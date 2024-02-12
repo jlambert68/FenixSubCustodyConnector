@@ -1,11 +1,10 @@
-module FenixOnPremDemoConnector
+module FenixSubCustodyConnector
 
 go 1.21
 
 require (
-	github.com/jlambert68/FenixConnectorAdminShared v0.0.0-20240125141835-5a88946f96e2
+	github.com/jlambert68/FenixConnectorAdminShared v0.0.0-20240202092904-889ab3823fa8
 	github.com/jlambert68/FenixGrpcApi v0.0.0-20240212082043-5a90809deba9
-	github.com/jlambert68/FenixOnPremDemoTestInstructionAdmin v0.0.0-20240122140609-7a46c8e1f738
 	github.com/jlambert68/FenixSubCustodyTestInstructionAdmin v0.0.0-20240212123633-f59b2de49782
 	github.com/jlambert68/FenixTestInstructionsAdminShared v0.0.0-20240212082241-b037127f1f1f
 	github.com/sirupsen/logrus v1.9.3

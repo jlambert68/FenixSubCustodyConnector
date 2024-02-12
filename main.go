@@ -7,10 +7,11 @@ import (
 func main() {
 
 	// Initiate ExecutionOrchestratorEngine
-	executionOrchestrator.InitiateExecutionOrchestratorEngine()
+	executionOrchestrator.InitiateExecutionOrchestratorEngine(allowedUsers)
 
 	// Keep program running
-	for {
-	}
+	var waitChannel chan bool
+	waitChannel = make(chan bool)
+	<-waitChannel
 
 }

@@ -1,7 +1,6 @@
 package main
 
 import (
-	"FenixSubCustodyConnector/sharedCode"
 	"log"
 	"os"
 )
