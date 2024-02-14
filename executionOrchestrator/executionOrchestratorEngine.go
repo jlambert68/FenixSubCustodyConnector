@@ -1,6 +1,7 @@
 package executionOrchestrator
 
 import (
+	executeTestInstructionUsingTestApiEngine "FenixSubCustodyConnector/externalTestInstructionExecutionsViaTestApiEngine"
 	"FenixSubCustodyConnector/sharedCode"
 	"errors"
 	"fmt"
@@ -15,6 +16,7 @@ import (
 	"github.com/jlambert68/FenixTestInstructionsAdminShared/TypeAndStructs"
 	"github.com/sirupsen/logrus"
 	"google.golang.org/protobuf/types/known/timestamppb"
+	"net/http"
 	"time"
 )
 
@@ -134,7 +136,50 @@ func processTestInstructionExecutionRequest(
 	case TestInstruction_SendOnMQTypeMT_SendMT540.TestInstructionUUID_SubCustody_SendMT540:
 		fmt.Println("case TestInstruction_SendOnMQTypeMT_SendMT540.TestInstructionUUID_SubCustody_SendMT540:")
 
+		// Convert message into message that can be used when sedning to TestApiEngine
+		var testApiEngineRestApiMessageValues *executeTestInstructionUsingTestApiEngine.TestApiEngineRestApiMessageStruct
+		testApiEngineRestApiMessageValues, err = executeTestInstructionUsingTestApiEngine.
+			ConvertTestInstructionExecutionIntoTestApiEngineRestCallMessage(testInstructionExecutionPubSubRequest)
+		if err != nil {
+			// Something wrong when converting the 'TestInstructionExecutionPubSubRequest' into TestApiEngine-structure
+			sharedCode.Logger.WithFields(logrus.Fields{
+				"id":                                    "3380f600-ef95-477f-bc6d-34e0695c51da",
+				"err":                                   err.Error(),
+				"testInstructionExecutionPubSubRequest": testInstructionExecutionPubSubRequest,
+			}).Error("Something wrong when converting the 'TestInstructionExecutionPubSubRequest' into TestApiEngine-structure")
+
+			testInstructionExecutionResultMessage = &fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage{
+				ClientSystemIdentification:           nil,
+				TestInstructionExecutionUuid:         testInstructionExecutionPubSubRequest.GetTestInstruction().TestInstructionExecutionUuid,
+				TestInstructionExecutionStatus:       fenixExecutionWorkerGrpcApi.TestInstructionExecutionStatusEnum_TIE_UNEXPECTED_INTERRUPTION_CAN_BE_RERUN,
+				TestInstructionExecutionEndTimeStamp: timestamppb.Now(),
+			}
+
+			break
+		}
+
 		// Do Rest-call to 'TestApiEngine' for executing the TestInstruction
+		var restResponse *http.Response
+		restResponse, err = executeTestInstructionUsingTestApiEngine.PostTestInstructionUsingRestCall(testApiEngineRestApiMessageValues)
+		if err != nil {
+			// Something went wrong when doing RestApi-call
+			sharedCode.Logger.WithFields(logrus.Fields{
+				"id":                                    "c7f0986d-b32c-4300-b096-ed8b4b773229",
+				"err":                                   err.Error(),
+				"testInstructionExecutionPubSubRequest": testInstructionExecutionPubSubRequest,
+				"testApiEngineRestApiMessageValues":     testApiEngineRestApiMessageValues,
+			}).Error("Something went wrong when doing RestApi-call to execute the TestInstruction")
+
+			testInstructionExecutionResultMessage = &fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage{
+				ClientSystemIdentification:           nil,
+				TestInstructionExecutionUuid:         testInstructionExecutionPubSubRequest.GetTestInstruction().TestInstructionExecutionUuid,
+				TestInstructionExecutionStatus:       fenixExecutionWorkerGrpcApi.TestInstructionExecutionStatusEnum_TIE_UNEXPECTED_INTERRUPTION,
+				TestInstructionExecutionEndTimeStamp: timestamppb.Now(),
+			}
+		}
+
+		fmt.Println(restResponse)
+
 		testInstructionExecutionResultMessage = &fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage{
 			ClientSystemIdentification:           nil,
 			TestInstructionExecutionUuid:         testInstructionExecutionPubSubRequest.GetTestInstruction().TestInstructionExecutionUuid,

@@ -1,12 +1,8 @@
 package executeTestInstructionUsingTestApiEngine
 
-import (
-	"github.com/jlambert68/FenixTestInstructionsAdminShared/TestInstructionAndTestInstuctionContainerTypes"
-)
-
 // InitiateRestCallsToCAEngine
 // Do all initiation to have restEngine be able to do RestCalls to Sub Custodys TestApiEngine
-func InitiateTestApiEngine(testInstructionsAndTestInstructionsContainers *TestInstructionAndTestInstuctionContainerTypes.TestInstructionsAndTestInstructionsContainersStruct) {
+func InitiateTestApiEngine() {
 
 	// Extract environment variables regarding TestApiEngine
 	Init()

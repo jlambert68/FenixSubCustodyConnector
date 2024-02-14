@@ -25,13 +25,13 @@ func ConvertTestInstructionExecutionIntoTestApiEngineRestCallMessage(
 
 	// Extract UUID:s from 'TestInstructionExecutionRequest'
 	var (
-		testInstructionUuid         string
-		testCaseExecutionUuid       string
-		testIntructionExecutionUuid string
+		testInstructionUuid          string
+		testCaseExecutionUuid        string
+		testInstructionExecutionUuid string
 	)
 	testInstructionUuid = processTestInstructionExecutionPubSubRequest.GetTestInstruction().GetTestInstructionUuid()
 	testCaseExecutionUuid = processTestInstructionExecutionPubSubRequest.GetTestCaseExecutionUuid()
-	testIntructionExecutionUuid = processTestInstructionExecutionPubSubRequest.GetTestInstruction().GetTestInstructionExecutionUuid()
+	testInstructionExecutionUuid = processTestInstructionExecutionPubSubRequest.GetTestInstruction().GetTestInstructionExecutionUuid()
 
 	// Extract TestInstructionAttributes from 'TestInstructionExecutionRequest'
 	var testInstructionAttributes []*fenixExecutionWorkerGrpcApi.ProcessTestInstructionExecutionPubSubRequest_TestInstructionAttributeMessage
@@ -88,7 +88,7 @@ func ConvertTestInstructionExecutionIntoTestApiEngineRestCallMessage(
 	// Values to be used in RestCall to TestApiEngine
 	TestApiEngineRestApiMessageValues = &TestApiEngineRestApiMessageStruct{
 		TestCaseExecutionUuid:                testCaseExecutionUuid,
-		TestInstructionExecutionUuid:         testIntructionExecutionUuid,
+		TestInstructionExecutionUuid:         testInstructionExecutionUuid,
 		TestApiEngineClassNameNAME:           tempTestApiEngineClassesMethodsAttributes.TestApiEngineClassNameNAME,
 		TestApiEngineMethodNameNAME:          tempTestApiEngineClassesMethodsAttributes.TestApiEngineMethodNameNAME,
 		TestApiEngineExpectedToBePassedValue: "",

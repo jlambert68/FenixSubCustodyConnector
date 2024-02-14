@@ -20,13 +20,6 @@ func mustGetenv(k string) string {
 func Init() {
 	var err error
 
-	// Extract environment variable for to be able to turn of all communication to and from Worker is turned off.
-	TurnAllCommunicationWithWorker, err = strconv.ParseBool(mustGetenv("TurnAllCommunicationWithWorker"))
-	if err != nil {
-		fmt.Println("Couldn't convert environment variable 'TurnAllCommunicationWithWorker:' to an boolean, error: ", err)
-		os.Exit(0)
-	}
-
 	// Extract environment variable for to redirect calls from TestApiEngine to a local web server
 	UseInternalWebServerForTestInsteadOfCallingTestApiEngine, err = strconv.ParseBool(mustGetenv("UseInternalWebServerForTestInsteadOfCallingTestApiEngine"))
 	if err != nil {

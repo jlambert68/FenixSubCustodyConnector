@@ -5,6 +5,8 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"time"
+
 	//"github.com/golang/gddo/httputil/header"
 	"github.com/gorilla/mux"
 	"github.com/sirupsen/logrus"
@@ -23,6 +25,15 @@ type RestUserMessageStruct struct {
 }
 
 func RestAPIServer() {
+
+	// Wait until Logger has been initiated
+	for {
+		if sharedCode.Logger == nil {
+			time.Sleep(time.Second)
+		} else {
+			break
+		}
+	}
 
 	sharedCode.Logger.WithFields(logrus.Fields{
 		"id": "028012db-71a4-4585-900b-4b5986f7a4bc",
