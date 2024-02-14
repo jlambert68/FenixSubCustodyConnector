@@ -166,7 +166,7 @@ func PostTestInstructionUsingRestCall(
 
 	sharedCode.Logger.WithFields(logrus.Fields{
 		"id": "97a1ab6a-9994-4004-b457-5abbb6816f9e",
-	}).Error("2. Performing Http Post...")
+	}).Debug("2. Performing Http Post...")
 
 	// Generate json-body for RestCall, need to do it manually, because of strange json-structure with parameters just added instead of using an array
 	attributesMap := make(map[string]string)

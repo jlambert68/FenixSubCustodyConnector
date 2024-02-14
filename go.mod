@@ -4,7 +4,7 @@ go 1.21
 
 require (
 	github.com/gorilla/mux v1.8.1
-	github.com/jlambert68/FenixConnectorAdminShared v0.0.0-20240214152745-bad2c657a74e
+	github.com/jlambert68/FenixConnectorAdminShared v0.0.0-20240214193221-df2e9aa34a8a
 	github.com/jlambert68/FenixGrpcApi v0.0.0-20240214145621-7060f4a311a9
 	github.com/jlambert68/FenixSubCustodyTestInstructionAdmin v0.0.0-20240214132809-fe2069aedc7f
 	github.com/jlambert68/FenixTestInstructionsAdminShared v0.0.0-20240212082241-b037127f1f1f

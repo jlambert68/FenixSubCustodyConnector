@@ -45,7 +45,7 @@ func RestAPIServer() {
 
 	//specify endpoints
 	router.HandleFunc("/health-check", healthCheck).Methods("GET")
-	router.HandleFunc("/TestCaseExecution/ExecuteTestActionMethod/TestApiEngineClass/TestApiEngineMethod", testApiEngineClassTestApiEngineMethod).Methods("POST")
+	router.HandleFunc("/TestCaseExecution/ExecuteTestActionMethod/SendOnMQTypeMT/SendMT540_v1_0", testApiEngineClassTestApiEngineMethod).Methods("POST")
 	router.NotFoundHandler = http.HandlerFunc(notFound)
 	//router.HandleFunc("/*", allOtherRoutes).Methods("POST")
 	/*
@@ -66,7 +66,8 @@ func notFound(w http.ResponseWriter, r *http.Request) {
 	// curl --request GET localhost:8080/health-check
 
 	sharedCode.Logger.WithFields(logrus.Fields{
-		"id": "42c2cdca-4ce1-4802-888d-ccc6eb82996f",
+		"id":           "42c2cdca-4ce1-4802-888d-ccc6eb82996f",
+		"http.Request": r,
 	}).Debug("Incoming 'RestApi - *'")
 
 	defer sharedCode.Logger.WithFields(logrus.Fields{
@@ -76,7 +77,7 @@ func notFound(w http.ResponseWriter, r *http.Request) {
 	// Create base for response body
 	var responseBody map[string]string
 	responseBody = make(map[string]string)
-	responseBody["type"] = "FenixSCConnector - internal Web Server"
+	responseBody["type"] = "FenixConnector - internal Web Server"
 
 	// Create Header
 	w.Header().Set("Content-Type", "application/json")
