@@ -4,10 +4,10 @@ go 1.21
 
 require (
 	github.com/gorilla/mux v1.8.1
-	github.com/jlambert68/FenixConnectorAdminShared v0.0.0-20240214193221-df2e9aa34a8a
+	github.com/jlambert68/FenixConnectorAdminShared v0.0.0-20240215124007-fc8720b667c4
 	github.com/jlambert68/FenixGrpcApi v0.0.0-20240214145621-7060f4a311a9
-	github.com/jlambert68/FenixSubCustodyTestInstructionAdmin v0.0.0-20240214132809-fe2069aedc7f
-	github.com/jlambert68/FenixTestInstructionsAdminShared v0.0.0-20240212082241-b037127f1f1f
+	github.com/jlambert68/FenixSubCustodyTestInstructionAdmin v0.0.0-20240215124216-41f82894db3b
+	github.com/jlambert68/FenixTestInstructionsAdminShared v0.0.0-20240215122938-809872919af1
 	github.com/sirupsen/logrus v1.9.3
 	google.golang.org/protobuf v1.32.0
 )
@@ -41,7 +41,7 @@ require (
 	github.com/jackc/pgtype v1.14.2 // indirect
 	github.com/jackc/pgx/v4 v4.18.1 // indirect
 	github.com/jackc/puddle v1.3.0 // indirect
-	github.com/jlambert68/FenixSyncShared v0.0.0-20231023123349-e891692cede8 // indirect
+	github.com/jlambert68/FenixSyncShared v0.0.0-20240215115014-3251590d407c // indirect
 	github.com/markbates/goth v1.78.0 // indirect
 	go.opencensus.io v0.24.0 // indirect
 	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.48.0 // indirect
@@ -57,7 +57,7 @@ require (
 	golang.org/x/text v0.14.0 // indirect
 	golang.org/x/time v0.5.0 // indirect
 	gonum.org/v1/gonum v0.14.0 // indirect
-	google.golang.org/api v0.164.0 // indirect
+	google.golang.org/api v0.165.0 // indirect
 	google.golang.org/appengine v1.6.8 // indirect
 	google.golang.org/genproto v0.0.0-20240213162025-012b6fc9bca9 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20240213162025-012b6fc9bca9 // indirect
