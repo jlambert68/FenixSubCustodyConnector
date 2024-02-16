@@ -217,7 +217,7 @@ func PostTestInstructionUsingRestCall(
 
 	} else {
 		// Use TestApiEngine address and port
-		TestApiEngineUrl = LocalExecutionMethods.TestApiEngineAddress + ":" + LocalExecutionMethods.TestApiEnginePort + TestApiEngineUrl
+		TestApiEngineUrl = "http://:" + LocalExecutionMethods.TestApiEngineAddress + ":" + LocalExecutionMethods.TestApiEnginePort + TestApiEngineUrl
 
 		sharedCode.Logger.WithFields(logrus.Fields{
 			"id": "fa461ab4-789f-4b2a-a215-2653567fe319",
