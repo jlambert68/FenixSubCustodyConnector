@@ -7,71 +7,71 @@ var (
 	useInjectedEnvironmentVariables string
 
 	// Injected Environment Variables
-	Injected_AuthClientId                                                                          string
-	Injected_AuthClientSecret                                                                      string
-	Injected_ExecutionConnectorPort                                                                string
-	Injected_ExecutionLocationForConnector                                                         string
-	Injected_ExecutionLocationForWorker                                                            string
-	Injected_ExecutionWorkerAddress                                                                string
-	Injected_ExecutionWorkerPort                                                                   string
-	Injected_ForceNewBaseLineForTestInstructionsAndTestInstructionContainers                       string
-	Injected_GCPAuthentication                                                                     string
-	Injected_GcpProject                                                                            string
-	Injected_LocalServiceAccountPath                                                               string
-	Injected_LocalWebServerAddress                                                                 string
-	Injected_LocalWebServerPort                                                                    string
-	Injected_LoggingLevel                                                                          string
-	Injected_RelativePathToAllowedUsersList                                                        string
-	Injected_ShouldPubSubReceiverBeStarted                                                         string
-	Injected_TestApiEngineAddress                                                                  string
-	Injected_TestApiEnginePort                                                                     string
-	Injected_TestApiEngineUrlPath                                                                  string
-	Injected_TestInstructionExecutionPubSubTopicBase                                               string
-	Injected_ThisConnectorIsTheOneThatPublishSupportedTestInstructionsAndTestInstructionContainers string
-	Injected_ThisDomainsUuid                                                                       string
-	Injected_ThisExecutionDomainUuid                                                               string
-	Injected_TurnOffAllCommunicationWithWorker                                                     string
-	Injected_UseInternalWebServerForTestInsteadOfCallingTestApiEngine                              string
-	Injected_UseNativeGcpPubSubClientLibrary                                                       string
-	Injected_UsePubSubToReceiveMessagesFromWorker                                                  string
-	Injected_UseServiceAccount                                                                     string
+	injectedAuthClientId                                                                          string
+	injectedAuthClientSecret                                                                      string
+	injectedExecutionConnectorPort                                                                string
+	injectedExecutionLocationForConnector                                                         string
+	injectedExecutionLocationForWorker                                                            string
+	injectedExecutionWorkerAddress                                                                string
+	injectedExecutionWorkerPort                                                                   string
+	injectedForceNewBaseLineForTestInstructionsAndTestInstructionContainers                       string
+	injectedGCPAuthentication                                                                     string
+	injectedGcpProject                                                                            string
+	injectedLocalServiceAccountPath                                                               string
+	injectedLocalWebServerAddress                                                                 string
+	injectedLocalWebServerPort                                                                    string
+	injectedLoggingLevel                                                                          string
+	injectedRelativePathToAllowedUsersList                                                        string
+	injectedShouldPubSubReceiverBeStarted                                                         string
+	injectedTestApiEngineAddress                                                                  string
+	injectedTestApiEnginePort                                                                     string
+	injectedTestApiEngineUrlPath                                                                  string
+	injectedTestInstructionExecutionPubSubTopicBase                                               string
+	injectedThisConnectorIsTheOneThatPublishSupportedTestInstructionsAndTestInstructionContainers string
+	injectedThisDomainsUuid                                                                       string
+	injectedThisExecutionDomainUuid                                                               string
+	injectedTurnOffAllCommunicationWithWorker                                                     string
+	injectedUseInternalWebServerForTestInsteadOfCallingTestApiEngine                              string
+	injectedUseNativeGcpPubSubClientLibrary                                                       string
+	injectedUsePubSubToReceiveMessagesFromWorker                                                  string
+	injectedUseServiceAccount                                                                     string
 )
 
 // Used for hard coding if Injected or real Environment Variables are expected
-var falseValue string = "false"
+var falseOrTrueValue string = "true"
 
 // Map used when Extracting the value of the injected variable
 var injectedVariablesMap = map[string]*string{
 	// Will Injected values och real Environment Variables be used
-	"useInjectedEnvironmentVariables": &falseValue,
+	"useInjectedEnvironmentVariables": &falseOrTrueValue,
 
 	// Environment Variables used for testing "FenixSubCustodyTestInstructionAdmin" by itself
-	"Injected_AuthClientId":                                                    &Injected_AuthClientId,
-	"Injected_AuthClientSecret":                                                &Injected_AuthClientSecret,
-	"Injected_ExecutionConnectorPort":                                          &Injected_ExecutionConnectorPort,
-	"Injected_ExecutionLocationForConnector":                                   &Injected_ExecutionLocationForConnector,
-	"Injected_ExecutionLocationForWorker":                                      &Injected_ExecutionLocationForWorker,
-	"Injected_ExecutionWorkerAddress":                                          &Injected_ExecutionWorkerAddress,
-	"Injected_ExecutionWorkerPort":                                             &Injected_ExecutionWorkerPort,
-	"Injected_ForceNewBaseLineForTestInstructionsAndTestInstructionContainers": &Injected_ForceNewBaseLineForTestInstructionsAndTestInstructionContainers,
-	"Injected_GCPAuthentication":                                               &Injected_GCPAuthentication,
-	"Injected_GcpProject":                                                      &Injected_GcpProject,
-	"Injected_LocalServiceAccountPath":                                         &Injected_LocalServiceAccountPath,
-	"Injected_LocalWebServerAddress":                                           &Injected_LocalWebServerAddress,
-	"Injected_LocalWebServerPort":                                              &Injected_LocalWebServerPort,
-	"Injected_LoggingLevel":                                                    &Injected_LoggingLevel,
-	"Injected_RelativePathToAllowedUsersList":                                  &Injected_RelativePathToAllowedUsersList,
-	"Injected_ShouldPubSubReceiverBeStarted":                                   &Injected_ShouldPubSubReceiverBeStarted,
-	"Injected_TestApiEngineAddress":                                            &Injected_TestApiEngineAddress,
-	"Injected_TestApiEnginePort":                                               &Injected_TestApiEnginePort,
-	"Injected_TestApiEngineUrlPath":                                            &Injected_TestApiEngineUrlPath,
-	"Injected_TestInstructionExecutionPubSubTopicBase":                         &Injected_TestInstructionExecutionPubSubTopicBase,
-	"Injected_ThisConnectorIsTheOneThatPublishSupportedTestInstructionsAndTestInstructionContainers": &Injected_ThisConnectorIsTheOneThatPublishSupportedTestInstructionsAndTestInstructionContainers,
-	"Injected_ThisDomainsUuid":                                          &Injected_ThisDomainsUuid,
-	"Injected_ThisExecutionDomainUuid":                                  &Injected_ThisExecutionDomainUuid,
-	"Injected_TurnOffAllCommunicationWithWorker":                        &Injected_TurnOffAllCommunicationWithWorker,
-	"Injected_UseInternalWebServerForTestInsteadOfCallingTestApiEngine": &Injected_UseInternalWebServerForTestInsteadOfCallingTestApiEngine,
-	"Injected_UseNativeGcpPubSubClientLibrary":                          &Injected_UseNativeGcpPubSubClientLibrary,
-	"Injected_UsePubSubToReceiveMessagesFromWorker":                     &Injected_UsePubSubToReceiveMessagesFromWorker,
-	"Injected_UseServiceAccount":                                        &Injected_UseServiceAccount,
+	"Injected_AuthClientId":                                                    &injectedAuthClientId,
+	"Injected_AuthClientSecret":                                                &injectedAuthClientSecret,
+	"Injected_ExecutionConnectorPort":                                          &injectedExecutionConnectorPort,
+	"Injected_ExecutionLocationForConnector":                                   &injectedExecutionLocationForConnector,
+	"Injected_ExecutionLocationForWorker":                                      &injectedExecutionLocationForWorker,
+	"Injected_ExecutionWorkerAddress":                                          &injectedExecutionWorkerAddress,
+	"Injected_ExecutionWorkerPort":                                             &injectedExecutionWorkerPort,
+	"Injected_ForceNewBaseLineForTestInstructionsAndTestInstructionContainers": &injectedForceNewBaseLineForTestInstructionsAndTestInstructionContainers,
+	"Injected_GCPAuthentication":                                               &injectedGCPAuthentication,
+	"Injected_GcpProject":                                                      &injectedGcpProject,
+	"Injected_LocalServiceAccountPath":                                         &injectedLocalServiceAccountPath,
+	"Injected_LocalWebServerAddress":                                           &injectedLocalWebServerAddress,
+	"Injected_LocalWebServerPort":                                              &injectedLocalWebServerPort,
+	"Injected_LoggingLevel":                                                    &injectedLoggingLevel,
+	"Injected_RelativePathToAllowedUsersList":                                  &injectedRelativePathToAllowedUsersList,
+	"Injected_ShouldPubSubReceiverBeStarted":                                   &injectedShouldPubSubReceiverBeStarted,
+	"Injected_TestApiEngineAddress":                                            &injectedTestApiEngineAddress,
+	"Injected_TestApiEnginePort":                                               &injectedTestApiEnginePort,
+	"Injected_TestApiEngineUrlPath":                                            &injectedTestApiEngineUrlPath,
+	"Injected_TestInstructionExecutionPubSubTopicBase":                         &injectedTestInstructionExecutionPubSubTopicBase,
+	"Injected_ThisConnectorIsTheOneThatPublishSupportedTestInstructionsAndTestInstructionContainers": &injectedThisConnectorIsTheOneThatPublishSupportedTestInstructionsAndTestInstructionContainers,
+	"Injected_ThisDomainsUuid":                                          &injectedThisDomainsUuid,
+	"Injected_ThisExecutionDomainUuid":                                  &injectedThisExecutionDomainUuid,
+	"Injected_TurnOffAllCommunicationWithWorker":                        &injectedTurnOffAllCommunicationWithWorker,
+	"Injected_UseInternalWebServerForTestInsteadOfCallingTestApiEngine": &injectedUseInternalWebServerForTestInsteadOfCallingTestApiEngine,
+	"Injected_UseNativeGcpPubSubClientLibrary":                          &injectedUseNativeGcpPubSubClientLibrary,
+	"Injected_UsePubSubToReceiveMessagesFromWorker":                     &injectedUsePubSubToReceiveMessagesFromWorker,
+	"Injected_UseServiceAccount":                                        &injectedUseServiceAccount,
 }

@@ -57,6 +57,11 @@ func RestAPIServer() {
 
 	http.Handle("/", router)
 
+	sharedCode.Logger.WithFields(logrus.Fields{
+		"id":                 "4961d4f2-20f5-43be-8a9b-074ec79f5075",
+		"LocalWebServerPort": LocalWebServerPort,
+	}).Debug("Starting Local Web Server for Test, instead of doing calls to TestApiEngine")
+
 	//start and listen to requests
 	http.ListenAndServe(":"+LocalWebServerPort, router)
 }

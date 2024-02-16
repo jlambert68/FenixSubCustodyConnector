@@ -2,39 +2,33 @@ package executeTestInstructionUsingTestApiEngine
 
 import (
 	"fmt"
-	"log"
+	"github.com/jlambert68/FenixSyncShared/environmentVariables"
 	"os"
 	"strconv"
 )
 
-// mustGetEnv is a helper function for getting environment variables.
-// Displays a warning if the environment variable is not set.
-func mustGetenv(k string) string {
-	v := os.Getenv(k)
-	if v == "" {
-		log.Fatalf("Warning: %s environment variable not set.\n", k)
-	}
-	return v
-}
-
 func Init() {
 	var err error
 
-	// Extract environment variable for to redirect calls from TestApiEngine to a local web server
-	UseInternalWebServerForTestInsteadOfCallingTestApiEngine, err = strconv.ParseBool(mustGetenv("UseInternalWebServerForTestInsteadOfCallingTestApiEngine"))
+	// Extract environment variable for Port used by TestApiEngine web server
+	UseInternalWebServerForTestInsteadOfCallingTestApiEngine, err = strconv.ParseBool(environmentVariables.
+		ExtractEnvironmentVariableOrInjectedEnvironmentVariable("UseInternalWebServerForTestInsteadOfCallingTestApiEngine"))
 	if err != nil {
-		fmt.Println("Couldn't convert environment variable 'UseInternalWebServerForTestInsteadOfCallingTestApiEngine:' to an boolean, error: ", err)
+		fmt.Println("Couldn't convert environment variable 'UseInternalWebServerForTestInsteadOfCallingTestApiEngine:' to a boolean, error: ", err)
 		os.Exit(0)
 	}
 
 	// Extract environment variable for Address used by local web server
-	LocalWebServerAddress = mustGetenv("LocalWebServerAddress")
+	LocalWebServerAddress = environmentVariables.
+		ExtractEnvironmentVariableOrInjectedEnvironmentVariable("LocalWebServerAddress")
 
 	// Extract environment variable for Port used by local web server
-	_, err = strconv.ParseInt(mustGetenv("LocalWebServerPort"), 10, 64)
+	_, err = strconv.ParseInt(environmentVariables.
+		ExtractEnvironmentVariableOrInjectedEnvironmentVariable("LocalWebServerPort"), 10, 64)
 	if err != nil {
 		fmt.Println("Couldn't convert environment variable 'LocalWebServerPort:' to an integer, error: ", err)
 		os.Exit(0)
 	}
-	LocalWebServerPort = mustGetenv("LocalWebServerPort")
+	LocalWebServerPort = environmentVariables.
+		ExtractEnvironmentVariableOrInjectedEnvironmentVariable("LocalWebServerPort")
 }

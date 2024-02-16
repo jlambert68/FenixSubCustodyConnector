@@ -207,7 +207,7 @@ func PostTestInstructionUsingRestCall(
 		"?" + "expectedToBePassed=" + string(testApiEngineRestApiMessageValues.TestApiEngineExpectedToBePassedValue)
 
 	// Use Local web server for test or TestApiEngine
-	if sharedCode.UseInternalWebServerForTestInsteadOfCallingTestApiEngine == true {
+	if UseInternalWebServerForTestInsteadOfCallingTestApiEngine == true {
 		// Use Local web server for testing
 		TestApiEngineUrl = "http://:" + LocalWebServerPort + TestApiEngineUrl
 

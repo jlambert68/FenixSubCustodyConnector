@@ -3,9 +3,14 @@ package main
 import (
 	"FenixSubCustodyConnector/executionOrchestrator"
 	executeTestInstructionUsingTestApiEngine "FenixSubCustodyConnector/externalTestInstructionExecutionsViaTestApiEngine"
+	"fmt"
 )
 
 func main() {
+
+	for a, b := range injectedVariablesMap {
+		fmt.Println(a, *b)
+	}
 
 	// Initiate TestApiEngine
 	executeTestInstructionUsingTestApiEngine.InitiateTestApiEngine()
