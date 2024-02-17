@@ -8,13 +8,17 @@ import (
 	"github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/LocalExecutionMethods"
 	"github.com/santhosh-tekuri/jsonschema/v5"
 	"github.com/sirupsen/logrus"
+	"io/ioutil"
 	"net/http"
 	"strings"
 )
 
 func PostTestInstructionUsingRestCall(
-	testApiEngineRestApiMessageValues *TestApiEngineRestApiMessageStruct) (
-	restResponse *http.Response, err error) {
+	testApiEngineRestApiMessageValues *TestApiEngineRestApiMessageStruct,
+	finalTestInstructionExecutionResultAsJson *string,
+	finalTestInstructionExecutionResultJsonSchema *string) (
+	testApiEngineFinalTestInstructionExecutionResult TestApiEngineFinalTestInstructionExecutionResultStruct,
+	err error) {
 
 	sharedCode.Logger.WithFields(logrus.Fields{
 		"id": "97a1ab6a-9994-4004-b457-5abbb6816f9e",
@@ -85,6 +89,7 @@ func PostTestInstructionUsingRestCall(
 	}
 
 	// Do RestCall to TestApiEngine
+	var restResponse *http.Response
 	restResponse, err = httpClient.Post(TestApiEngineUrl, "application/json; charset=utf-8", bytes.NewBuffer(attributesAsJson))
 	if err != nil {
 		sharedCode.Logger.WithFields(logrus.Fields{
@@ -92,22 +97,47 @@ func PostTestInstructionUsingRestCall(
 			"TestApiEngineUrl": TestApiEngineUrl,
 		}).Error("Couldn't do call to Rest-execution-server")
 
-		return restResponse, err
+		return TestApiEngineFinalTestInstructionExecutionResultStruct{}, err
 	}
 
-	return restResponse, err
+	// Read the body
+	restResponse.Body.Close()
+	body, err := ioutil.ReadAll(restResponse.Body)
+	if err != nil {
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id":               "838f461a-d207-450b-a46d-dc4557f64422",
+			"TestApiEngineUrl": TestApiEngineUrl,
+		}).Error("Couldn't extract json-body")
+	}
+
+	var bodyAsString string
+	bodyAsString = string(body)
+
+	// Validate rest-response and convert into 'TestApiEngineFinalTestInstructionExecutionResultStruct'
+	testApiEngineFinalTestInstructionExecutionResult, err = validateAndTransformRestResponse(
+		&bodyAsString,
+		finalTestInstructionExecutionResultAsJson,
+		finalTestInstructionExecutionResultJsonSchema)
+
+	if err != nil {
+		return TestApiEngineFinalTestInstructionExecutionResultStruct{}, err
+	}
+
+	return testApiEngineFinalTestInstructionExecutionResult, err
 }
 
 // Validate the json-response from the Rest-call to TestApiEngine
 // Validation os done with supported json-schemas
 // First that the overall message is valid
 // Second that the Response Variable message is valid
-func validateRestResponse(
+func validateAndTransformRestResponse(
 	finalTestInstructionExecutionResultAsJson *string,
 	finalTestInstructionExecutionResultJsonSchema *string,
 	responseVariablesJsonSchema *string) (
+	testApiEngineFinalTestInstructionExecutionResult TestApiEngineFinalTestInstructionExecutionResultStruct,
 	err error) {
 
+	// *** First Step ***
 	// Load the schema - 'finalTestInstructionExecutionResultJsonSchema'
 	var jsonSchemaCompilerFinalTestInstructionExecutionResult *jsonschema.Compiler
 	jsonSchemaCompilerFinalTestInstructionExecutionResult = jsonschema.NewCompiler()
@@ -144,16 +174,17 @@ func validateRestResponse(
 			"finalTestInstructionExecutionResultAsJson": *finalTestInstructionExecutionResultAsJson,
 		}).Error("'finalTestInstructionExecutionResultAsJson' is not valid to json-schema " +
 			"'finalTestInstructionExecutionResultJsonSchema'")
+
+		return TestApiEngineFinalTestInstructionExecutionResultStruct{}, err
 	} else {
 		sharedCode.Logger.WithFields(logrus.Fields{
 			"id": "f2189bcd-5822-4660-aa9b-e853fd2765e9",
 			"finalTestInstructionExecutionResultAsJson": *finalTestInstructionExecutionResultAsJson,
-		}).Error("'finalTestInstructionExecutionResultAsJson' is valid to json-schema " +
+		}).Debug("'finalTestInstructionExecutionResultAsJson' is valid to json-schema " +
 			"'finalTestInstructionExecutionResultJsonSchema'")
 	}
 
 	// UmMarshal TestApiEngine-json into Go-struct
-	var testApiEngineFinalTestInstructionExecutionResult TestApiEngineFinalTestInstructionExecutionResultStruct
 	err = json.Unmarshal([]byte(*finalTestInstructionExecutionResultAsJson),
 		&testApiEngineFinalTestInstructionExecutionResult)
 	if err != nil {
@@ -179,7 +210,7 @@ func validateRestResponse(
 
 	}
 
-	d
+	// 	// *** Second Step ***
 	// Load the schema - 'responseVariablesJsonSchema'
 	var jsonSchemaCompilerResponseVariables *jsonschema.Compiler
 	jsonSchemaCompilerResponseVariables = jsonschema.NewCompiler()
@@ -192,8 +223,8 @@ func validateRestResponse(
 			"responseVariablesJsonSchema": *responseVariablesJsonSchema,
 		}).Fatal("Couldn't add json-schema for 'responseVariablesJsonSchema' to " +
 			"'json-schema compile")
-
 	}
+
 	// Compile json-schema 'responseVariablesJsonSchema'
 	var jsonSchemaValidatorResponseVariables *jsonschema.Schema
 	jsonSchemaValidatorResponseVariables, err = jsonSchemaCompilerResponseVariables.
@@ -216,13 +247,16 @@ func validateRestResponse(
 			"string(testAPiEngineResponseVariablesAsJsonByteArray)": string(testAPiEngineResponseVariablesAsJsonByteArray),
 		}).Error("'string(testAPiEngineResponseVariablesAsJsonByteArray)' is not valid to json-schema " +
 			"'responseVariablesJsonSchema'")
+
+		return TestApiEngineFinalTestInstructionExecutionResultStruct{}, err
+
 	} else {
 		sharedCode.Logger.WithFields(logrus.Fields{
 			"id": "e498ecb2-8d50-4d99-8984-3171dbd9ed6c",
 			"string(testAPiEngineResponseVariablesAsJsonByteArray)": string(testAPiEngineResponseVariablesAsJsonByteArray),
-		}).Error("'string(testAPiEngineResponseVariablesAsJsonByteArray)' is valid to json-schema " +
+		}).Debug("'string(testAPiEngineResponseVariablesAsJsonByteArray)' is valid to json-schema " +
 			"'responseVariablesJsonSchema'")
 	}
 
-	return err
+	return testApiEngineFinalTestInstructionExecutionResult, err
 }

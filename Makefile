@@ -8,6 +8,19 @@ filenamePartFirst := FenixSubCustodyConnector
 filenamePartLast := .exe
 datetime := `date +'%y%m%d_%H%M%S'`
 
+githubUsername := jlambert68
+repositoryOverAll := FenixGrpcApi
+repositorySpecifc := FenixSubCustodyConnector
+branchOverAll := master
+branschSpecific := master
+
+localJsonSchemaPath := json-schmas
+
+jsonSchemaOverAll := FenixExecutionServer/fenixExecutionConnectorGrpcApi/json-schema/FinalTestInstructionExecutionResultMessage.json-schema.json
+localJsonSchemaOverAllLName := FinalTestInstructionExecutionResultMessage.json-schema.json
+
+
+
 GenerateDateTime:
 	$(eval fileName := $(filenamePartFirst)$(datetime)$(filenamePartLast))
 
@@ -29,3 +42,6 @@ BuildExeForLinux:
 CrossBuildForWindows_SEB_test:
 	$(eval fileName := $(filenamePartFirst)$(datetime)$(filenamePartLast))
 	GOOS=windows GOARCH=amd64 CGO_ENABLED=1 CXX=x86_64-w64-mingw32-g++ CC=x86_64-w64-mingw32-gcc go build -o $(fileName) -ldflags="$(InjectValue)" .
+
+Download-json-schemas:
+	@curl -L -o  $(localJsonSchemaPath)/$(localJsonSchemaOverAllLName) "https://github.com/$(githubUsername)/$(repositoryOverall)/$(branchOverAll)/$(jsonSchemaOverAll)"

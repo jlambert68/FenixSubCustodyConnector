@@ -16,7 +16,6 @@ import (
 	"github.com/jlambert68/FenixTestInstructionsAdminShared/TypeAndStructs"
 	"github.com/sirupsen/logrus"
 	"google.golang.org/protobuf/types/known/timestamppb"
-	"net/http"
 	"time"
 )
 
@@ -164,10 +163,19 @@ func processTestInstructionExecutionRequest(
 			break
 		}
 
+		// Get Json-schemas to use
+		var finalTestInstructionExecutionResultAsJson *string
+		var finalTestInstructionExecutionResultJsonSchema *string
+		finalTestInstructionExecutionResultAsJson, finalTestInstructionExecutionResultJsonSchema =
+			getResponseSchemasToUse(TestInstruction_SendOnMQTypeMT_SendMT540.TestInstructionUUID_SubCustody_SendMT540)
+
 		// Do Rest-call to 'TestApiEngine' for executing the TestInstruction
-		var restResponse *http.Response
-		restResponse, err = executeTestInstructionUsingTestApiEngine.PostTestInstructionUsingRestCall(
-			testApiEngineRestApiMessageValues)
+		var testApiEngineFinalTestInstructionExecutionResult executeTestInstructionUsingTestApiEngine.TestApiEngineFinalTestInstructionExecutionResultStruct
+		testApiEngineFinalTestInstructionExecutionResult, err = executeTestInstructionUsingTestApiEngine.
+			PostTestInstructionUsingRestCall(
+				testApiEngineRestApiMessageValues,
+				finalTestInstructionExecutionResultAsJson,
+				finalTestInstructionExecutionResultJsonSchema)
 		if err != nil {
 			// Something went wrong when doing RestApi-call
 			sharedCode.Logger.WithFields(logrus.Fields{
