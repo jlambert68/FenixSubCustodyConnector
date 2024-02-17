@@ -39,7 +39,8 @@ func InitiateExecutionOrchestratorEngine(tempAllowedUsers []byte) {
 
 }
 
-func getMaxExpectedFinishedTimeStamp(testInstructionExecutionPubSubRequest *fenixExecutionWorkerGrpcApi.ProcessTestInstructionExecutionPubSubRequest) (
+func getMaxExpectedFinishedTimeStamp(testInstructionExecutionPubSubRequest *fenixExecutionWorkerGrpcApi.
+	ProcessTestInstructionExecutionPubSubRequest) (
 	maxExpectedFinishedTimeStamp time.Time,
 	err error) {
 
@@ -89,7 +90,8 @@ func getMaxExpectedFinishedTimeStamp(testInstructionExecutionPubSubRequest *feni
 	default:
 		sharedCode.Logger.WithFields(logrus.Fields{
 			"id": "5e2fda4c-e5fe-4c6d-88db-0fadcae1d5ca",
-			"testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionUuid": testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionUuid,
+			"testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionUuid": testInstructionExecutionPubSubRequest.
+				TestInstruction.TestInstructionUuid,
 		}).Error("Unknown TestInstruction Uuid")
 
 		err = errors.New(fmt.Sprintf("Unknown TestInstruction Uuid: %s",
@@ -113,7 +115,8 @@ func generateSupportedTestInstructionsAndTestInstructionContainersAndAllowedUser
 		TestInstructionsAndTestInstructionsContainersStruct) {
 
 	// Generate the full structure for supported TestInstructions, TestInstructionContainers and Allowed Users
-	TestInstructionsAndTesInstructionContainersAndAllowedUsers.GenerateTestInstructionsAndTestInstructionContainersAndAllowedUsers_SubCustody(allowedUsers)
+	TestInstructionsAndTesInstructionContainersAndAllowedUsers.
+		GenerateTestInstructionsAndTestInstructionContainersAndAllowedUsers_SubCustody(allowedUsers)
 
 	// Get the full structure for supported TestInstructions, TestInstructionContainers and Allowed Users
 	supportedTestInstructionsAndTestInstructionContainersAndAllowedUsers =
@@ -146,12 +149,15 @@ func processTestInstructionExecutionRequest(
 				"id":                                    "3380f600-ef95-477f-bc6d-34e0695c51da",
 				"err":                                   err.Error(),
 				"testInstructionExecutionPubSubRequest": testInstructionExecutionPubSubRequest,
-			}).Error("Something wrong when converting the 'TestInstructionExecutionPubSubRequest' into TestApiEngine-structure")
+			}).Error("Something wrong when converting the 'TestInstructionExecutionPubSubRequest' into " +
+				"TestApiEngine-structure")
 
 			testInstructionExecutionResultMessage = &fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage{
-				ClientSystemIdentification:           nil,
-				TestInstructionExecutionUuid:         testInstructionExecutionPubSubRequest.GetTestInstruction().TestInstructionExecutionUuid,
-				TestInstructionExecutionStatus:       fenixExecutionWorkerGrpcApi.TestInstructionExecutionStatusEnum_TIE_UNEXPECTED_INTERRUPTION_CAN_BE_RERUN,
+				ClientSystemIdentification: nil,
+				TestInstructionExecutionUuid: testInstructionExecutionPubSubRequest.GetTestInstruction().
+					TestInstructionExecutionUuid,
+				TestInstructionExecutionStatus: fenixExecutionWorkerGrpcApi.
+					TestInstructionExecutionStatusEnum_TIE_UNEXPECTED_INTERRUPTION_CAN_BE_RERUN,
 				TestInstructionExecutionEndTimeStamp: timestamppb.Now(),
 			}
 
@@ -160,7 +166,8 @@ func processTestInstructionExecutionRequest(
 
 		// Do Rest-call to 'TestApiEngine' for executing the TestInstruction
 		var restResponse *http.Response
-		restResponse, err = executeTestInstructionUsingTestApiEngine.PostTestInstructionUsingRestCall(testApiEngineRestApiMessageValues)
+		restResponse, err = executeTestInstructionUsingTestApiEngine.PostTestInstructionUsingRestCall(
+			testApiEngineRestApiMessageValues)
 		if err != nil {
 			// Something went wrong when doing RestApi-call
 			sharedCode.Logger.WithFields(logrus.Fields{
@@ -171,9 +178,11 @@ func processTestInstructionExecutionRequest(
 			}).Error("Something went wrong when doing RestApi-call to execute the TestInstruction")
 
 			testInstructionExecutionResultMessage = &fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage{
-				ClientSystemIdentification:           nil,
-				TestInstructionExecutionUuid:         testInstructionExecutionPubSubRequest.GetTestInstruction().TestInstructionExecutionUuid,
-				TestInstructionExecutionStatus:       fenixExecutionWorkerGrpcApi.TestInstructionExecutionStatusEnum_TIE_UNEXPECTED_INTERRUPTION,
+				ClientSystemIdentification: nil,
+				TestInstructionExecutionUuid: testInstructionExecutionPubSubRequest.GetTestInstruction().
+					TestInstructionExecutionUuid,
+				TestInstructionExecutionStatus: fenixExecutionWorkerGrpcApi.
+					TestInstructionExecutionStatusEnum_TIE_UNEXPECTED_INTERRUPTION,
 				TestInstructionExecutionEndTimeStamp: timestamppb.Now(),
 			}
 		}
@@ -181,9 +190,11 @@ func processTestInstructionExecutionRequest(
 		fmt.Println(restResponse)
 
 		testInstructionExecutionResultMessage = &fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage{
-			ClientSystemIdentification:           nil,
-			TestInstructionExecutionUuid:         testInstructionExecutionPubSubRequest.GetTestInstruction().TestInstructionExecutionUuid,
-			TestInstructionExecutionStatus:       fenixExecutionWorkerGrpcApi.TestInstructionExecutionStatusEnum_TIE_FINISHED_OK,
+			ClientSystemIdentification: nil,
+			TestInstructionExecutionUuid: testInstructionExecutionPubSubRequest.GetTestInstruction().
+				TestInstructionExecutionUuid,
+			TestInstructionExecutionStatus: fenixExecutionWorkerGrpcApi.
+				TestInstructionExecutionStatusEnum_TIE_FINISHED_OK,
 			TestInstructionExecutionEndTimeStamp: timestamppb.Now(),
 		}
 
@@ -193,9 +204,11 @@ func processTestInstructionExecutionRequest(
 
 		// Do Rest-call to 'TestApiEngine' for executing the TestInstruction
 		testInstructionExecutionResultMessage = &fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage{
-			ClientSystemIdentification:           nil,
-			TestInstructionExecutionUuid:         testInstructionExecutionPubSubRequest.GetTestInstruction().TestInstructionExecutionUuid,
-			TestInstructionExecutionStatus:       fenixExecutionWorkerGrpcApi.TestInstructionExecutionStatusEnum_TIE_FINISHED_OK,
+			ClientSystemIdentification: nil,
+			TestInstructionExecutionUuid: testInstructionExecutionPubSubRequest.GetTestInstruction().
+				TestInstructionExecutionUuid,
+			TestInstructionExecutionStatus: fenixExecutionWorkerGrpcApi.
+				TestInstructionExecutionStatusEnum_TIE_FINISHED_OK,
 			TestInstructionExecutionEndTimeStamp: timestamppb.Now(),
 		}
 
@@ -205,9 +218,11 @@ func processTestInstructionExecutionRequest(
 
 		// Do Rest-call to 'TestApiEngine' for executing the TestInstruction
 		testInstructionExecutionResultMessage = &fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage{
-			ClientSystemIdentification:           nil,
-			TestInstructionExecutionUuid:         testInstructionExecutionPubSubRequest.GetTestInstruction().TestInstructionExecutionUuid,
-			TestInstructionExecutionStatus:       fenixExecutionWorkerGrpcApi.TestInstructionExecutionStatusEnum_TIE_FINISHED_OK,
+			ClientSystemIdentification: nil,
+			TestInstructionExecutionUuid: testInstructionExecutionPubSubRequest.GetTestInstruction().
+				TestInstructionExecutionUuid,
+			TestInstructionExecutionStatus: fenixExecutionWorkerGrpcApi.
+				TestInstructionExecutionStatusEnum_TIE_FINISHED_OK,
 			TestInstructionExecutionEndTimeStamp: timestamppb.Now(),
 		}
 

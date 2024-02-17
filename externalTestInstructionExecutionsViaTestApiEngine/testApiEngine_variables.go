@@ -27,3 +27,47 @@ type TestInstructionAttributesUuidAndValueStruct struct {
 	TestInstructionAttributeName          TypeAndStructs.TestInstructionAttributeNameType
 	TestInstructionAttributeValueAsString TypeAndStructs.AttributeValueAsStringType
 }
+
+// TestApiEngineFinalTestInstructionExecutionResultStruct
+// Specify the structure that the Json-response, from TestApiEngine, will be 'converted into
+type TestApiEngineFinalTestInstructionExecutionResultStruct struct {
+	TestInstructionExecutionUUID           string                   `json:"TestInstructionExecutionUuid"`
+	TestInstructionExecutionVersion        string                   `json:"TestInstructionExecutionVersion"`
+	TestInstructionExecutionStatus         string                   `json:"TestInstructionExecutionStatus"`
+	TestInstructionExecutionStartTimeStamp string                   `json:"TestInstructionExecutionStartTimeStamp"`
+	TestInstructionExecutionEndTimeStamp   string                   `json:"TestInstructionExecutionEndTimeStamp"`
+	ResponseVariables                      []ResponseVariableStruct `json:"ResponseVariables"`
+	LogPosts                               []LogPostStruct          `json:"LogPosts"`
+}
+
+// LogPostStruct, within 'TestApiEngineFinalTestInstructionExecutionResultStruct'
+// Hold one logpost item
+type LogPostStruct struct {
+	LogPostTimeStamp                     string                                      `json:"LogPostTimeStamp"`
+	LogPostStatus                        string                                      `json:"LogPostStatus"`
+	LogPostText                          string                                      `json:"LogPostText"`
+	FoundVersusExpectedValueForVariables []FoundVersusExpectedValueForVariableStruct `json:"FoundVersusExpectedValueForVariables"`
+}
+
+// FoundVersusExpectedValueForVariableStruct within 'LogPostStruct'
+// Holds one variables and its expected value vs found value
+type FoundVersusExpectedValueForVariableStruct struct {
+	VariableName              string                           `json:"VariableName"`
+	VariableDescription       string                           `json:"VariableDescription"`
+	FoundVersusExpectedValues []FoundVersusExpectedValueStruct `json:"FoundVersusExpectedValues"`
+}
+
+// FoundVersusExpectedValueStruct within 'LogPostStruct'
+// Holds one variables and its expected value vs found value
+type FoundVersusExpectedValueStruct struct {
+	FoundValue    string `json:"FoundValue"`
+	ExpectedValue string `json:"ExpectedValue"`
+}
+
+// ResponseVariableStruct within 'TestApiEngineFinalTestInstructionExecutionResultStruct'
+// Holds one response variable and its value
+type ResponseVariableStruct struct {
+	ResponseVariableUUID          string `json:"ResponseVariableUuid"`
+	ResponseVariableName          string `json:"ResponseVariableName"`
+	ResponseVariableValueAsString string `json:"ResponseVariableValueAsString"`
+}

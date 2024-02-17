@@ -9,6 +9,7 @@ require (
 	github.com/jlambert68/FenixSubCustodyTestInstructionAdmin v0.0.0-20240215124216-41f82894db3b
 	github.com/jlambert68/FenixSyncShared v0.0.0-20240215140904-db0840b5d70a
 	github.com/jlambert68/FenixTestInstructionsAdminShared v0.0.0-20240215141221-a22a1f13dc53
+	github.com/santhosh-tekuri/jsonschema/v5 v5.3.1
 	github.com/sirupsen/logrus v1.9.3
 	google.golang.org/protobuf v1.32.0
 )

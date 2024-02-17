@@ -5,160 +5,12 @@ import (
 	"bytes"
 	"crypto/tls"
 	"encoding/json"
-	"errors"
-	"fmt"
-	fenixExecutionWorkerGrpcApi "github.com/jlambert68/FenixGrpcApi/FenixExecutionServer/fenixExecutionWorkerGrpcApi/go_grpc_api"
 	"github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/LocalExecutionMethods"
-	TestApiEngineClassesAndMethodsAndAttributes "github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/LocalExecutionMethods/TestApiEngineClassesAndMethods"
-	testApiEngineClassesAndMethods "github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/LocalExecutionMethods/TestApiEngineClassesAndMethods"
-	"github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions"
-	"github.com/jlambert68/FenixTestInstructionsAdminShared/TypeAndStructs"
+	"github.com/santhosh-tekuri/jsonschema/v5"
 	"github.com/sirupsen/logrus"
 	"net/http"
-	"strconv"
+	"strings"
 )
-
-func ConvertTestInstructionExecutionIntoTestApiEngineRestCallMessage(
-	processTestInstructionExecutionPubSubRequest *fenixExecutionWorkerGrpcApi.ProcessTestInstructionExecutionPubSubRequest) (
-	TestApiEngineRestApiMessageValues *TestApiEngineRestApiMessageStruct,
-	err error) {
-
-	// Extract UUID:s from 'TestInstructionExecutionRequest'
-	var (
-		testInstructionUuid          string
-		testCaseExecutionUuid        string
-		testInstructionExecutionUuid string
-	)
-	testInstructionUuid = processTestInstructionExecutionPubSubRequest.GetTestInstruction().GetTestInstructionUuid()
-	testCaseExecutionUuid = processTestInstructionExecutionPubSubRequest.GetTestCaseExecutionUuid()
-	testInstructionExecutionUuid = processTestInstructionExecutionPubSubRequest.GetTestInstruction().GetTestInstructionExecutionUuid()
-
-	// Extract TestInstructionAttributes from 'TestInstructionExecutionRequest'
-	var testInstructionAttributes []*fenixExecutionWorkerGrpcApi.ProcessTestInstructionExecutionPubSubRequest_TestInstructionAttributeMessage
-	testInstructionAttributes = processTestInstructionExecutionPubSubRequest.GetTestInstruction().GetTestInstructionAttributes()
-
-	// Extract relevant testApiEngineData, from TestApiEngine-definitions to be used in mapping,
-	var testApiEngineTestInstructionDataMapPtr *TestApiEngineClassesAndMethodsAndAttributes.TestApiEngineClassesMethodsAttributesVersionMapType
-	var existsInMap bool
-	testApiEngineTestInstructionDataMapPtr, existsInMap = LocalExecutionMethods.FullTestApiEngineClassesMethodsAttributesVersionMap[TypeAndStructs.OriginalElementUUIDType(testInstructionUuid)]
-	if existsInMap != true {
-		// Must exist in map
-		sharedCode.Logger.WithFields(logrus.Fields{
-			"id":                  "acbfdd00-ed23-4882-893c-0e6b4e61338f",
-			"testInstructionUuid": testInstructionUuid,
-		}).Error("Couldn't find correct testApiEngineData in 'testApiEngineClassesMethodsAttributesMap'")
-
-		errorID := "4faf3e89-f647-494c-8cd2-3f0623db68c6"
-		err = errors.New(fmt.Sprintf("couldn't find correct testApiEngineData in 'testApiEngineClassesMethodsAttributesMap' for TestInstructionUuid:'%s', [ErrorID='%s']", testInstructionUuid, errorID))
-
-		return nil, err
-	}
-
-	// Map holding all versions of the specific TestInstruction, with data for mapping towards TestApiEngine
-	var testApiEngineTestInstructionDataMap TestApiEngineClassesAndMethodsAndAttributes.TestApiEngineClassesMethodsAttributesVersionMapType
-	testApiEngineTestInstructionDataMap = *testApiEngineTestInstructionDataMapPtr
-
-	// Version as 'string'
-	var versionNumberAsString TestApiEngineClassesAndMethodsAndAttributes.TestApiEngine_MethodNameVersion_SubCustody_Type // "1_0" or "13_3" ...)
-	// Create the version number as a 'string'
-	versionNumberAsString = TestApiEngineClassesAndMethodsAndAttributes.TestApiEngine_MethodNameVersion_SubCustody_Type(
-		strconv.Itoa(int(processTestInstructionExecutionPubSubRequest.GetTestInstruction().GetMajorVersionNumber())) + "_" +
-			strconv.Itoa(int(processTestInstructionExecutionPubSubRequest.GetTestInstruction().GetMinorVersionNumber())))
-
-	// Pointer to the structure holding Classes, Methods and Attribute conversion information
-	var tempTestApiEngineClassesMethodsAttributesPtr *TestApiEngineClassesAndMethodsAndAttributes.TestApiEngineClassesMethodsAttributesStruct
-	tempTestApiEngineClassesMethodsAttributesPtr, existInMap := testApiEngineTestInstructionDataMap[versionNumberAsString]
-	if existInMap == false {
-		// Must exist in map
-		sharedCode.Logger.WithFields(logrus.Fields{
-			"id":                  "89922406-110e-4792-8c4b-9d48474bfc19",
-			"testInstructionUuid": testInstructionUuid,
-		}).Error("Couldn't find correct testApiEngineData in 'testApiEngineClassesMethodsAttributesMap'")
-
-		errorID := "4faf3e89-f647-494c-8cd2-3f0623db68c6"
-		err = errors.New(fmt.Sprintf("couldn't find correct testApiEngineData in 'testApiEngineClassesMethodsAttributesMap' for TestInstructionUuid:'%s', [ErrorID='%s']", testInstructionUuid, errorID))
-
-		return nil, err
-	}
-
-	// Structure holding Classes, Methods and Attribute conversion information
-	var tempTestApiEngineClassesMethodsAttributes TestApiEngineClassesAndMethodsAndAttributes.TestApiEngineClassesMethodsAttributesStruct
-	tempTestApiEngineClassesMethodsAttributes = *tempTestApiEngineClassesMethodsAttributesPtr
-
-	// Values to be used in RestCall to TestApiEngine
-	TestApiEngineRestApiMessageValues = &TestApiEngineRestApiMessageStruct{
-		TestCaseExecutionUuid:                testCaseExecutionUuid,
-		TestInstructionExecutionUuid:         testInstructionExecutionUuid,
-		TestApiEngineClassNameNAME:           tempTestApiEngineClassesMethodsAttributes.TestApiEngineClassNameNAME,
-		TestApiEngineMethodNameNAME:          tempTestApiEngineClassesMethodsAttributes.TestApiEngineMethodNameNAME,
-		TestApiEngineExpectedToBePassedValue: "",
-		TestInstructionAttribute:             nil,
-		TestApiEngineAttributes:              make(map[TypeAndStructs.TestInstructionAttributeUUIDType]*testApiEngineClassesAndMethods.TestApiEngineAttributesStruct),
-	}
-
-	// Loop all Attributes and populate message to be used for RestCall to TestApiEngine
-	for _, testInstructionAttribute := range testInstructionAttributes {
-
-		// Separate Attribute 'ExpectedToBePassed', which is used in url instead as a parameter in the body of the rest call
-		if testInstructionAttribute.TestInstructionAttributeName != string(TestInstructions.TestInstructionAttributeName_SubCustody_ExpectedToBePassed) {
-
-			// Create and add Attribute with value
-			var tempTestInstructionAttributesUuidAndValue TestInstructionAttributesUuidAndValueStruct
-			tempTestInstructionAttributesUuidAndValue = TestInstructionAttributesUuidAndValueStruct{
-				TestInstructionAttributeUUID:          TypeAndStructs.TestInstructionAttributeUUIDType(testInstructionAttribute.TestInstructionAttributeUuid),
-				TestInstructionAttributeName:          TypeAndStructs.TestInstructionAttributeNameType(testInstructionAttribute.TestInstructionAttributeName),
-				TestInstructionAttributeValueAsString: TypeAndStructs.AttributeValueAsStringType(testInstructionAttribute.AttributeValueAsString),
-			}
-			TestApiEngineRestApiMessageValues.TestInstructionAttribute = append(
-				TestApiEngineRestApiMessageValues.TestInstructionAttribute,
-				tempTestInstructionAttributesUuidAndValue)
-
-			// Get TestApiEngine-attribute conversion-map from pointer
-			var attributesMap map[TypeAndStructs.TestInstructionAttributeUUIDType]*TestApiEngineClassesAndMethodsAndAttributes.TestApiEngineAttributesStruct
-			attributesMap = *tempTestApiEngineClassesMethodsAttributes.Attributes
-
-			// Extract TestApiEngineAttribute-data pointer
-			var tempTestApiEngineAttributesPtr *TestApiEngineClassesAndMethodsAndAttributes.TestApiEngineAttributesStruct
-			tempTestApiEngineAttributesPtr, existsInMap = attributesMap[TypeAndStructs.TestInstructionAttributeUUIDType(testInstructionAttribute.TestInstructionAttributeUuid)]
-			if existsInMap != true {
-				// Must exist in map
-				sharedCode.Logger.WithFields(logrus.Fields{
-					"id":                           "c3fdcf73-f3b7-4ed2-9a9c-c25a64151bbc",
-					"testInstructionUuid":          testInstructionUuid,
-					"TestInstructionAttributeUuid": TypeAndStructs.TestInstructionAttributeUUIDType(testInstructionAttribute.TestInstructionAttributeUuid),
-				}).Error("Couldn't find correct attribute in 'tempTestApiEngineClassesMethodsAttributes.Attributes'")
-
-				errorID := "0ce6aea7-ce07-4ae9-8c9f-227efb621e92"
-				err = errors.New(fmt.Sprintf("couldn't find correct testApiEngineData in 'testApiEngineData.Attributes' for TestInstructionAttributeUuid:'%s', [ErrorID='%s']", testInstructionUuid, errorID))
-
-				return nil, err
-			}
-
-			// Extract TestApiEngineAttribute-data
-			var tempTestApiEngineAttributes TestApiEngineClassesAndMethodsAndAttributes.TestApiEngineAttributesStruct
-			tempTestApiEngineAttributes = *tempTestApiEngineAttributesPtr
-
-			// Create and add reference between Attribute and TestApiEngineAttribute-name to be used in RestRequest
-			var tempTestApiEngineAttributesToUse *testApiEngineClassesAndMethods.TestApiEngineAttributesStruct
-			tempTestApiEngineAttributesToUse = &testApiEngineClassesAndMethods.TestApiEngineAttributesStruct{
-				TestInstructionAttributeUUID:     tempTestApiEngineAttributes.TestInstructionAttributeUUID,
-				TestInstructionAttributeName:     tempTestApiEngineAttributes.TestInstructionAttributeName,
-				TestInstructionAttributeTypeUUID: tempTestApiEngineAttributes.TestInstructionAttributeTypeUUID,
-				TestApiEngineAttributeNameUUID:   tempTestApiEngineAttributes.TestApiEngineAttributeNameUUID,
-				TestApiEngineAttributeNameName:   tempTestApiEngineAttributes.TestApiEngineAttributeNameName,
-			}
-			// Add Attribute
-			TestApiEngineRestApiMessageValues.TestApiEngineAttributes[TypeAndStructs.TestInstructionAttributeUUIDType(testInstructionAttribute.TestInstructionAttributeUuid)] = tempTestApiEngineAttributesToUse
-
-		} else {
-			// Attribute is 'ExpectedToBePassedValue'
-			TestApiEngineRestApiMessageValues.TestApiEngineExpectedToBePassedValue = TypeAndStructs.AttributeValueAsStringType(testInstructionAttribute.AttributeValueAsString)
-		}
-
-	}
-
-	return TestApiEngineRestApiMessageValues, err
-}
 
 func PostTestInstructionUsingRestCall(
 	testApiEngineRestApiMessageValues *TestApiEngineRestApiMessageStruct) (
@@ -244,4 +96,133 @@ func PostTestInstructionUsingRestCall(
 	}
 
 	return restResponse, err
+}
+
+// Validate the json-response from the Rest-call to TestApiEngine
+// Validation os done with supported json-schemas
+// First that the overall message is valid
+// Second that the Response Variable message is valid
+func validateRestResponse(
+	finalTestInstructionExecutionResultAsJson *string,
+	finalTestInstructionExecutionResultJsonSchema *string,
+	responseVariablesJsonSchema *string) (
+	err error) {
+
+	// Load the schema - 'finalTestInstructionExecutionResultJsonSchema'
+	var jsonSchemaCompilerFinalTestInstructionExecutionResult *jsonschema.Compiler
+	jsonSchemaCompilerFinalTestInstructionExecutionResult = jsonschema.NewCompiler()
+	err = jsonSchemaCompilerFinalTestInstructionExecutionResult.AddResource("schema.json",
+		strings.NewReader(*finalTestInstructionExecutionResultJsonSchema))
+	if err != nil {
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id":  "cf1f344a-ec0c-464f-9082-24823a06540a",
+			"err": err,
+			"finalTestInstructionExecutionResultJsonSchema": *finalTestInstructionExecutionResultJsonSchema,
+		}).Fatal("Couldn't add json-schema for 'finalTestInstructionExecutionResultJsonSchema' to " +
+			"'json-schema compile")
+
+	}
+	// Compile json-schema 'finalTestInstructionExecutionResultJsonSchema'
+	var jsonSchemaValidatorFinalTestInstructionExecutionResult *jsonschema.Schema
+	jsonSchemaValidatorFinalTestInstructionExecutionResult, err =
+		jsonSchemaCompilerFinalTestInstructionExecutionResult.Compile("schema.json")
+	if err != nil {
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id":  "eaadce84-0800-4ecc-8a67-29351146060a",
+			"err": err,
+			"finalTestInstructionExecutionResultJsonSchema": *finalTestInstructionExecutionResultJsonSchema,
+		}).Fatal("Couldn't compile the json-schema for 'finalTestInstructionExecutionResultJsonSchema'")
+	}
+
+	// First validate that the overall message is valid -'finalTestInstructionExecutionResultJsonSchema'
+	err = jsonSchemaValidatorFinalTestInstructionExecutionResult.Validate(
+		strings.NewReader(*finalTestInstructionExecutionResultAsJson))
+	if err != nil {
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id":  "d71db97a-740a-4a6f-a429-568e2739496a",
+			"err": err,
+			"finalTestInstructionExecutionResultAsJson": *finalTestInstructionExecutionResultAsJson,
+		}).Error("'finalTestInstructionExecutionResultAsJson' is not valid to json-schema " +
+			"'finalTestInstructionExecutionResultJsonSchema'")
+	} else {
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id": "f2189bcd-5822-4660-aa9b-e853fd2765e9",
+			"finalTestInstructionExecutionResultAsJson": *finalTestInstructionExecutionResultAsJson,
+		}).Error("'finalTestInstructionExecutionResultAsJson' is valid to json-schema " +
+			"'finalTestInstructionExecutionResultJsonSchema'")
+	}
+
+	// UmMarshal TestApiEngine-json into Go-struct
+	var testApiEngineFinalTestInstructionExecutionResult TestApiEngineFinalTestInstructionExecutionResultStruct
+	err = json.Unmarshal([]byte(*finalTestInstructionExecutionResultAsJson),
+		&testApiEngineFinalTestInstructionExecutionResult)
+	if err != nil {
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id": "4997b271-fcf0-44fa-ac29-cdab53f7cdbb",
+			"finalTestInstructionExecutionResultAsJson": *finalTestInstructionExecutionResultAsJson,
+		}).Fatal("Couldn't Unmarshal 'finalTestInstructionExecutionResultAsJson' into Go-struct")
+	}
+
+	// Extract Response Variables
+	var testAPiEngineResponseVariables []ResponseVariableStruct
+	testAPiEngineResponseVariables = testApiEngineFinalTestInstructionExecutionResult.ResponseVariables
+
+	// Convert 'Response Variables' into json, to be validated towards json-schema
+	var testAPiEngineResponseVariablesAsJsonByteArray []byte
+	testAPiEngineResponseVariablesAsJsonByteArray, err = json.Marshal(testAPiEngineResponseVariables)
+	if err != nil {
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id":                             "4997b271-fcf0-44fa-ac29-cdab53f7cdb",
+			"err":                            err,
+			"testAPiEngineResponseVariables": testAPiEngineResponseVariables,
+		}).Fatal("Couldn't marshal 'testAPiEngineResponseVariables' into json")
+
+	}
+
+	d
+	// Load the schema - 'responseVariablesJsonSchema'
+	var jsonSchemaCompilerResponseVariables *jsonschema.Compiler
+	jsonSchemaCompilerResponseVariables = jsonschema.NewCompiler()
+	err = jsonSchemaCompilerResponseVariables.AddResource("schema.json",
+		strings.NewReader(*responseVariablesJsonSchema))
+	if err != nil {
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id":                          "02c10d0e-5fd1-4d45-9d4a-bc041cb4e04d",
+			"err":                         err,
+			"responseVariablesJsonSchema": *responseVariablesJsonSchema,
+		}).Fatal("Couldn't add json-schema for 'responseVariablesJsonSchema' to " +
+			"'json-schema compile")
+
+	}
+	// Compile json-schema 'responseVariablesJsonSchema'
+	var jsonSchemaValidatorResponseVariables *jsonschema.Schema
+	jsonSchemaValidatorResponseVariables, err = jsonSchemaCompilerResponseVariables.
+		Compile("schema.json")
+	if err != nil {
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id":                          "a852d237-13e0-4925-893d-c185c316ed17",
+			"err":                         err,
+			"responseVariablesJsonSchema": *responseVariablesJsonSchema,
+		}).Fatal("Couldn't compile the json-schema for 'responseVariablesJsonSchema'")
+	}
+
+	// Second validate that the 'Response Variables' is valid -'responseVariablesJsonSchema'
+	err = jsonSchemaValidatorResponseVariables.Validate(
+		strings.NewReader(string(testAPiEngineResponseVariablesAsJsonByteArray)))
+	if err != nil {
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id":  "74916f92-fb0f-445c-ae0a-6a5bd2bd0fcf",
+			"err": err,
+			"string(testAPiEngineResponseVariablesAsJsonByteArray)": string(testAPiEngineResponseVariablesAsJsonByteArray),
+		}).Error("'string(testAPiEngineResponseVariablesAsJsonByteArray)' is not valid to json-schema " +
+			"'responseVariablesJsonSchema'")
+	} else {
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id": "e498ecb2-8d50-4d99-8984-3171dbd9ed6c",
+			"string(testAPiEngineResponseVariablesAsJsonByteArray)": string(testAPiEngineResponseVariablesAsJsonByteArray),
+		}).Error("'string(testAPiEngineResponseVariablesAsJsonByteArray)' is valid to json-schema " +
+			"'responseVariablesJsonSchema'")
+	}
+
+	return err
 }
