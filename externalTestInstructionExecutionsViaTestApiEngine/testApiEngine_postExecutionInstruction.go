@@ -33,6 +33,11 @@ func PostTestInstructionUsingRestCall(
 		attributesMap[string(testInstructionAttribute.TestInstructionAttributeName)] = string(testInstructionAttribute.TestInstructionAttributeValueAsString)
 	}
 
+	// Add TestCaseExecutionUuid and TestInstructionExecutionUuid
+	attributesMap["TestCaseExecutionUuid"] = testApiEngineRestApiMessageValues.TestCaseExecutionUuid
+	attributesMap["TestInstructionExecutionUuid"] = testApiEngineRestApiMessageValues.TestInstructionExecutionUuid
+	attributesMap["TestInstructionExecutionVersion"] = "1"
+
 	attributesAsJson, err := json.Marshal(attributesMap)
 	if err != nil {
 		sharedCode.Logger.WithFields(logrus.Fields{
@@ -40,7 +45,7 @@ func PostTestInstructionUsingRestCall(
 			"attributesMap": attributesMap,
 		}).Error("Couldn't Marshal Attributes-map into json request")
 
-		return nil, err
+		return TestApiEngineFinalTestInstructionExecutionResultStruct{}, err
 	}
 
 	// Create request-url

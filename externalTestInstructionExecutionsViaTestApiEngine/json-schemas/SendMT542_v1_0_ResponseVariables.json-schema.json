@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Response Variables for SendMT540",
+  "title": "Response Variables for SendMT542",
   "type": "array",
   "items": {
     "type": "object",
@@ -24,7 +24,7 @@
     "additionalProperties": false,
     "enum": [
       {
-        "ResponseVariableUuid": "24fa2f84-827a-4c01-a86c-da42d888c295",
+        "ResponseVariableUuid": "9dd57f25-75e0-4024-862b-e0728c066604",
         "ResponseVariableName": ":20C::SEME//"
       }
     ]
