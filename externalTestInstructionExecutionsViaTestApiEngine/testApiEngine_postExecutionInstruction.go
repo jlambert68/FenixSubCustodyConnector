@@ -15,8 +15,8 @@ import (
 
 func PostTestInstructionUsingRestCall(
 	testApiEngineRestApiMessageValues *TestApiEngineRestApiMessageStruct,
-	finalTestInstructionExecutionResultAsJson *string,
-	finalTestInstructionExecutionResultJsonSchema *string) (
+	finalTestInstructionExecutionResultJsonSchema *string,
+	responseVariablesJsonSchema *string) (
 	testApiEngineFinalTestInstructionExecutionResult TestApiEngineFinalTestInstructionExecutionResultStruct,
 	err error) {
 
@@ -90,7 +90,10 @@ func PostTestInstructionUsingRestCall(
 
 	// Do RestCall to TestApiEngine
 	var restResponse *http.Response
-	restResponse, err = httpClient.Post(TestApiEngineUrl, "application/json; charset=utf-8", bytes.NewBuffer(attributesAsJson))
+	restResponse, err = httpClient.Post(
+		TestApiEngineUrl,
+		"application/json; charset=utf-8",
+		bytes.NewBuffer(attributesAsJson))
 	if err != nil {
 		sharedCode.Logger.WithFields(logrus.Fields{
 			"id":               "12b846ad-e8bf-41e0-8893-a1a7cef5f396",
@@ -116,8 +119,8 @@ func PostTestInstructionUsingRestCall(
 	// Validate rest-response and convert into 'TestApiEngineFinalTestInstructionExecutionResultStruct'
 	testApiEngineFinalTestInstructionExecutionResult, err = validateAndTransformRestResponse(
 		&bodyAsString,
-		finalTestInstructionExecutionResultAsJson,
-		finalTestInstructionExecutionResultJsonSchema)
+		finalTestInstructionExecutionResultJsonSchema,
+		responseVariablesJsonSchema)
 
 	if err != nil {
 		return TestApiEngineFinalTestInstructionExecutionResultStruct{}, err

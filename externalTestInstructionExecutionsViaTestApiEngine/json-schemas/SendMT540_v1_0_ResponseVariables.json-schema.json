@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Response Variables for SendMT540",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "ResponseVariableUuid": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "ResponseVariableName": {
+        "type": "string"
+      },
+      "ResponseVariableValueAsString": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "ResponseVariableUuid",
+      "ResponseVariableName",
+      "ResponseVariableValueAsString"
+    ],
+    "additionalProperties": false,
+    "enum": [
+      {
+        "uuid": "39818ba1-676d-42d0-87da-e1080e9d5ffd",
+        "name": ":20C::SEME//"
+      }
+    ]
+  }
+}

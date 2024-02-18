@@ -138,6 +138,11 @@ func processTestInstructionExecutionRequest(
 	case TestInstruction_SendOnMQTypeMT_SendMT540.TestInstructionUUID_SubCustody_SendMT540:
 		fmt.Println("case TestInstruction_SendOnMQTypeMT_SendMT540.TestInstructionUUID_SubCustody_SendMT540:")
 
+		var version string
+		version = string(testInstructionExecutionPubSubRequest.TestInstruction.GetMajorVersionNumber()) +
+			"_" +
+			string(testInstructionExecutionPubSubRequest.TestInstruction.GetMinorVersionNumber())
+
 		// Convert message into message that can be used when sedning to TestApiEngine
 		var testApiEngineRestApiMessageValues *executeTestInstructionUsingTestApiEngine.TestApiEngineRestApiMessageStruct
 		testApiEngineRestApiMessageValues, err = executeTestInstructionUsingTestApiEngine.
@@ -164,18 +169,21 @@ func processTestInstructionExecutionRequest(
 		}
 
 		// Get Json-schemas to use
-		var finalTestInstructionExecutionResultAsJson *string
 		var finalTestInstructionExecutionResultJsonSchema *string
-		finalTestInstructionExecutionResultAsJson, finalTestInstructionExecutionResultJsonSchema =
-			getResponseSchemasToUse(TestInstruction_SendOnMQTypeMT_SendMT540.TestInstructionUUID_SubCustody_SendMT540)
+		var responseVariablesJsonSchema *string
+		finalTestInstructionExecutionResultJsonSchema, responseVariablesJsonSchema =
+			executeTestInstructionUsingTestApiEngine.GetResponseSchemasToUse(
+				TestInstruction_SendOnMQTypeMT_SendMT540.TestInstructionUUID_SubCustody_SendMT540,
+				version)
 
 		// Do Rest-call to 'TestApiEngine' for executing the TestInstruction
 		var testApiEngineFinalTestInstructionExecutionResult executeTestInstructionUsingTestApiEngine.TestApiEngineFinalTestInstructionExecutionResultStruct
 		testApiEngineFinalTestInstructionExecutionResult, err = executeTestInstructionUsingTestApiEngine.
 			PostTestInstructionUsingRestCall(
 				testApiEngineRestApiMessageValues,
-				finalTestInstructionExecutionResultAsJson,
-				finalTestInstructionExecutionResultJsonSchema)
+				finalTestInstructionExecutionResultJsonSchema,
+				responseVariablesJsonSchema)
+
 		if err != nil {
 			// Something went wrong when doing RestApi-call
 			sharedCode.Logger.WithFields(logrus.Fields{
@@ -195,7 +203,7 @@ func processTestInstructionExecutionRequest(
 			}
 		}
 
-		fmt.Println(restResponse)
+		testApiEngineFinalTestInstructionExecutionResult
 
 		testInstructionExecutionResultMessage = &fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage{
 			ClientSystemIdentification: nil,

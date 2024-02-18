@@ -1,0 +1,126 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "FinalTestInstructionExecutionResultMessage",
+    "type": "object",
+    "properties": {
+        "TestInstructionExecutionUuid": {
+            "type": "string"
+        },
+        "TestInstructionExecutionVersion": {
+            "type": "string"
+        },
+        "TestInstructionExecutionStatus": {
+            "$ref": "#/definitions/TestInstructionExecutionStatusEnum"
+        },
+        "TestInstructionExecutionStartTimeStamp": {
+            "type": "string",
+            "format": "date-time"
+        },
+        "TestInstructionExecutionEndTimeStamp": {
+            "type": "string",
+            "format": "date-time"
+        },
+        "ResponseVariables": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/ResponseVariableMessage"
+            }
+        },
+        "LogPosts": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/LogPostMessage"
+            }
+        }
+    },
+    "required": [
+        "TestInstructionExecutionUuid",
+        "TestInstructionExecutionVersion",
+        "TestInstructionExecutionStatus",
+        "TestInstructionExecutionStartTimeStamp",
+        "TestInstructionExecutionEndTimeStamp",
+        "LogPosts"
+    ],
+    "definitions": {
+        "TestInstructionExecutionStatusEnum": {
+            "type": "string",
+            "enum": [
+                "TIE_INITIATED",
+                "TIE_EXECUTING",
+                "TIE_CONTROLLED_INTERRUPTION",
+                "TIE_CONTROLLED_INTERRUPTION_CAN_BE_RERUN",
+                "TIE_FINISHED_OK",
+                "TIE_FINISHED_OK_CAN_BE_RERUN",
+                "TIE_FINISHED_NOT_OK",
+                "TIE_FINISHED_NOT_OK_CAN_BE_RERUN",
+                "TIE_UNEXPECTED_INTERRUPTION",
+                "TIE_UNEXPECTED_INTERRUPTION_CAN_BE_RERUN",
+                "TIE_TIMEOUT_INTERRUPTION",
+                "TIE_TIMEOUT_INTERRUPTION_CAN_BE_RERUN"
+            ]
+        },
+        "LogPostMessage": {
+            "type": "object",
+            "properties": {
+                "LogPostTimeStamp": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "LogPostStatus": {
+                    "$ref": "#/definitions/LogPostStatusEnum"
+                },
+                "LogPostText": {
+                    "type": "string"
+                },
+                "FoundVersusExpectedValue": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/FoundVersusExpectedValueMessage"
+                    }
+                }
+            },
+            "required": ["LogPostTimeStamp", "LogPostStatus", "LogPostText", "FoundVersusExpectedValue"]
+        },
+        "LogPostStatusEnum": {
+            "type": "string",
+            "enum": [
+                "INFO",
+                "WARNING",
+                "VALIDATION_OK",
+                "VALIDATION_ERROR",
+                "EXECUTION_OK",
+                "EXECUTION_ERROR"
+            ]
+        },
+        "FoundVersusExpectedValueMessage": {
+            "type": "object",
+            "properties": {
+                "FoundValue": {
+                    "type": "string"
+                },
+                "ExpectedValue": {
+                    "type": "string"
+                }
+            },
+            "required": ["FoundValue", "ExpectedValue"]
+        },
+        "ResponseVariableMessage": {
+            "type": "object",
+            "properties": {
+                "ResponseVariableUuid": {
+                    "type": "string"
+                },
+                "ResponseVariableName": {
+                    "type": "string"
+                },
+                "ResponseVariableValueAsString": {
+                    "type": "string"
+                }
+            },
+            "required": ["ResponseVariableUuid", "ResponseVariableName", "ResponseVariableValueAsString"]
+        }
+    }
+}
+
+
+

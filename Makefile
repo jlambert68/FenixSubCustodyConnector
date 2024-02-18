@@ -8,16 +8,44 @@ filenamePartFirst := FenixSubCustodyConnector
 filenamePartLast := .exe
 datetime := `date +'%y%m%d_%H%M%S'`
 
+# Remote OverAll
+remoteUrl := https://raw.githubusercontent.com
 githubUsername := jlambert68
+
 repositoryOverAll := FenixGrpcApi
-repositorySpecifc := FenixSubCustodyConnector
 branchOverAll := master
-branschSpecific := master
 
-localJsonSchemaPath := json-schmas
+# Remote Json-Schemas
+jsonSchemaPathOverAll := FenixExecutionServer/fenixExecutionConnectorGrpcApi/json-schema/
+jsonSchemaFileNameOverAllL := FinalTestInstructionExecutionResultMessage.json-schema.json
 
-jsonSchemaOverAll := FenixExecutionServer/fenixExecutionConnectorGrpcApi/json-schema/FinalTestInstructionExecutionResultMessage.json-schema.json
-localJsonSchemaOverAllLName := FinalTestInstructionExecutionResultMessage.json-schema.json
+
+# Full Remote Path and FilePath - OverAll
+fullRemotePathOverAll := $(remoteUrl)/$(githubUsername)/$(repositoryOverAll)/$(branchOverAll)/$(jsonSchemaPathOverAll)
+fullRemoteFilePathOverAll := $(fullRemotePathOverAll)/$(jsonSchemaFileNameOverAllL)
+
+# Remote Specific
+repositorySubCustody := FenixSubCustodyTestInstructionAdmin
+branchSpecific := master
+
+# Remote SendMT540
+# Remote Json-Schemas
+jsonSchemaPathSendMT540_v1_0 := TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_SendOnMQTypeMT_SendMT540/version_1_0/
+jsonSchemaFileNameSendMT540 := SendMT540_ResponseVariables.json-schema.json
+
+
+
+# Full Remote Path and FilePath - SendMT540
+fullRemotePathSendMT540_v1_0 := $(remoteUrl)/$(githubUsername)/$(repositorySubCustody)/$(branchSpecific)/$(jsonSchemaPathSendMT540_v1_0)
+fullRemoteFilePathSendMT540_v1_0 := $(fullRemotePathSendMT540_v1_0)/$(jsonSchemaFileNameSendMT540)
+
+# Local
+localJsonSchemaPath := externalTestInstructionExecutionsViaTestApiEngine/json-schemas
+localJsonSchemaFileNameSendMT540_v1_0 := SendMT540_v1_0_ResponseVariables.json-schema.json
+
+fullLocalPath := $(localJsonSchemaPath)
+fullLocalFilePathOverAll := $(fullLocalPath)/$(jsonSchemaFileNameOverAllL)
+fullLocalFilePathSendMT540_v1_0 := $(fullLocalPath)/$(localJsonSchemaFileNameSendMT540_v1_0)
 
 
 
@@ -44,4 +72,8 @@ CrossBuildForWindows_SEB_test:
 	GOOS=windows GOARCH=amd64 CGO_ENABLED=1 CXX=x86_64-w64-mingw32-g++ CC=x86_64-w64-mingw32-gcc go build -o $(fileName) -ldflags="$(InjectValue)" .
 
 Download-json-schemas:
-	@curl -L -o  $(localJsonSchemaPath)/$(localJsonSchemaOverAllLName) "https://github.com/$(githubUsername)/$(repositoryOverall)/$(branchOverAll)/$(jsonSchemaOverAll)"
+	echo "$(fullLocalFilePathSendMT540_v1_0)"
+	echo "$(fullRemoteFilePathSendMT540_v1_0)"
+	@curl -L -o $(fullLocalFilePathOverAll) "$(fullRemoteFilePathOverAll)"
+	@curl -L -o $(fullLocalFilePathSendMT540_v1_0) "$(fullRemoteFilePathSendMT540_v1_0)"
+#$(localJsonSchemaPath)/$(localJsonSchemaOverAllLName)
