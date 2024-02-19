@@ -10,6 +10,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 	"strings"
 )
 
@@ -17,7 +18,8 @@ func PostTestInstructionUsingRestCall(
 	testApiEngineRestApiMessageValues *TestApiEngineRestApiMessageStruct,
 	requestMessageToTestApiEngineJsonSchema *string,
 	finalTestInstructionExecutionResultJsonSchema *string,
-	responseVariablesJsonSchema *string) (
+	responseVariablesJsonSchema *string,
+	testInstructionVersion string) (
 	testApiEngineFinalTestInstructionExecutionResult TestApiEngineFinalTestInstructionExecutionResultStruct,
 	err error) {
 
@@ -31,13 +33,16 @@ func PostTestInstructionUsingRestCall(
 	for _, testInstructionAttribute := range testApiEngineRestApiMessageValues.TestInstructionAttribute {
 
 		// Add attribute to Map
-		attributesMap[string(testInstructionAttribute.TestInstructionAttributeName)] = string(testInstructionAttribute.TestInstructionAttributeValueAsString)
+		attributesMap[string(testInstructionAttribute.TestInstructionAttributeName)] = string(testInstructionAttribute.
+			TestInstructionAttributeValueAsString)
 	}
 
-	// Add TestCaseExecutionUuid and TestInstructionExecutionUuid
+	// Add TestCaseExecutionUuid, TestInstructionExecutionUuid, TestInstructionExecutionVersion and TestInstructionVersion
 	attributesMap["TestCaseExecutionUuid"] = testApiEngineRestApiMessageValues.TestCaseExecutionUuid
 	attributesMap["TestInstructionExecutionUuid"] = testApiEngineRestApiMessageValues.TestInstructionExecutionUuid
-	attributesMap["TestInstructionExecutionVersion"] = "1"
+	attributesMap["TestInstructionExecutionVersion"] = strconv.Itoa(int(testApiEngineRestApiMessageValues.
+		TestInstructionExecutionVersion))
+	attributesMap["TestInstructionVersion"] = testInstructionVersion
 
 	var attributesAsJson []byte
 	attributesAsJson, err = json.Marshal(attributesMap)
@@ -155,28 +160,12 @@ func validateRestRequest(
 	var tempJsonSchema string
 	var tempAttributesAsByteArray []byte
 
-	// 	// *** Second Step ***
-	// Load the schema - 'requestMessageToTestApiEngineJsonSchema'
-	var jsonSchemaCompilerRequest *jsonschema.Compiler
-	jsonSchemaCompilerRequest = jsonschema.NewCompiler()
-
+	// 	// *** First Step ***
 	tempJsonSchema = *requestMessageToTestApiEngineJsonSchema
-
-	err = jsonSchemaCompilerRequest.AddResource("schema.json",
-		strings.NewReader(tempJsonSchema))
-	if err != nil {
-		sharedCode.Logger.WithFields(logrus.Fields{
-			"id":  "5c586c18-ab8e-400d-a65e-d4ac60a46071",
-			"err": err,
-			"requestMessageToTestApiEngineJsonSchema": *requestMessageToTestApiEngineJsonSchema,
-		}).Fatal("Couldn't add json-schema for 'requestMessageToTestApiEngineJsonSchema' to " +
-			"'json-schema compile")
-	}
 
 	// Compile json-schema 'requestMessageToTestApiEngineJsonSchema'
 	var jsonSchemaValidatorRequest *jsonschema.Schema
-	jsonSchemaValidatorRequest, err = jsonSchemaCompilerRequest.
-		Compile("schema.json")
+	jsonSchemaValidatorRequest, err = jsonschema.CompileString("schema.json", tempJsonSchema)
 	if err != nil {
 		sharedCode.Logger.WithFields(logrus.Fields{
 			"id":  "b090d10f-4880-45ee-b015-43e8789bc1ea",
@@ -185,17 +174,27 @@ func validateRestRequest(
 		}).Fatal("Couldn't compile the json-schema for 'requestMessageToTestApiEngineJsonSchema'")
 	}
 
-	// Second validate that the 'Request' is valid -'requestMessageToTestApiEngineJsonSchema'
-
+	// Second convert to object that can be validated
 	tempAttributesAsByteArray = *attributesAsJson
-	err = jsonSchemaValidatorRequest.Validate(
-		strings.NewReader(string(tempAttributesAsByteArray)))
+	var jsonObjectedToBeValidated interface{}
+	err = json.Unmarshal(tempAttributesAsByteArray, &jsonObjectedToBeValidated)
+
+	if err != nil {
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id":                        "e0c23da2-322c-477b-bcca-7aca9f39aa9b",
+			"err":                       err,
+			"string(*attributesAsJson)": string(*attributesAsJson),
+		}).Fatal("Couldn't Unmarshal the json, tempAttributesAsByteArray, into object that can be validated")
+	}
+
+	// Thirds validate that the 'Request' is valid -'requestMessageToTestApiEngineJsonSchema'
+	err = jsonSchemaValidatorRequest.Validate(jsonObjectedToBeValidated)
 	if err != nil {
 		sharedCode.Logger.WithFields(logrus.Fields{
 			"id":                        "bb0ffb11-77e6-4739-8911-fcb70ff714f2",
 			"err":                       err,
 			"string(*attributesAsJson)": string(*attributesAsJson),
-		}).Error("'string(*attributesAsJson)' is not valid to json-schema " +
+		}).Error("'string(*attributesAsJson)' is not valid to json " +
 			"'requestMessageToTestApiEngineJsonSchema'")
 
 		return err
@@ -223,47 +222,45 @@ func validateAndTransformRestResponse(
 	err error) {
 
 	// *** First Step ***
-	// Load the schema - 'finalTestInstructionExecutionResultJsonSchema'
-	var jsonSchemaCompilerFinalTestInstructionExecutionResult *jsonschema.Compiler
-	jsonSchemaCompilerFinalTestInstructionExecutionResult = jsonschema.NewCompiler()
-	err = jsonSchemaCompilerFinalTestInstructionExecutionResult.AddResource("schema.json",
-		strings.NewReader(*finalTestInstructionExecutionResultJsonSchema))
-	if err != nil {
-		sharedCode.Logger.WithFields(logrus.Fields{
-			"id":  "cf1f344a-ec0c-464f-9082-24823a06540a",
-			"err": err,
-			"finalTestInstructionExecutionResultJsonSchema": *finalTestInstructionExecutionResultJsonSchema,
-		}).Fatal("Couldn't add json-schema for 'finalTestInstructionExecutionResultJsonSchema' to " +
-			"'json-schema compile")
 
-	}
 	// Compile json-schema 'finalTestInstructionExecutionResultJsonSchema'
 	var jsonSchemaValidatorFinalTestInstructionExecutionResult *jsonschema.Schema
-	jsonSchemaValidatorFinalTestInstructionExecutionResult, err =
-		jsonSchemaCompilerFinalTestInstructionExecutionResult.Compile("schema.json")
+	jsonSchemaValidatorFinalTestInstructionExecutionResult, err = jsonschema.CompileString("schema.json", *finalTestInstructionExecutionResultJsonSchema)
 	if err != nil {
 		sharedCode.Logger.WithFields(logrus.Fields{
-			"id":  "eaadce84-0800-4ecc-8a67-29351146060a",
+			"id":  "df414c69-7ee7-454c-83ba-c6350440fd66",
 			"err": err,
 			"finalTestInstructionExecutionResultJsonSchema": *finalTestInstructionExecutionResultJsonSchema,
 		}).Fatal("Couldn't compile the json-schema for 'finalTestInstructionExecutionResultJsonSchema'")
 	}
 
-	// First validate that the overall message is valid -'finalTestInstructionExecutionResultJsonSchema'
-	err = jsonSchemaValidatorFinalTestInstructionExecutionResult.Validate(
-		strings.NewReader(*finalTestInstructionExecutionResultAsJson))
+	// Convert to object that can be validated
+	var jsonObjectedToBeValidated interface{}
+	err = json.Unmarshal([]byte(*finalTestInstructionExecutionResultAsJson), &jsonObjectedToBeValidated)
+
 	if err != nil {
 		sharedCode.Logger.WithFields(logrus.Fields{
-			"id":  "d71db97a-740a-4a6f-a429-568e2739496a",
+			"id":  "3e01379c-166b-4c58-a48c-fad7692387da",
+			"err": err,
+			"requestMessageToTestApiEngineJsonSchema": *finalTestInstructionExecutionResultAsJson,
+		}).Fatal("Couldn't Unmarshal the json, finalTestInstructionExecutionResultAsJson, into object that can be validated")
+	}
+
+	// Validate that the overall message is valid -'finalTestInstructionExecutionResultJsonSchema'
+	err = jsonSchemaValidatorFinalTestInstructionExecutionResult.Validate(jsonObjectedToBeValidated)
+	if err != nil {
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id":  "0bd7fcff-ac59-4747-aeaf-f60ef4e0aa37",
 			"err": err,
 			"finalTestInstructionExecutionResultAsJson": *finalTestInstructionExecutionResultAsJson,
 		}).Error("'finalTestInstructionExecutionResultAsJson' is not valid to json-schema " +
 			"'finalTestInstructionExecutionResultJsonSchema'")
 
 		return TestApiEngineFinalTestInstructionExecutionResultStruct{}, err
+
 	} else {
 		sharedCode.Logger.WithFields(logrus.Fields{
-			"id": "f2189bcd-5822-4660-aa9b-e853fd2765e9",
+			"id": "2a2cb32d-84d7-4a7f-aced-2b1466982513",
 			"finalTestInstructionExecutionResultAsJson": *finalTestInstructionExecutionResultAsJson,
 		}).Debug("'finalTestInstructionExecutionResultAsJson' is valid to json-schema " +
 			"'finalTestInstructionExecutionResultJsonSchema'")
@@ -296,30 +293,27 @@ func validateAndTransformRestResponse(
 	}
 
 	// 	// *** Second Step ***
-	// Load the schema - 'responseVariablesJsonSchema'
-	var jsonSchemaCompilerResponseVariables *jsonschema.Compiler
-	jsonSchemaCompilerResponseVariables = jsonschema.NewCompiler()
-	err = jsonSchemaCompilerResponseVariables.AddResource("schema.json",
-		strings.NewReader(*responseVariablesJsonSchema))
-	if err != nil {
-		sharedCode.Logger.WithFields(logrus.Fields{
-			"id":                          "02c10d0e-5fd1-4d45-9d4a-bc041cb4e04d",
-			"err":                         err,
-			"responseVariablesJsonSchema": *responseVariablesJsonSchema,
-		}).Fatal("Couldn't add json-schema for 'responseVariablesJsonSchema' to " +
-			"'json-schema compile")
-	}
 
 	// Compile json-schema 'responseVariablesJsonSchema'
 	var jsonSchemaValidatorResponseVariables *jsonschema.Schema
-	jsonSchemaValidatorResponseVariables, err = jsonSchemaCompilerResponseVariables.
-		Compile("schema.json")
+	jsonSchemaValidatorResponseVariables, err = jsonschema.CompileString("schema.json", *responseVariablesJsonSchema)
 	if err != nil {
 		sharedCode.Logger.WithFields(logrus.Fields{
 			"id":                          "a852d237-13e0-4925-893d-c185c316ed17",
 			"err":                         err,
 			"responseVariablesJsonSchema": *responseVariablesJsonSchema,
 		}).Fatal("Couldn't compile the json-schema for 'responseVariablesJsonSchema'")
+	}
+
+	// Convert to object that can be validated
+	err = json.Unmarshal(testAPiEngineResponseVariablesAsJsonByteArray, &jsonObjectedToBeValidated)
+
+	if err != nil {
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id":                             "3e01379c-166b-4c58-a48c-fad7692387da",
+			"err":                            err,
+			"testAPiEngineResponseVariables": testAPiEngineResponseVariables,
+		}).Fatal("Couldn't Unmarshal the json, testAPiEngineResponseVariablesAsJsonByteArray, into object that can be validated")
 	}
 
 	// Second validate that the 'Response Variables' is valid -'responseVariablesJsonSchema'

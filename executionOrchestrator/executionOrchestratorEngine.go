@@ -145,9 +145,12 @@ func processTestInstructionExecutionRequest(
 	case TestInstruction_SendOnMQTypeMT_SendMT540.TestInstructionUUID_SubCustody_SendMT540:
 		fmt.Println("case TestInstruction_SendOnMQTypeMT_SendMT540.TestInstructionUUID_SubCustody_SendMT540:")
 
-		var version string
-		version = strconv.Itoa(int(testInstructionExecutionPubSubRequest.TestInstruction.GetMajorVersionNumber())) +
-			"_" +
+		// Create version number to be used in attributes request
+		// Also use version number when getting correct json-schemas
+		var testInstructionVersion string
+		testInstructionVersion = "v" +
+			strconv.Itoa(int(testInstructionExecutionPubSubRequest.TestInstruction.GetMajorVersionNumber())) +
+			"." +
 			strconv.Itoa(int(testInstructionExecutionPubSubRequest.TestInstruction.GetMinorVersionNumber()))
 
 		// Convert message into message that can be used when sending to TestApiEngine
@@ -208,7 +211,7 @@ func processTestInstructionExecutionRequest(
 		requestMessageToTestApiEngineJsonSchema, finalTestInstructionExecutionResultJsonSchema, responseVariablesJsonSchema =
 			executeTestInstructionUsingTestApiEngine.GetResponseSchemasToUse(
 				TestInstruction_SendOnMQTypeMT_SendMT540.TestInstructionUUID_SubCustody_SendMT540,
-				version)
+				testInstructionVersion)
 
 		// Do Rest-call to 'TestApiEngine' for executing the TestInstruction
 		var testApiEngineFinalTestInstructionExecutionResult executeTestInstructionUsingTestApiEngine.TestApiEngineFinalTestInstructionExecutionResultStruct
@@ -217,7 +220,8 @@ func processTestInstructionExecutionRequest(
 				testApiEngineRestApiMessageValues,
 				requestMessageToTestApiEngineJsonSchema,
 				finalTestInstructionExecutionResultJsonSchema,
-				responseVariablesJsonSchema)
+				responseVariablesJsonSchema,
+				testInstructionVersion)
 
 		if err != nil {
 			// Something went wrong when doing RestApi-call

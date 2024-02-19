@@ -30,7 +30,7 @@ func GetResponseSchemasToUse(
 
 		// Extract json-schema depending on version
 		switch testInstructionVersion {
-		case "1_0":
+		case "v1.0":
 
 			// Outgoing Request
 			var tempRequestMessageToTestApiEngineJsonSchema string
@@ -56,7 +56,7 @@ func GetResponseSchemasToUse(
 
 		// Extract json-schema depending on version
 		switch testInstructionVersion {
-		case "1_0":
+		case "v1.0":
 
 			// Outgoing Request
 			var tempRequestMessageToTestApiEngineJsonSchema string
@@ -82,7 +82,7 @@ func GetResponseSchemasToUse(
 
 		// Extract json-schema depending on version
 		switch testInstructionVersion {
-		case "1_0":
+		case "v1.0":
 
 			// Outgoing Request
 			var tempRequestMessageToTestApiEngineJsonSchema string
