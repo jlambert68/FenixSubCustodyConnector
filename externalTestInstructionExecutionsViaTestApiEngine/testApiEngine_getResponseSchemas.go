@@ -3,6 +3,8 @@ package executeTestInstructionUsingTestApiEngine
 import (
 	"FenixSubCustodyConnector/sharedCode"
 	"github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_SendOnMQTypeMT_SendMT540"
+	TestInstruction_SendOnMQTypeMT_SendMT542 "github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_SendOnMQTypeMT_SendMT542/version_1_0"
+	TestInstruction_ValidateMQTypeMT54x_ValidateMT544 "github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_ValidateMQTypeMT54x_ValidateMT544/version_1_0"
 	"github.com/jlambert68/FenixTestInstructionsAdminShared/TypeAndStructs"
 	"github.com/sirupsen/logrus"
 )
@@ -11,11 +13,14 @@ import (
 func GetResponseSchemasToUse(
 	testInstructionUUID TypeAndStructs.OriginalElementUUIDType,
 	testInstructionVersion string) (
+	requestMessageToTestApiEngineJsonSchema *string,
 	finalTestInstructionExecutionResultJsonSchema *string,
 	responseVariablesJsonSchema *string) {
 
 	// Get the json-schema for 'FinalTestInstructionExecutionResult'
-	*finalTestInstructionExecutionResultJsonSchema = string(finalTestInstructionExecutionResultMessageJsonSchema)
+	var tempFinalTestInstructionExecutionResultJsonSchema string
+	tempFinalTestInstructionExecutionResultJsonSchema = string(finalTestInstructionExecutionResultMessageJsonSchema)
+	finalTestInstructionExecutionResultJsonSchema = &tempFinalTestInstructionExecutionResultJsonSchema
 
 	// Chose Response Schema depending on TestInstruction to be executed
 	switch testInstructionUUID {
@@ -26,14 +31,75 @@ func GetResponseSchemasToUse(
 		// Extract json-schema depending on version
 		switch testInstructionVersion {
 		case "1_0":
-			*responseVariablesJsonSchema = string(sendMT540_v1_0_ResponseVariablesMessageJsonSchema)
+
+			// Outgoing Request
+			var tempRequestMessageToTestApiEngineJsonSchema string
+			tempRequestMessageToTestApiEngineJsonSchema = string(sendMT540_v1_0_RequestMessageJsonSchema)
+			requestMessageToTestApiEngineJsonSchema = &tempRequestMessageToTestApiEngineJsonSchema
+
+			// Incoming Response
+			var tempResponseVariablesJsonSchema string
+			tempResponseVariablesJsonSchema = string(sendMT540_v1_0_ResponseVariablesMessageJsonSchema)
+			responseVariablesJsonSchema = &tempResponseVariablesJsonSchema
 
 		default:
 			sharedCode.Logger.WithFields(logrus.Fields{
 				"id":                     "dec47e30-5f2e-4891-a228-b00580d3dc31",
 				"testInstructionUUID":    testInstructionUUID,
 				"testInstructionVersion": testInstructionVersion,
-			}).Error("Unhandled version")
+			}).Fatal("Unhandled version")
+
+		}
+
+		// Send a MT542 on MQ
+	case TestInstruction_SendOnMQTypeMT_SendMT542.TestInstructionUUID_SubCustody_SendMT542:
+
+		// Extract json-schema depending on version
+		switch testInstructionVersion {
+		case "1_0":
+
+			// Outgoing Request
+			var tempRequestMessageToTestApiEngineJsonSchema string
+			tempRequestMessageToTestApiEngineJsonSchema = string(sendMT542_v1_0_RequestMessageJsonSchema)
+			requestMessageToTestApiEngineJsonSchema = &tempRequestMessageToTestApiEngineJsonSchema
+
+			// Incoming Response
+			var tempResponseVariablesJsonSchema string
+			tempResponseVariablesJsonSchema = string(sendMT542_v1_0_ResponseVariablesMessageJsonSchema)
+			responseVariablesJsonSchema = &tempResponseVariablesJsonSchema
+
+		default:
+			sharedCode.Logger.WithFields(logrus.Fields{
+				"id":                     "4d13b512-baa7-439b-a174-90e2859e259c",
+				"testInstructionUUID":    testInstructionUUID,
+				"testInstructionVersion": testInstructionVersion,
+			}).Fatal("Unhandled version for 'TestInstructionUUID_SubCustody_SendMT542'")
+
+		}
+
+		// Validate a MT544
+	case TestInstruction_ValidateMQTypeMT54x_ValidateMT544.TestInstructionUUID_SubCustody_ValidateMT544:
+
+		// Extract json-schema depending on version
+		switch testInstructionVersion {
+		case "1_0":
+
+			// Outgoing Request
+			var tempRequestMessageToTestApiEngineJsonSchema string
+			tempRequestMessageToTestApiEngineJsonSchema = string(validateMT544_v1_0_RequestMessageJsonSchema)
+			requestMessageToTestApiEngineJsonSchema = &tempRequestMessageToTestApiEngineJsonSchema
+
+			// Incoming Response
+			var tempResponseVariablesJsonSchema string
+			tempResponseVariablesJsonSchema = string(validateMT544_v1_0_ResponseVariablesMessageJsonSchema)
+			responseVariablesJsonSchema = &tempResponseVariablesJsonSchema
+
+		default:
+			sharedCode.Logger.WithFields(logrus.Fields{
+				"id":                     "4f75a47a-d2b6-4d63-a198-dd6e3964551d",
+				"testInstructionUUID":    testInstructionUUID,
+				"testInstructionVersion": testInstructionVersion,
+			}).Fatal("Unhandled version for 'TestInstructionUUID_SubCustody_ValidateMT544'")
 
 		}
 
@@ -45,5 +111,5 @@ func GetResponseSchemasToUse(
 
 	}
 
-	return finalTestInstructionExecutionResultJsonSchema, responseVariablesJsonSchema
+	return requestMessageToTestApiEngineJsonSchema, finalTestInstructionExecutionResultJsonSchema, responseVariablesJsonSchema
 }

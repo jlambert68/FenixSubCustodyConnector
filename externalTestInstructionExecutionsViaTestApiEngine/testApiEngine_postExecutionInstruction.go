@@ -15,6 +15,7 @@ import (
 
 func PostTestInstructionUsingRestCall(
 	testApiEngineRestApiMessageValues *TestApiEngineRestApiMessageStruct,
+	requestMessageToTestApiEngineJsonSchema *string,
 	finalTestInstructionExecutionResultJsonSchema *string,
 	responseVariablesJsonSchema *string) (
 	testApiEngineFinalTestInstructionExecutionResult TestApiEngineFinalTestInstructionExecutionResultStruct,
@@ -38,13 +39,23 @@ func PostTestInstructionUsingRestCall(
 	attributesMap["TestInstructionExecutionUuid"] = testApiEngineRestApiMessageValues.TestInstructionExecutionUuid
 	attributesMap["TestInstructionExecutionVersion"] = "1"
 
-	attributesAsJson, err := json.Marshal(attributesMap)
+	var attributesAsJson []byte
+	attributesAsJson, err = json.Marshal(attributesMap)
 	if err != nil {
 		sharedCode.Logger.WithFields(logrus.Fields{
 			"id":            "e1e74131-5040-43fa-abfc-1023f09d4388",
 			"attributesMap": attributesMap,
 		}).Error("Couldn't Marshal Attributes-map into json request")
 
+		return TestApiEngineFinalTestInstructionExecutionResultStruct{}, err
+	}
+
+	// Validate rest-request and convert
+	err = validateRestRequest(
+		&attributesAsJson,
+		requestMessageToTestApiEngineJsonSchema)
+
+	if err != nil {
 		return TestApiEngineFinalTestInstructionExecutionResultStruct{}, err
 	}
 
@@ -132,6 +143,72 @@ func PostTestInstructionUsingRestCall(
 	}
 
 	return testApiEngineFinalTestInstructionExecutionResult, err
+}
+
+// Validate the json-request to be sent to TestApiEngine
+// Validation os done with supported json-schemas
+func validateRestRequest(
+	attributesAsJson *[]byte,
+	requestMessageToTestApiEngineJsonSchema *string) (
+	err error) {
+
+	var tempJsonSchema string
+	var tempAttributesAsByteArray []byte
+
+	// 	// *** Second Step ***
+	// Load the schema - 'requestMessageToTestApiEngineJsonSchema'
+	var jsonSchemaCompilerRequest *jsonschema.Compiler
+	jsonSchemaCompilerRequest = jsonschema.NewCompiler()
+
+	tempJsonSchema = *requestMessageToTestApiEngineJsonSchema
+
+	err = jsonSchemaCompilerRequest.AddResource("schema.json",
+		strings.NewReader(tempJsonSchema))
+	if err != nil {
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id":  "5c586c18-ab8e-400d-a65e-d4ac60a46071",
+			"err": err,
+			"requestMessageToTestApiEngineJsonSchema": *requestMessageToTestApiEngineJsonSchema,
+		}).Fatal("Couldn't add json-schema for 'requestMessageToTestApiEngineJsonSchema' to " +
+			"'json-schema compile")
+	}
+
+	// Compile json-schema 'requestMessageToTestApiEngineJsonSchema'
+	var jsonSchemaValidatorRequest *jsonschema.Schema
+	jsonSchemaValidatorRequest, err = jsonSchemaCompilerRequest.
+		Compile("schema.json")
+	if err != nil {
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id":  "b090d10f-4880-45ee-b015-43e8789bc1ea",
+			"err": err,
+			"requestMessageToTestApiEngineJsonSchema": *requestMessageToTestApiEngineJsonSchema,
+		}).Fatal("Couldn't compile the json-schema for 'requestMessageToTestApiEngineJsonSchema'")
+	}
+
+	// Second validate that the 'Request' is valid -'requestMessageToTestApiEngineJsonSchema'
+
+	tempAttributesAsByteArray = *attributesAsJson
+	err = jsonSchemaValidatorRequest.Validate(
+		strings.NewReader(string(tempAttributesAsByteArray)))
+	if err != nil {
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id":                        "bb0ffb11-77e6-4739-8911-fcb70ff714f2",
+			"err":                       err,
+			"string(*attributesAsJson)": string(*attributesAsJson),
+		}).Error("'string(*attributesAsJson)' is not valid to json-schema " +
+			"'requestMessageToTestApiEngineJsonSchema'")
+
+		return err
+
+	} else {
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id":                        "18c74f8c-3de2-4333-9ebb-618f5908adcd",
+			"string(*attributesAsJson)": string(*attributesAsJson),
+		}).Debug("'string(*attributesAsJson)' is valid to json-schema " +
+			"'requestMessageToTestApiEngineJsonSchema'")
+	}
+
+	return err
 }
 
 // Validate the json-response from the Rest-call to TestApiEngine

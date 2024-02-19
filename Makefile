@@ -32,10 +32,18 @@ CrossBuildForWindows_SEB_test:
 	GOOS=windows GOARCH=amd64 CGO_ENABLED=1 CXX=x86_64-w64-mingw32-g++ CC=x86_64-w64-mingw32-gcc go build -o $(fileName) -ldflags="$(InjectValue)" .
 
 Download-json-schemas:
+
 	echo "$(fullLocalFilePathValidateMT544_v1_0)"
-	echo "$(fullRemoteFilePathValidateMT542Response_v1_0)"
+	echo "$(fullRemoteFilePathValidateMT544_v1_0)"
+
 	@curl -L -o $(fullLocalFilePathOverAll) "$(fullRemoteFilePathOverAll)"
+
+	@curl -L -o $(fullLocalFilePathSendMT540Request_v1_0) "$(fullRemoteFilePathSendMT540Request_v1_0)"
 	@curl -L -o $(fullLocalFilePathSendMT540_v1_0) "$(fullRemoteFilePathSendMT540Response_v1_0)"
+
+	@curl -L -o $(fullLocalFilePathSendMT542Request_v1_0) "$(fullRemoteFilePathSendMT542Request_v1_0)"
 	@curl -L -o $(fullLocalFilePathSendMT542_v1_0) "$(fullRemoteFilePathSendMT542Response_v1_0)"
-	@curl -L -o $(fullLocalFilePathValidateMT544_v1_0) "$(fullRemoteFilePathValidateMT542Response_v1_0)"
+
+	@curl -L -o $(fullLocalFilePathValidateMT544Request_v1_0) "$(fullRemoteFilePathValidateMT544Request_v1_0)"
+	@curl -L -o $(fullLocalFilePathValidateMT544_v1_0) "$(fullRemoteFilePathValidateMT544_v1_0)"
 #$(localJsonSchemaPath)/$(localJsonSchemaOverAllLName)

@@ -33,10 +33,13 @@ jsonSchemaFileNameSendMT540Response := SendMT540_ResponseVariables.json-schema.j
 
 # Full Remote Path and FilePath - SendMT540
 fullRemotePathSendMT540_v1_0 := $(remoteUrl)/$(githubUsername)/$(repositorySubCustody)/$(branchSpecific)/$(jsonSchemaPathSendMT540_v1_0)
+fullRemoteFilePathSendMT540Request_v1_0 := $(fullRemotePathSendMT540_v1_0)/$(jsonSchemaFileNameSendMT540Request)
 fullRemoteFilePathSendMT540Response_v1_0 := $(fullRemotePathSendMT540_v1_0)/$(jsonSchemaFileNameSendMT540Response)
 
 # Local - SendMT540
+localJsonSchemaFileNameSendMT540Request_v1_0 := SendMT540_v1_0_Request.json-schema.json
 localJsonSchemaFileNameSendMT540_v1_0 := SendMT540_v1_0_ResponseVariables.json-schema.json
+fullLocalFilePathSendMT540Request_v1_0 := $(fullLocalPath)/$(localJsonSchemaFileNameSendMT540Request_v1_0)
 fullLocalFilePathSendMT540_v1_0 := $(fullLocalPath)/$(localJsonSchemaFileNameSendMT540_v1_0)
 
 
@@ -48,10 +51,13 @@ jsonSchemaFileNameSendMT542Response := SendMT542_ResponseVariables.json-schema.j
 
 # Full Remote Path and FilePath - SendMT542
 fullRemotePathSendMT542_v1_0 := $(remoteUrl)/$(githubUsername)/$(repositorySubCustody)/$(branchSpecific)/$(jsonSchemaPathSendMT542_v1_0)
+fullRemoteFilePathSendMT542Request_v1_0 := $(fullRemotePathSendMT542_v1_0)/$(jsonSchemaFileNameSendMT542Request)
 fullRemoteFilePathSendMT542Response_v1_0 := $(fullRemotePathSendMT542_v1_0)/$(jsonSchemaFileNameSendMT542Response)
 
 # Local - SendMT542
+localJsonSchemaFileNameSendMT542Request_v1_0 := SendMT542_v1_0_Request.json-schema.json
 localJsonSchemaFileNameSendMT542_v1_0 := SendMT542_v1_0_ResponseVariables.json-schema.json
+fullLocalFilePathSendMT542Request_v1_0 := $(fullLocalPath)/$(localJsonSchemaFileNameSendMT542Request_v1_0)
 fullLocalFilePathSendMT542_v1_0 := $(fullLocalPath)/$(localJsonSchemaFileNameSendMT542_v1_0)
 
 
@@ -63,10 +69,12 @@ jsonSchemaFileNameValidateMT544Response := ValidateMT544_ResponseVariables.json-
 
 # Full Remote Path and FilePath - ValidateMT544
 fullRemotePathValidateMT544_v1_0 := $(remoteUrl)/$(githubUsername)/$(repositorySubCustody)/$(branchSpecific)/$(jsonSchemaPathValidateMT544_v1_0)
-fullRemoteFilePathValidateMT542Response_v1_0 := $(fullRemotePathValidateMT544_v1_0)/$(jsonSchemaFileNameValidateMT544Response)
+fullRemoteFilePathValidateMT544Request_v1_0 := $(fullRemotePathValidateMT544_v1_0)/$(jsonSchemaFileNameValidateMT544Request)
+fullRemoteFilePathValidateMT544_v1_0 := $(fullRemotePathValidateMT544_v1_0)/$(jsonSchemaFileNameValidateMT544Response)
 
 # Local - ValidateMT544
+localJsonSchemaFileNameValidateMT544Request_v1_0 := ValidateMT544_v1_0_Request.json-schema.json
 localJsonSchemaFileNameValidateMT544_v1_0 := ValidateMT544_v1_0_ResponseVariables.json-schema.json
+fullLocalFilePathValidateMT544Request_v1_0 := $(fullLocalPath)/$(localJsonSchemaFileNameValidateMT544Request_v1_0)
 fullLocalFilePathValidateMT544_v1_0 := $(fullLocalPath)/$(localJsonSchemaFileNameValidateMT544_v1_0)
-
 

@@ -16,6 +16,7 @@ import (
 	"github.com/jlambert68/FenixTestInstructionsAdminShared/TypeAndStructs"
 	"github.com/sirupsen/logrus"
 	"google.golang.org/protobuf/types/known/timestamppb"
+	"strconv"
 	"time"
 )
 
@@ -145,9 +146,9 @@ func processTestInstructionExecutionRequest(
 		fmt.Println("case TestInstruction_SendOnMQTypeMT_SendMT540.TestInstructionUUID_SubCustody_SendMT540:")
 
 		var version string
-		version = string(testInstructionExecutionPubSubRequest.TestInstruction.GetMajorVersionNumber()) +
+		version = strconv.Itoa(int(testInstructionExecutionPubSubRequest.TestInstruction.GetMajorVersionNumber())) +
 			"_" +
-			string(testInstructionExecutionPubSubRequest.TestInstruction.GetMinorVersionNumber())
+			strconv.Itoa(int(testInstructionExecutionPubSubRequest.TestInstruction.GetMinorVersionNumber()))
 
 		// Convert message into message that can be used when sending to TestApiEngine
 		var testApiEngineRestApiMessageValues *executeTestInstructionUsingTestApiEngine.TestApiEngineRestApiMessageStruct
@@ -202,9 +203,10 @@ func processTestInstructionExecutionRequest(
 		}
 
 		// Get Json-schemas to use
+		var requestMessageToTestApiEngineJsonSchema *string
 		var finalTestInstructionExecutionResultJsonSchema *string
 		var responseVariablesJsonSchema *string
-		finalTestInstructionExecutionResultJsonSchema, responseVariablesJsonSchema =
+		requestMessageToTestApiEngineJsonSchema, finalTestInstructionExecutionResultJsonSchema, responseVariablesJsonSchema =
 			executeTestInstructionUsingTestApiEngine.GetResponseSchemasToUse(
 				TestInstruction_SendOnMQTypeMT_SendMT540.TestInstructionUUID_SubCustody_SendMT540,
 				version)
@@ -214,6 +216,7 @@ func processTestInstructionExecutionRequest(
 		testApiEngineFinalTestInstructionExecutionResult, err = executeTestInstructionUsingTestApiEngine.
 			PostTestInstructionUsingRestCall(
 				testApiEngineRestApiMessageValues,
+				requestMessageToTestApiEngineJsonSchema,
 				finalTestInstructionExecutionResultJsonSchema,
 				responseVariablesJsonSchema)
 
