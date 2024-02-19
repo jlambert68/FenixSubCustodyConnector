@@ -10,6 +10,7 @@ import (
 type TestApiEngineRestApiMessageStruct struct {
 	TestCaseExecutionUuid                string
 	TestInstructionExecutionUuid         string
+	TestInstructionExecutionVersion      uint32
 	TestApiEngineClassNameNAME           testApiEngineClassesAndMethods.TestApiEngine_ClassName_Name_SubCustody_Type
 	TestApiEngineMethodNameNAME          testApiEngineClassesAndMethods.TestApiEngine_MethodName_Name_SubCustody_Type
 	TestApiEngineExpectedToBePassedValue TypeAndStructs.AttributeValueAsStringType

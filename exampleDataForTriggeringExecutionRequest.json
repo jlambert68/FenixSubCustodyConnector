@@ -17,6 +17,7 @@
       }
     ],
     "TestInstructionUuid": "85bcef3b-fbba-4d92-822c-7e180e3e3b7b",
+    "TestInstructionExecutionVersion": 1,
     "TestInstructionName": "SendMT540",
     "MajorVersionNumber": 1,
     "MinorVersionNumber": 0,

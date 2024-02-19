@@ -4,11 +4,11 @@ go 1.21
 
 require (
 	github.com/gorilla/mux v1.8.1
-	github.com/jlambert68/FenixConnectorAdminShared v0.0.0-20240215124007-fc8720b667c4
-	github.com/jlambert68/FenixGrpcApi v0.0.0-20240217072419-f885539277c1
-	github.com/jlambert68/FenixSubCustodyTestInstructionAdmin v0.0.0-20240218195909-4ec9167cd7bc
+	github.com/jlambert68/FenixConnectorAdminShared v0.0.0-20240219150049-dc97cbddf09f
+	github.com/jlambert68/FenixGrpcApi v0.0.0-20240219140949-64a3ef4c78f7
+	github.com/jlambert68/FenixSubCustodyTestInstructionAdmin v0.0.0-20240219134442-75810741e9d1
 	github.com/jlambert68/FenixSyncShared v0.0.0-20240215140904-db0840b5d70a
-	github.com/jlambert68/FenixTestInstructionsAdminShared v0.0.0-20240215141221-a22a1f13dc53
+	github.com/jlambert68/FenixTestInstructionsAdminShared v0.0.0-20240219141728-8af453f0932d
 	github.com/santhosh-tekuri/jsonschema/v5 v5.3.1
 	github.com/sirupsen/logrus v1.9.3
 	google.golang.org/protobuf v1.32.0

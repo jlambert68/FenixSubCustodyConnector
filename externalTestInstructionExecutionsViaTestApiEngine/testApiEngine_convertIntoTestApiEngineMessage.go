@@ -21,15 +21,17 @@ func ConvertTestInstructionExecutionIntoTestApiEngineRestCallMessage(
 	TestApiEngineRestApiMessageValues *TestApiEngineRestApiMessageStruct,
 	err error) {
 
-	// Extract UUID:s from 'TestInstructionExecutionRequest'
+	// Extract UUID:s from 'TestInstructionExecutionRequest' and TestInstructionExecutionVersion
 	var (
-		testInstructionUuid          string
-		testCaseExecutionUuid        string
-		testInstructionExecutionUuid string
+		testInstructionUuid             string
+		testCaseExecutionUuid           string
+		testInstructionExecutionUuid    string
+		testInstructionExecutionVersion uint32
 	)
 	testInstructionUuid = processTestInstructionExecutionPubSubRequest.GetTestInstruction().GetTestInstructionUuid()
 	testCaseExecutionUuid = processTestInstructionExecutionPubSubRequest.GetTestCaseExecutionUuid()
 	testInstructionExecutionUuid = processTestInstructionExecutionPubSubRequest.GetTestInstruction().GetTestInstructionExecutionUuid()
+	testInstructionExecutionVersion = processTestInstructionExecutionPubSubRequest.GetTestInstruction().GetTestInstructionExecutionVersion()
 
 	// Extract TestInstructionAttributes from 'TestInstructionExecutionRequest'
 	var testInstructionAttributes []*fenixExecutionWorkerGrpcApi.ProcessTestInstructionExecutionPubSubRequest_TestInstructionAttributeMessage
@@ -87,6 +89,7 @@ func ConvertTestInstructionExecutionIntoTestApiEngineRestCallMessage(
 	TestApiEngineRestApiMessageValues = &TestApiEngineRestApiMessageStruct{
 		TestCaseExecutionUuid:                testCaseExecutionUuid,
 		TestInstructionExecutionUuid:         testInstructionExecutionUuid,
+		TestInstructionExecutionVersion:      testInstructionExecutionVersion,
 		TestApiEngineClassNameNAME:           tempTestApiEngineClassesMethodsAttributes.TestApiEngineClassNameNAME,
 		TestApiEngineMethodNameNAME:          tempTestApiEngineClassesMethodsAttributes.TestApiEngineMethodNameNAME,
 		TestApiEngineExpectedToBePassedValue: "",
@@ -98,60 +101,59 @@ func ConvertTestInstructionExecutionIntoTestApiEngineRestCallMessage(
 	for _, testInstructionAttribute := range testInstructionAttributes {
 
 		// Separate Attribute 'ExpectedToBePassed', which is used in url instead as a parameter in the body of the rest call
-		if testInstructionAttribute.TestInstructionAttributeName != string(TestInstructions.TestInstructionAttributeName_SubCustody_ExpectedToBePassed) {
-
-			// Create and add Attribute with value
-			var tempTestInstructionAttributesUuidAndValue TestInstructionAttributesUuidAndValueStruct
-			tempTestInstructionAttributesUuidAndValue = TestInstructionAttributesUuidAndValueStruct{
-				TestInstructionAttributeUUID:          TypeAndStructs.TestInstructionAttributeUUIDType(testInstructionAttribute.TestInstructionAttributeUuid),
-				TestInstructionAttributeName:          TypeAndStructs.TestInstructionAttributeNameType(testInstructionAttribute.TestInstructionAttributeName),
-				TestInstructionAttributeValueAsString: TypeAndStructs.AttributeValueAsStringType(testInstructionAttribute.AttributeValueAsString),
-			}
-			TestApiEngineRestApiMessageValues.TestInstructionAttribute = append(
-				TestApiEngineRestApiMessageValues.TestInstructionAttribute,
-				tempTestInstructionAttributesUuidAndValue)
-
-			// Get TestApiEngine-attribute conversion-map from pointer
-			var attributesMap map[TypeAndStructs.TestInstructionAttributeUUIDType]*TestApiEngineClassesAndMethodsAndAttributes.TestApiEngineAttributesStruct
-			attributesMap = *tempTestApiEngineClassesMethodsAttributes.Attributes
-
-			// Extract TestApiEngineAttribute-data pointer
-			var tempTestApiEngineAttributesPtr *TestApiEngineClassesAndMethodsAndAttributes.TestApiEngineAttributesStruct
-			tempTestApiEngineAttributesPtr, existsInMap = attributesMap[TypeAndStructs.TestInstructionAttributeUUIDType(testInstructionAttribute.TestInstructionAttributeUuid)]
-			if existsInMap != true {
-				// Must exist in map
-				sharedCode.Logger.WithFields(logrus.Fields{
-					"id":                           "c3fdcf73-f3b7-4ed2-9a9c-c25a64151bbc",
-					"testInstructionUuid":          testInstructionUuid,
-					"TestInstructionAttributeUuid": TypeAndStructs.TestInstructionAttributeUUIDType(testInstructionAttribute.TestInstructionAttributeUuid),
-				}).Error("Couldn't find correct attribute in 'tempTestApiEngineClassesMethodsAttributes.Attributes'")
-
-				errorID := "0ce6aea7-ce07-4ae9-8c9f-227efb621e92"
-				err = errors.New(fmt.Sprintf("couldn't find correct testApiEngineData in 'testApiEngineData.Attributes' for TestInstructionAttributeUuid:'%s', [ErrorID='%s']", testInstructionUuid, errorID))
-
-				return nil, err
-			}
-
-			// Extract TestApiEngineAttribute-data
-			var tempTestApiEngineAttributes TestApiEngineClassesAndMethodsAndAttributes.TestApiEngineAttributesStruct
-			tempTestApiEngineAttributes = *tempTestApiEngineAttributesPtr
-
-			// Create and add reference between Attribute and TestApiEngineAttribute-name to be used in RestRequest
-			var tempTestApiEngineAttributesToUse *testApiEngineClassesAndMethods.TestApiEngineAttributesStruct
-			tempTestApiEngineAttributesToUse = &testApiEngineClassesAndMethods.TestApiEngineAttributesStruct{
-				TestInstructionAttributeUUID:     tempTestApiEngineAttributes.TestInstructionAttributeUUID,
-				TestInstructionAttributeName:     tempTestApiEngineAttributes.TestInstructionAttributeName,
-				TestInstructionAttributeTypeUUID: tempTestApiEngineAttributes.TestInstructionAttributeTypeUUID,
-				TestApiEngineAttributeNameUUID:   tempTestApiEngineAttributes.TestApiEngineAttributeNameUUID,
-				TestApiEngineAttributeNameName:   tempTestApiEngineAttributes.TestApiEngineAttributeNameName,
-			}
-			// Add Attribute
-			TestApiEngineRestApiMessageValues.TestApiEngineAttributes[TypeAndStructs.TestInstructionAttributeUUIDType(testInstructionAttribute.TestInstructionAttributeUuid)] = tempTestApiEngineAttributesToUse
-
-		} else {
-			// Attribute is 'ExpectedToBePassedValue'
+		// But also as an attribute in json-request-body
+		if testInstructionAttribute.TestInstructionAttributeName == string(TestInstructions.TestInstructionAttributeName_SubCustody_ExpectedToBePassed) {
+			// Attribute is 'ExpectedToBePassedValue' (in url)
 			TestApiEngineRestApiMessageValues.TestApiEngineExpectedToBePassedValue = TypeAndStructs.AttributeValueAsStringType(testInstructionAttribute.AttributeValueAsString)
 		}
+
+		// Create and add Attribute with value
+		var tempTestInstructionAttributesUuidAndValue TestInstructionAttributesUuidAndValueStruct
+		tempTestInstructionAttributesUuidAndValue = TestInstructionAttributesUuidAndValueStruct{
+			TestInstructionAttributeUUID:          TypeAndStructs.TestInstructionAttributeUUIDType(testInstructionAttribute.TestInstructionAttributeUuid),
+			TestInstructionAttributeName:          TypeAndStructs.TestInstructionAttributeNameType(testInstructionAttribute.TestInstructionAttributeName),
+			TestInstructionAttributeValueAsString: TypeAndStructs.AttributeValueAsStringType(testInstructionAttribute.AttributeValueAsString),
+		}
+		TestApiEngineRestApiMessageValues.TestInstructionAttribute = append(
+			TestApiEngineRestApiMessageValues.TestInstructionAttribute,
+			tempTestInstructionAttributesUuidAndValue)
+
+		// Get TestApiEngine-attribute conversion-map from pointer
+		var attributesMap map[TypeAndStructs.TestInstructionAttributeUUIDType]*TestApiEngineClassesAndMethodsAndAttributes.TestApiEngineAttributesStruct
+		attributesMap = *tempTestApiEngineClassesMethodsAttributes.Attributes
+
+		// Extract TestApiEngineAttribute-data pointer
+		var tempTestApiEngineAttributesPtr *TestApiEngineClassesAndMethodsAndAttributes.TestApiEngineAttributesStruct
+		tempTestApiEngineAttributesPtr, existsInMap = attributesMap[TypeAndStructs.TestInstructionAttributeUUIDType(testInstructionAttribute.TestInstructionAttributeUuid)]
+		if existsInMap != true {
+			// Must exist in map
+			sharedCode.Logger.WithFields(logrus.Fields{
+				"id":                           "c3fdcf73-f3b7-4ed2-9a9c-c25a64151bbc",
+				"testInstructionUuid":          testInstructionUuid,
+				"TestInstructionAttributeUuid": TypeAndStructs.TestInstructionAttributeUUIDType(testInstructionAttribute.TestInstructionAttributeUuid),
+			}).Error("Couldn't find correct attribute in 'tempTestApiEngineClassesMethodsAttributes.Attributes'")
+
+			errorID := "0ce6aea7-ce07-4ae9-8c9f-227efb621e92"
+			err = errors.New(fmt.Sprintf("couldn't find correct testApiEngineData in 'testApiEngineData.Attributes' for TestInstructionAttributeUuid:'%s', [ErrorID='%s']", testInstructionUuid, errorID))
+
+			return nil, err
+		}
+
+		// Extract TestApiEngineAttribute-data
+		var tempTestApiEngineAttributes TestApiEngineClassesAndMethodsAndAttributes.TestApiEngineAttributesStruct
+		tempTestApiEngineAttributes = *tempTestApiEngineAttributesPtr
+
+		// Create and add reference between Attribute and TestApiEngineAttribute-name to be used in RestRequest
+		var tempTestApiEngineAttributesToUse *testApiEngineClassesAndMethods.TestApiEngineAttributesStruct
+		tempTestApiEngineAttributesToUse = &testApiEngineClassesAndMethods.TestApiEngineAttributesStruct{
+			TestInstructionAttributeUUID:     tempTestApiEngineAttributes.TestInstructionAttributeUUID,
+			TestInstructionAttributeName:     tempTestApiEngineAttributes.TestInstructionAttributeName,
+			TestInstructionAttributeTypeUUID: tempTestApiEngineAttributes.TestInstructionAttributeTypeUUID,
+			TestApiEngineAttributeNameUUID:   tempTestApiEngineAttributes.TestApiEngineAttributeNameUUID,
+			TestApiEngineAttributeNameName:   tempTestApiEngineAttributes.TestApiEngineAttributeNameName,
+		}
+		// Add Attribute
+		TestApiEngineRestApiMessageValues.TestApiEngineAttributes[TypeAndStructs.TestInstructionAttributeUUIDType(testInstructionAttribute.TestInstructionAttributeUuid)] = tempTestApiEngineAttributesToUse
 
 	}
 

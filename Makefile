@@ -34,7 +34,7 @@ CrossBuildForWindows_SEB_test:
 Download-json-schemas:
 
 	echo "$(fullLocalFilePathValidateMT544_v1_0)"
-	echo "$(fullRemoteFilePathValidateMT544_v1_0)"
+	echo "$(fullRemoteFilePathSendMT542Request_v1_0)"
 
 	@curl -L -o $(fullLocalFilePathOverAll) "$(fullRemoteFilePathOverAll)"
 

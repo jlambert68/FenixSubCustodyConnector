@@ -198,7 +198,6 @@ func processTestInstructionExecutionRequest(
 				LogPosts:                               errLogPostsToAdd,
 			}
 
-			err = nil
 			break
 		}
 
@@ -241,7 +240,6 @@ func processTestInstructionExecutionRequest(
 				LogPosts:                               nil,
 			}
 
-			err = nil
 			break
 		}
 
@@ -251,7 +249,6 @@ func processTestInstructionExecutionRequest(
 			&testApiEngineFinalTestInstructionExecutionResult,
 			testInstructionExecutionPubSubRequest)
 
-		err = nil
 		break
 
 	// Send a MT542 on MQ

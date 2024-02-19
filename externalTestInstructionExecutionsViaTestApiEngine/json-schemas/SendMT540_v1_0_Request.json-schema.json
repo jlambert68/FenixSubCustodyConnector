@@ -15,6 +15,10 @@
       "type": "string",
       "format": "uuid"
     },
+    "TestInstructionExecutionVersion": {
+      "type": "string",
+      "pattern": "^[0-9]+$"
+    },
     "ExpectedToBePassed": {
       "type": "string",
       "enum": ["true", "false"]
