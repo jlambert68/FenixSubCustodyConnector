@@ -52,9 +52,9 @@ type LogPostStruct struct {
 // FoundVersusExpectedValueForVariableStruct within 'LogPostStruct'
 // Holds one variables and its expected value vs found value
 type FoundVersusExpectedValueForVariableStruct struct {
-	VariableName              string                           `json:"VariableName"`
-	VariableDescription       string                           `json:"VariableDescription"`
-	FoundVersusExpectedValues []FoundVersusExpectedValueStruct `json:"FoundVersusExpectedValues"`
+	VariableName              string                         `json:"VariableName"`
+	VariableDescription       string                         `json:"VariableDescription"`
+	FoundVersusExpectedValues FoundVersusExpectedValueStruct `json:"FoundVersusExpectedValues"`
 }
 
 // FoundVersusExpectedValueStruct within 'LogPostStruct'

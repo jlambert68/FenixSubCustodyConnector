@@ -5,8 +5,8 @@ go 1.21
 require (
 	github.com/gorilla/mux v1.8.1
 	github.com/jlambert68/FenixConnectorAdminShared v0.0.0-20240215124007-fc8720b667c4
-	github.com/jlambert68/FenixGrpcApi v0.0.0-20240214145621-7060f4a311a9
-	github.com/jlambert68/FenixSubCustodyTestInstructionAdmin v0.0.0-20240215124216-41f82894db3b
+	github.com/jlambert68/FenixGrpcApi v0.0.0-20240217072419-f885539277c1
+	github.com/jlambert68/FenixSubCustodyTestInstructionAdmin v0.0.0-20240218195909-4ec9167cd7bc
 	github.com/jlambert68/FenixSyncShared v0.0.0-20240215140904-db0840b5d70a
 	github.com/jlambert68/FenixTestInstructionsAdminShared v0.0.0-20240215141221-a22a1f13dc53
 	github.com/santhosh-tekuri/jsonschema/v5 v5.3.1

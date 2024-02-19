@@ -1,1 +1,32 @@
-404: Not Found
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Response Variables for ValidateMT544",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "ResponseVariableUuid": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "ResponseVariableName": {
+        "type": "string"
+      },
+      "ResponseVariableValueAsString": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "ResponseVariableUuid",
+      "ResponseVariableName",
+      "ResponseVariableValueAsString"
+    ],
+    "additionalProperties": false,
+    "enum": [
+      {
+        "ResponseVariableUuid": "39818ba1-676d-42d0-87da-e1080e9d5ffd",
+        "ResponseVariableName": ":20C::SEME//"
+      }
+    ]
+  }
+}

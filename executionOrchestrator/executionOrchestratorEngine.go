@@ -131,6 +131,12 @@ func processTestInstructionExecutionRequest(
 	testInstructionExecutionResultMessage *fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage,
 	err error) {
 
+	var errLogPostsToAdd []*fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage_LogPostMessage
+
+	// Create a temporary Start-TimeStamp to be used for when something goes wrong
+	var tempTestInstructionExecutionStartTimeStamp *timestamppb.Timestamp
+	tempTestInstructionExecutionStartTimeStamp = timestamppb.Now()
+
 	// Depending on TestInstruction then choose how to execution the TestInstruction
 	switch TypeAndStructs.OriginalElementUUIDType(testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionUuid) {
 
@@ -143,7 +149,7 @@ func processTestInstructionExecutionRequest(
 			"_" +
 			string(testInstructionExecutionPubSubRequest.TestInstruction.GetMinorVersionNumber())
 
-		// Convert message into message that can be used when sedning to TestApiEngine
+		// Convert message into message that can be used when sending to TestApiEngine
 		var testApiEngineRestApiMessageValues *executeTestInstructionUsingTestApiEngine.TestApiEngineRestApiMessageStruct
 		testApiEngineRestApiMessageValues, err = executeTestInstructionUsingTestApiEngine.
 			ConvertTestInstructionExecutionIntoTestApiEngineRestCallMessage(testInstructionExecutionPubSubRequest)
@@ -156,15 +162,42 @@ func processTestInstructionExecutionRequest(
 			}).Error("Something wrong when converting the 'TestInstructionExecutionPubSubRequest' into " +
 				"TestApiEngine-structure")
 
+			// Add a log post
+			var logPostText string
+			logPostText = fmt.Sprintf("Something wrong when converting the 'TestInstructionExecutionPubSubRequest' into "+
+				"TestApiEngine-structure in Connector. "+
+				"TestCaseExecutionUuid='%s', "+
+				"testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionExecutionUuid='%s', "+
+				"TestInstructionExecutionVersion='%s'. "+
+				"Errror='%s'",
+				testInstructionExecutionPubSubRequest.TestCaseExecutionUuid,
+				testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionExecutionUuid,
+				"1",
+				err.Error())
+
+			var errLogPostToAdd *fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage_LogPostMessage
+			errLogPostToAdd = &fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage_LogPostMessage{
+				LogPostTimeStamp:                    timestamppb.Now(),
+				LogPostStatus:                       fenixExecutionWorkerGrpcApi.LogPostStatusEnum_EXECUTION_ERROR,
+				LogPostText:                         logPostText,
+				FoundVersusExpectedValueForVariable: nil,
+			}
+
+			errLogPostsToAdd = append(errLogPostsToAdd, errLogPostToAdd)
+
 			testInstructionExecutionResultMessage = &fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage{
 				ClientSystemIdentification: nil,
 				TestInstructionExecutionUuid: testInstructionExecutionPubSubRequest.GetTestInstruction().
 					TestInstructionExecutionUuid,
 				TestInstructionExecutionStatus: fenixExecutionWorkerGrpcApi.
 					TestInstructionExecutionStatusEnum_TIE_UNEXPECTED_INTERRUPTION_CAN_BE_RERUN,
-				TestInstructionExecutionEndTimeStamp: timestamppb.Now(),
+				TestInstructionExecutionStartTimeStamp: tempTestInstructionExecutionStartTimeStamp,
+				TestInstructionExecutionEndTimeStamp:   timestamppb.Now(),
+				ResponseVariables:                      nil,
+				LogPosts:                               errLogPostsToAdd,
 			}
 
+			err = nil
 			break
 		}
 
@@ -199,20 +232,24 @@ func processTestInstructionExecutionRequest(
 					TestInstructionExecutionUuid,
 				TestInstructionExecutionStatus: fenixExecutionWorkerGrpcApi.
 					TestInstructionExecutionStatusEnum_TIE_UNEXPECTED_INTERRUPTION,
-				TestInstructionExecutionEndTimeStamp: timestamppb.Now(),
+				TestInstructionExecutionStartTimeStamp: tempTestInstructionExecutionStartTimeStamp,
+				TestInstructionExecutionEndTimeStamp:   timestamppb.Now(),
+				ResponseVariables:                      nil,
+				LogPosts:                               nil,
 			}
+
+			err = nil
+			break
 		}
 
-		testApiEngineFinalTestInstructionExecutionResult
+		// Validate the TestApiEngine-response
+		testInstructionExecutionResultMessage = validateAndConvertTestApiEngineResponse(
+			tempTestInstructionExecutionStartTimeStamp,
+			&testApiEngineFinalTestInstructionExecutionResult,
+			testInstructionExecutionPubSubRequest)
 
-		testInstructionExecutionResultMessage = &fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage{
-			ClientSystemIdentification: nil,
-			TestInstructionExecutionUuid: testInstructionExecutionPubSubRequest.GetTestInstruction().
-				TestInstructionExecutionUuid,
-			TestInstructionExecutionStatus: fenixExecutionWorkerGrpcApi.
-				TestInstructionExecutionStatusEnum_TIE_FINISHED_OK,
-			TestInstructionExecutionEndTimeStamp: timestamppb.Now(),
-		}
+		err = nil
+		break
 
 	// Send a MT542 on MQ
 	case TestInstruction_SendOnMQTypeMT_SendMT542.TestInstructionUUID_SubCustody_SendMT542:
@@ -250,4 +287,569 @@ func processTestInstructionExecutionRequest(
 	}
 
 	return testInstructionExecutionResultMessage, err
+}
+
+// Validates the TestApiResponse
+func validateAndConvertTestApiEngineResponse(
+	tempTestInstructionExecutionStartTimeStamp *timestamppb.Timestamp,
+	testApiEngineFinalTestInstructionExecutionResult *executeTestInstructionUsingTestApiEngine.
+		TestApiEngineFinalTestInstructionExecutionResultStruct,
+	testInstructionExecutionPubSubRequest *fenixExecutionWorkerGrpcApi.ProcessTestInstructionExecutionPubSubRequest) (
+	testInstructionExecutionResultMessage *fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage) {
+
+	var err error
+	var foundError bool
+	var errLogPostsToAdd []*fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage_LogPostMessage
+
+	// Validate that outgoing in incoming TestInstructionExecution is the same
+	if testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionExecutionUuid !=
+		testApiEngineFinalTestInstructionExecutionResult.TestInstructionExecutionUUID ||
+		"1" != testApiEngineFinalTestInstructionExecutionResult.TestInstructionExecutionVersion {
+
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id":                                    "c033b03e-88e1-4d0a-8b92-e1603ccc13c8",
+			"testInstructionExecutionPubSubRequest": testInstructionExecutionPubSubRequest,
+			"testApiEngineFinalTestInstructionExecutionResult": testApiEngineFinalTestInstructionExecutionResult,
+		}).Error("Incoming TestInstructionExecution is not the same as outgoing")
+
+		// Add a log post
+		var logPostText string
+		logPostText = fmt.Sprintf("Incoming TestInstructionExecution is not the same as outgoing. "+
+			"TestCaseExecutionUuid='%s', "+
+			"testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionExecutionUuid='%s' <> "+
+			"testApiEngineFinalTestInstructionExecutionResult.TestInstructionExecutionUUID='%s', "+
+			"TestInstructionExecutionVersion='%s' <> testApiEngineFinalTestInstructionExecutionResult.TestInstructionExecutionVersion='%s'",
+			testInstructionExecutionPubSubRequest.TestCaseExecutionUuid,
+			testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionExecutionUuid,
+			testApiEngineFinalTestInstructionExecutionResult.TestInstructionExecutionUUID,
+			"1",
+			testApiEngineFinalTestInstructionExecutionResult.TestInstructionExecutionVersion)
+
+		var errLogPostToAdd *fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage_LogPostMessage
+		errLogPostToAdd = &fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage_LogPostMessage{
+			LogPostTimeStamp:                    timestamppb.Now(),
+			LogPostStatus:                       fenixExecutionWorkerGrpcApi.LogPostStatusEnum_EXECUTION_ERROR,
+			LogPostText:                         logPostText,
+			FoundVersusExpectedValueForVariable: nil,
+		}
+
+		errLogPostsToAdd = append(errLogPostsToAdd, errLogPostToAdd)
+
+		testInstructionExecutionResultMessage = &fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage{
+			ClientSystemIdentification: nil,
+			TestInstructionExecutionUuid: testInstructionExecutionPubSubRequest.GetTestInstruction().
+				TestInstructionExecutionUuid,
+			TestInstructionExecutionStatus: fenixExecutionWorkerGrpcApi.
+				TestInstructionExecutionStatusEnum_TIE_UNEXPECTED_INTERRUPTION,
+			TestInstructionExecutionStartTimeStamp: tempTestInstructionExecutionStartTimeStamp,
+			TestInstructionExecutionEndTimeStamp:   timestamppb.Now(),
+			ResponseVariables:                      nil,
+			LogPosts:                               errLogPostsToAdd,
+		}
+
+		// At least one error found
+		foundError = true
+	}
+
+	// Convert TestInstructionExecutionStartTimeStamp into time-variable
+	var testInstructionExecutionStartTimeStamp time.Time
+	var timeStampLayoutForParser string //:= "2006-01-02 15:04:05.999999999 -0700 MST"
+	timeStampLayoutForParser, err = sharedCode.GenerateTimeStampParserLayout(
+		testApiEngineFinalTestInstructionExecutionResult.TestInstructionExecutionStartTimeStamp)
+	if err != nil {
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"Id":                                     "7b664f24-ae55-442e-82a6-711f6cd76c7e",
+			"err":                                    err,
+			"TestInstructionExecutionStartTimeStamp": testApiEngineFinalTestInstructionExecutionResult.TestInstructionExecutionStartTimeStamp,
+		}).Error("Couldn't generate parser layout from 'TestInstructionExecutionStartTimeStamp'")
+
+		// Add a log post
+		var logPostText string
+		logPostText = fmt.Sprintf("Couldn't generate parser layout from 'TestInstructionExecutionStartTimeStamp'. "+
+			"TestCaseExecutionUuid='%s', "+
+			"testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionExecutionUuid='%s', "+
+			"TestInstructionExecutionVersion='%s'. "+
+			"testApiEngineFinalTestInstructionExecutionResult.TestInstructionExecutionStartTimeStamp='%s"+
+			"Errror='%s'",
+			testInstructionExecutionPubSubRequest.TestCaseExecutionUuid,
+			testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionExecutionUuid,
+			"1",
+			testApiEngineFinalTestInstructionExecutionResult.TestInstructionExecutionStartTimeStamp,
+			err.Error())
+
+		var errLogPostToAdd *fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage_LogPostMessage
+		errLogPostToAdd = &fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage_LogPostMessage{
+			LogPostTimeStamp:                    timestamppb.Now(),
+			LogPostStatus:                       fenixExecutionWorkerGrpcApi.LogPostStatusEnum_EXECUTION_ERROR,
+			LogPostText:                         logPostText,
+			FoundVersusExpectedValueForVariable: nil,
+		}
+
+		errLogPostsToAdd = append(errLogPostsToAdd, errLogPostToAdd)
+
+		testInstructionExecutionResultMessage = &fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage{
+			ClientSystemIdentification: nil,
+			TestInstructionExecutionUuid: testInstructionExecutionPubSubRequest.GetTestInstruction().
+				TestInstructionExecutionUuid,
+			TestInstructionExecutionStatus: fenixExecutionWorkerGrpcApi.
+				TestInstructionExecutionStatusEnum_TIE_UNEXPECTED_INTERRUPTION,
+			TestInstructionExecutionStartTimeStamp: tempTestInstructionExecutionStartTimeStamp,
+			TestInstructionExecutionEndTimeStamp:   timestamppb.Now(),
+			ResponseVariables:                      nil,
+			LogPosts:                               errLogPostsToAdd,
+		}
+
+		// At least one error found
+		foundError = true
+
+	} else {
+
+		testInstructionExecutionStartTimeStamp, err = time.Parse(timeStampLayoutForParser,
+			testApiEngineFinalTestInstructionExecutionResult.TestInstructionExecutionStartTimeStamp)
+		if err != nil {
+			sharedCode.Logger.WithFields(logrus.Fields{
+				"Id":  "bbe31015-dcb5-404d-bd9f-a235ac490555",
+				"err": err,
+				"TestInstructionExecutionStartTimeStamp": testApiEngineFinalTestInstructionExecutionResult.
+					TestInstructionExecutionStartTimeStamp,
+			}).Error("Couldn't parse 'TestInstructionExecutionStartTimeStamp' in " +
+				"'testApiEngineFinalTestInstructionExecutionResult'")
+
+			// Add a log post
+			var logPostText string
+			logPostText = fmt.Sprintf("Couldn't parse 'TestInstructionExecutionStartTimeStamp' in "+
+				"'testApiEngineFinalTestInstructionExecutionResult'. "+
+				"TestCaseExecutionUuid='%s', "+
+				"testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionExecutionUuid='%s', "+
+				"TestInstructionExecutionVersion='%s'. "+
+				"testApiEngineFinalTestInstructionExecutionResult.TestInstructionExecutionStartTimeStamp='%s"+
+				"Errror='%s'",
+				testInstructionExecutionPubSubRequest.TestCaseExecutionUuid,
+				testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionExecutionUuid,
+				"1",
+				testApiEngineFinalTestInstructionExecutionResult.TestInstructionExecutionStartTimeStamp,
+				err.Error())
+
+			var errLogPostToAdd *fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage_LogPostMessage
+			errLogPostToAdd = &fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage_LogPostMessage{
+				LogPostTimeStamp:                    timestamppb.Now(),
+				LogPostStatus:                       fenixExecutionWorkerGrpcApi.LogPostStatusEnum_EXECUTION_ERROR,
+				LogPostText:                         logPostText,
+				FoundVersusExpectedValueForVariable: nil,
+			}
+
+			errLogPostsToAdd = append(errLogPostsToAdd, errLogPostToAdd)
+
+			testInstructionExecutionResultMessage = &fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage{
+				ClientSystemIdentification: nil,
+				TestInstructionExecutionUuid: testInstructionExecutionPubSubRequest.GetTestInstruction().
+					TestInstructionExecutionUuid,
+				TestInstructionExecutionStatus: fenixExecutionWorkerGrpcApi.
+					TestInstructionExecutionStatusEnum_TIE_UNEXPECTED_INTERRUPTION,
+				TestInstructionExecutionStartTimeStamp: tempTestInstructionExecutionStartTimeStamp,
+				TestInstructionExecutionEndTimeStamp:   timestamppb.Now(),
+				ResponseVariables:                      nil,
+				LogPosts:                               errLogPostsToAdd,
+			}
+
+			// At least one error found
+			foundError = true
+		}
+	}
+
+	// Convert TestInstructionExecutionEndTimeStamp into time-variable
+	var testInstructionExecutionEndTimeStamp time.Time
+	timeStampLayoutForParser, err = sharedCode.GenerateTimeStampParserLayout(
+		testApiEngineFinalTestInstructionExecutionResult.TestInstructionExecutionEndTimeStamp)
+	if err != nil {
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"Id":  "41c1ff67-e643-4c33-a6e8-0ade0017cc0c",
+			"err": err,
+			"TestInstructionExecutionEndTimeStamp": testApiEngineFinalTestInstructionExecutionResult.
+				TestInstructionExecutionEndTimeStamp,
+		}).Error("Couldn't generate parser layout from 'TestInstructionExecutionEndTimeStamp'")
+
+		// Add a log post
+		var logPostText string
+		logPostText = fmt.Sprintf("Couldn't generate parser layout from 'TestInstructionExecutionEndTimeStamp'. "+
+			"TestCaseExecutionUuid='%s', "+
+			"testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionExecutionUuid='%s', "+
+			"TestInstructionExecutionVersion='%s'. "+
+			"testApiEngineFinalTestInstructionExecutionResult.TestInstructionExecutionEndTimeStamp='%s"+
+			"Errror='%s'",
+			testInstructionExecutionPubSubRequest.TestCaseExecutionUuid,
+			testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionExecutionUuid,
+			"1",
+			testApiEngineFinalTestInstructionExecutionResult.TestInstructionExecutionEndTimeStamp,
+			err.Error())
+
+		var errLogPostToAdd *fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage_LogPostMessage
+		errLogPostToAdd = &fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage_LogPostMessage{
+			LogPostTimeStamp:                    timestamppb.Now(),
+			LogPostStatus:                       fenixExecutionWorkerGrpcApi.LogPostStatusEnum_EXECUTION_ERROR,
+			LogPostText:                         logPostText,
+			FoundVersusExpectedValueForVariable: nil,
+		}
+
+		errLogPostsToAdd = append(errLogPostsToAdd, errLogPostToAdd)
+
+		testInstructionExecutionResultMessage = &fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage{
+			ClientSystemIdentification: nil,
+			TestInstructionExecutionUuid: testInstructionExecutionPubSubRequest.GetTestInstruction().
+				TestInstructionExecutionUuid,
+			TestInstructionExecutionStatus: fenixExecutionWorkerGrpcApi.
+				TestInstructionExecutionStatusEnum_TIE_UNEXPECTED_INTERRUPTION,
+			TestInstructionExecutionStartTimeStamp: tempTestInstructionExecutionStartTimeStamp,
+			TestInstructionExecutionEndTimeStamp:   timestamppb.Now(),
+			ResponseVariables:                      nil,
+			LogPosts:                               errLogPostsToAdd,
+		}
+
+		// At least one error found
+		foundError = true
+
+	} else {
+
+		testInstructionExecutionStartTimeStamp, err = time.Parse(timeStampLayoutForParser,
+			testApiEngineFinalTestInstructionExecutionResult.TestInstructionExecutionEndTimeStamp)
+		if err != nil {
+			sharedCode.Logger.WithFields(logrus.Fields{
+				"Id":  "4e50dc7d-ee62-43dc-b7a7-8ba9aee64df5",
+				"err": err,
+				"TestInstructionExecutionEndTimeStamp": testApiEngineFinalTestInstructionExecutionResult.
+					TestInstructionExecutionEndTimeStamp,
+			}).Error("Couldn't parse 'TestInstructionExecutionEndTimeStamp' in " +
+				"'testApiEngineFinalTestInstructionExecutionResult'")
+
+			// Add a log post
+			var logPostText string
+			logPostText = fmt.Sprintf("Couldn't parse 'TestInstructionExecutionEndTimeStamp' in "+
+				"'testApiEngineFinalTestInstructionExecutionResult'. "+
+				"TestCaseExecutionUuid='%s', "+
+				"testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionExecutionUuid='%s', "+
+				"TestInstructionExecutionVersion='%s'. "+
+				"testApiEngineFinalTestInstructionExecutionResult.TestInstructionExecutionEndTimeStamp='%s"+
+				"Errror='%s'",
+				testInstructionExecutionPubSubRequest.TestCaseExecutionUuid,
+				testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionExecutionUuid,
+				"1",
+				testApiEngineFinalTestInstructionExecutionResult.TestInstructionExecutionEndTimeStamp,
+				err.Error())
+
+			var errLogPostToAdd *fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage_LogPostMessage
+			errLogPostToAdd = &fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage_LogPostMessage{
+				LogPostTimeStamp:                    timestamppb.Now(),
+				LogPostStatus:                       fenixExecutionWorkerGrpcApi.LogPostStatusEnum_EXECUTION_ERROR,
+				LogPostText:                         logPostText,
+				FoundVersusExpectedValueForVariable: nil,
+			}
+
+			errLogPostsToAdd = append(errLogPostsToAdd, errLogPostToAdd)
+
+			testInstructionExecutionResultMessage = &fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage{
+				ClientSystemIdentification: nil,
+				TestInstructionExecutionUuid: testInstructionExecutionPubSubRequest.GetTestInstruction().
+					TestInstructionExecutionUuid,
+				TestInstructionExecutionStatus: fenixExecutionWorkerGrpcApi.
+					TestInstructionExecutionStatusEnum_TIE_UNEXPECTED_INTERRUPTION,
+				TestInstructionExecutionStartTimeStamp: tempTestInstructionExecutionStartTimeStamp,
+				TestInstructionExecutionEndTimeStamp:   timestamppb.Now(),
+				ResponseVariables:                      nil,
+				LogPosts:                               errLogPostsToAdd,
+			}
+
+			// At least one error found
+			foundError = true
+		}
+	}
+
+	// Convert 'TestInstructionExecutionStatus' into gRPC-variable
+	var testInstructionExecutionStatus int32
+	var existInMap bool
+	testInstructionExecutionStatus, existInMap = fenixExecutionWorkerGrpcApi.
+		TestInstructionExecutionStatusEnum_value[testApiEngineFinalTestInstructionExecutionResult.TestInstructionExecutionStatus]
+	if existInMap == false {
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"Id":                             "e14137df-6d55-4996-8547-8052e5269b97",
+			"err":                            err,
+			"TestInstructionExecutionStatus": testApiEngineFinalTestInstructionExecutionResult.TestInstructionExecutionStatus,
+		}).Error("'TestInstructionExecutionStatus' in 'testApiEngineFinalTestInstructionExecutionResult' doesn't " +
+			"exist within gRPC-definition")
+
+		// Add a log post
+		var logPostText string
+		logPostText = fmt.Sprintf("'TestInstructionExecutionStatus' in "+
+			"'testApiEngineFinalTestInstructionExecutionResult' doesn't exist within gRPC-definition. "+
+			"TestCaseExecutionUuid='%s', "+
+			"testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionExecutionUuid='%s' <> "+
+			"testApiEngineFinalTestInstructionExecutionResult.TestInstructionExecutionUUID='%s', "+
+			"TestInstructionExecutionVersion='%s' <> testApiEngineFinalTestInstructionExecutionResult.TestInstructionExecutionVersion='%s', "+
+			"testApiEngineFinalTestInstructionExecutionResult.TestInstructionExecutionStatus='%s'",
+			testInstructionExecutionPubSubRequest.TestCaseExecutionUuid,
+			testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionExecutionUuid,
+			testApiEngineFinalTestInstructionExecutionResult.TestInstructionExecutionUUID,
+			"1",
+			testApiEngineFinalTestInstructionExecutionResult.TestInstructionExecutionVersion,
+			testApiEngineFinalTestInstructionExecutionResult.TestInstructionExecutionStatus)
+
+		var errLogPostToAdd *fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage_LogPostMessage
+		errLogPostToAdd = &fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage_LogPostMessage{
+			LogPostTimeStamp:                    timestamppb.Now(),
+			LogPostStatus:                       fenixExecutionWorkerGrpcApi.LogPostStatusEnum_EXECUTION_ERROR,
+			LogPostText:                         logPostText,
+			FoundVersusExpectedValueForVariable: nil,
+		}
+
+		errLogPostsToAdd = append(errLogPostsToAdd, errLogPostToAdd)
+
+		testInstructionExecutionResultMessage = &fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage{
+			ClientSystemIdentification: nil,
+			TestInstructionExecutionUuid: testInstructionExecutionPubSubRequest.GetTestInstruction().
+				TestInstructionExecutionUuid,
+			TestInstructionExecutionStatus: fenixExecutionWorkerGrpcApi.
+				TestInstructionExecutionStatusEnum_TIE_UNEXPECTED_INTERRUPTION,
+			TestInstructionExecutionStartTimeStamp: tempTestInstructionExecutionStartTimeStamp,
+			TestInstructionExecutionEndTimeStamp:   timestamppb.Now(),
+			ResponseVariables:                      nil,
+			LogPosts:                               errLogPostsToAdd,
+		}
+
+		// At least one error found
+		foundError = true
+	}
+
+	// Convert ResponseVariables
+	var tempResponseVariablesGrpc []*fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage_ResponseVariableMessage
+
+	// Loop response variables from TestApiEngine
+	for _, tempResponseVariable := range testApiEngineFinalTestInstructionExecutionResult.ResponseVariables {
+
+		// Create gRPC-Response variable
+		var tempResponseVariableGrpc *fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage_ResponseVariableMessage
+		tempResponseVariableGrpc = &fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage_ResponseVariableMessage{
+			ResponseVariableUuid:          tempResponseVariable.ResponseVariableUUID,
+			ResponseVariableName:          tempResponseVariable.ResponseVariableName,
+			ResponseVariableValueAsString: tempResponseVariable.ResponseVariableValueAsString,
+		}
+
+		// Append to list of Response variables
+		tempResponseVariablesGrpc = append(tempResponseVariablesGrpc, tempResponseVariableGrpc)
+	}
+
+	// Convert LogPosts
+	var tempLogPostsGrpc []*fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage_LogPostMessage
+
+	// Loop Logpost from TestApiEngine
+	for _, tempLogPost := range testApiEngineFinalTestInstructionExecutionResult.LogPosts {
+
+		// Create gRPC-FoundVersusExpectedValueForVariables
+		var tempFoundVersusExpectedValueForVariablesGrpc []*fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage_LogPostMessage_FoundVersusExpectedValueForVariableMessage
+
+		// Loop Found Versus Expected Values from TestApiEngine
+		for _, tempFoundVersusExpectedValueForVariable := range tempLogPost.FoundVersusExpectedValueForVariables {
+			var tempFoundVersusExpectedValueForVariableMessageGrpc *fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage_LogPostMessage_FoundVersusExpectedValueForVariableMessage
+
+			// gRPC Found Versus Expected Values variable
+			tempFoundVersusExpectedValueForVariableMessageGrpc = &fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage_LogPostMessage_FoundVersusExpectedValueForVariableMessage{
+				VariableName:        tempFoundVersusExpectedValueForVariable.VariableName,
+				VariableDescription: tempFoundVersusExpectedValueForVariable.VariableDescription,
+				FoundVersusExpectedValue: &fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage_LogPostMessage_FoundVersusExpectedValueMessage{
+					FoundValue:    tempFoundVersusExpectedValueForVariable.FoundVersusExpectedValues.FoundValue,
+					ExpectedValue: tempFoundVersusExpectedValueForVariable.FoundVersusExpectedValues.ExpectedValue,
+				},
+			}
+			// Add FoundVsExpected to list
+			tempFoundVersusExpectedValueForVariablesGrpc = append(tempFoundVersusExpectedValueForVariablesGrpc,
+				tempFoundVersusExpectedValueForVariableMessageGrpc)
+
+		}
+
+		// Convert 'LogPostStatus' into gRPC-variable
+		var tempLogPostStatus int32
+		tempLogPostStatus, existInMap = fenixExecutionWorkerGrpcApi.
+			LogPostStatusEnum_value[tempLogPost.LogPostStatus]
+		if existInMap == false {
+			sharedCode.Logger.WithFields(logrus.Fields{
+				"Id":            "c1bd4194-f527-4758-85b0-9709158cf22e",
+				"LogPostStatus": tempLogPost.LogPostStatus,
+			}).Error("'LogPostStatus' in 'testApiEngineFinalTestInstructionExecutionResult' doesn't " +
+				"exist within gRPC-definition")
+
+			// Add a log post
+			var logPostText string
+			logPostText = fmt.Sprintf("'LogPostStatus' in "+
+				"'testApiEngineFinalTestInstructionExecutionResult' doesn't exist within gRPC-definition. "+
+				"TestCaseExecutionUuid='%s', "+
+				"testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionExecutionUuid='%s' <> "+
+				"testApiEngineFinalTestInstructionExecutionResult.TestInstructionExecutionUUID='%s', "+
+				"TestInstructionExecutionVersion='%s' <> testApiEngineFinalTestInstructionExecutionResult.TestInstructionExecutionVersion='%s', "+
+				"tempLogPost.LogPostStatus='%s'",
+				testInstructionExecutionPubSubRequest.TestCaseExecutionUuid,
+				testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionExecutionUuid,
+				testApiEngineFinalTestInstructionExecutionResult.TestInstructionExecutionUUID,
+				"1",
+				testApiEngineFinalTestInstructionExecutionResult.TestInstructionExecutionVersion,
+				tempLogPost.LogPostStatus)
+
+			var errLogPostToAdd *fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage_LogPostMessage
+			errLogPostToAdd = &fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage_LogPostMessage{
+				LogPostTimeStamp:                    timestamppb.Now(),
+				LogPostStatus:                       fenixExecutionWorkerGrpcApi.LogPostStatusEnum_EXECUTION_ERROR,
+				LogPostText:                         logPostText,
+				FoundVersusExpectedValueForVariable: nil,
+			}
+
+			errLogPostsToAdd = append(errLogPostsToAdd, errLogPostToAdd)
+
+			testInstructionExecutionResultMessage = &fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage{
+				ClientSystemIdentification: nil,
+				TestInstructionExecutionUuid: testInstructionExecutionPubSubRequest.GetTestInstruction().
+					TestInstructionExecutionUuid,
+				TestInstructionExecutionStatus: fenixExecutionWorkerGrpcApi.
+					TestInstructionExecutionStatusEnum_TIE_UNEXPECTED_INTERRUPTION,
+				TestInstructionExecutionStartTimeStamp: tempTestInstructionExecutionStartTimeStamp,
+				TestInstructionExecutionEndTimeStamp:   timestamppb.Now(),
+				ResponseVariables:                      nil,
+				LogPosts:                               errLogPostsToAdd,
+			}
+
+			// At least one error found
+			foundError = true
+		}
+
+		// Convert TestInstructionExecutionStartTimeStamp into time-variable
+		var logPostTimeStamp time.Time
+		timeStampLayoutForParser, err = sharedCode.GenerateTimeStampParserLayout(
+			tempLogPost.LogPostTimeStamp)
+		if err != nil {
+			sharedCode.Logger.WithFields(logrus.Fields{
+				"Id":               "669665e6-f8f5-40bc-a4a6-dce19b969b86",
+				"err":              err,
+				"LogPostTimeStamp": tempLogPost.LogPostTimeStamp,
+			}).Error("Couldn't generate parser layout from 'LogPostTimeStamp'")
+
+			// Add a log post
+			var logPostText string
+			logPostText = fmt.Sprintf("Couldn't generate parser layout from 'LogPostTimeStamp'. "+
+				"TestCaseExecutionUuid='%s', "+
+				"testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionExecutionUuid='%s', "+
+				"TestInstructionExecutionVersion='%s'. "+
+				"tempLogPost.LogPostTimeStamp='%s"+
+				"Errror='%s'",
+				testInstructionExecutionPubSubRequest.TestCaseExecutionUuid,
+				testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionExecutionUuid,
+				"1",
+				tempLogPost.LogPostTimeStamp,
+				err.Error())
+
+			var errLogPostToAdd *fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage_LogPostMessage
+			errLogPostToAdd = &fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage_LogPostMessage{
+				LogPostTimeStamp:                    timestamppb.Now(),
+				LogPostStatus:                       fenixExecutionWorkerGrpcApi.LogPostStatusEnum_EXECUTION_ERROR,
+				LogPostText:                         logPostText,
+				FoundVersusExpectedValueForVariable: nil,
+			}
+
+			errLogPostsToAdd = append(errLogPostsToAdd, errLogPostToAdd)
+
+			testInstructionExecutionResultMessage = &fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage{
+				ClientSystemIdentification: nil,
+				TestInstructionExecutionUuid: testInstructionExecutionPubSubRequest.GetTestInstruction().
+					TestInstructionExecutionUuid,
+				TestInstructionExecutionStatus: fenixExecutionWorkerGrpcApi.
+					TestInstructionExecutionStatusEnum_TIE_UNEXPECTED_INTERRUPTION,
+				TestInstructionExecutionStartTimeStamp: tempTestInstructionExecutionStartTimeStamp,
+				TestInstructionExecutionEndTimeStamp:   timestamppb.Now(),
+				ResponseVariables:                      nil,
+				LogPosts:                               errLogPostsToAdd,
+			}
+
+			// At least one error found
+			foundError = true
+
+		} else {
+
+			logPostTimeStamp, err = time.Parse(timeStampLayoutForParser,
+				tempLogPost.LogPostTimeStamp)
+			if err != nil {
+				sharedCode.Logger.WithFields(logrus.Fields{
+					"Id":               "a1b99570-526c-4960-9bec-79ff6310dc70",
+					"err":              err,
+					"LogPostTimeStamp": tempLogPost.LogPostTimeStamp,
+				}).Error("Couldn't parse 'LogPostTimeStamp' in " +
+					"'testApiEngineFinalTestInstructionExecutionResult'")
+
+				// Add a log post
+				var logPostText string
+				logPostText = fmt.Sprintf("Couldn't parse 'LogPostTimeStamp' in "+
+					"'testApiEngineFinalTestInstructionExecutionResult'. "+
+					"TestCaseExecutionUuid='%s', "+
+					"testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionExecutionUuid='%s', "+
+					"TestInstructionExecutionVersion='%s'. "+
+					"tempLogPost.LogPostTimeStamp='%s"+
+					"Errror='%s'",
+					testInstructionExecutionPubSubRequest.TestCaseExecutionUuid,
+					testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionExecutionUuid,
+					"1",
+					tempLogPost.LogPostTimeStamp,
+					err.Error())
+
+				var errLogPostToAdd *fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage_LogPostMessage
+				errLogPostToAdd = &fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage_LogPostMessage{
+					LogPostTimeStamp:                    timestamppb.Now(),
+					LogPostStatus:                       fenixExecutionWorkerGrpcApi.LogPostStatusEnum_EXECUTION_ERROR,
+					LogPostText:                         logPostText,
+					FoundVersusExpectedValueForVariable: nil,
+				}
+
+				errLogPostsToAdd = append(errLogPostsToAdd, errLogPostToAdd)
+
+				testInstructionExecutionResultMessage = &fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage{
+					ClientSystemIdentification: nil,
+					TestInstructionExecutionUuid: testInstructionExecutionPubSubRequest.GetTestInstruction().
+						TestInstructionExecutionUuid,
+					TestInstructionExecutionStatus: fenixExecutionWorkerGrpcApi.
+						TestInstructionExecutionStatusEnum_TIE_UNEXPECTED_INTERRUPTION,
+					TestInstructionExecutionStartTimeStamp: tempTestInstructionExecutionStartTimeStamp,
+					TestInstructionExecutionEndTimeStamp:   timestamppb.Now(),
+					ResponseVariables:                      nil,
+					LogPosts:                               errLogPostsToAdd,
+				}
+
+				// At least one error found
+				foundError = true
+			}
+		}
+
+		// At least one error found
+		if foundError == true {
+			return testInstructionExecutionResultMessage
+		}
+
+		// Create gRPC-LogPost variable
+		var tempLogPostGrpc *fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage_LogPostMessage
+		tempLogPostGrpc = &fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage_LogPostMessage{
+			LogPostTimeStamp:                    timestamppb.New(logPostTimeStamp),
+			LogPostStatus:                       fenixExecutionWorkerGrpcApi.LogPostStatusEnum(tempLogPostStatus),
+			LogPostText:                         tempLogPost.LogPostText,
+			FoundVersusExpectedValueForVariable: tempFoundVersusExpectedValueForVariablesGrpc,
+		}
+
+		// Add LogPost to list of LogPosts
+		tempLogPostsGrpc = append(tempLogPostsGrpc, tempLogPostGrpc)
+	}
+
+	testInstructionExecutionResultMessage = &fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage{
+		ClientSystemIdentification: nil,
+		TestInstructionExecutionVersion: testInstructionExecutionPubSubRequest.GetTestInstruction().
+			TestInstructionExecutionUuid,
+		TestInstructionExecutionStatus: fenixExecutionWorkerGrpcApi.TestInstructionExecutionStatusEnum(
+			testInstructionExecutionStatus),
+		TestInstructionExecutionStartTimeStamp: timestamppb.New(testInstructionExecutionStartTimeStamp),
+		TestInstructionExecutionEndTimeStamp:   timestamppb.New(testInstructionExecutionEndTimeStamp),
+		ResponseVariables:                      tempResponseVariablesGrpc,
+		LogPosts:                               tempLogPostsGrpc,
+	}
+
+	return testInstructionExecutionResultMessage
 }
