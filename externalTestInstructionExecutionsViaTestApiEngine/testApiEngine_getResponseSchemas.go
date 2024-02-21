@@ -14,12 +14,18 @@ func GetResponseSchemasToUse(
 	testInstructionUUID TypeAndStructs.OriginalElementUUIDType,
 	testInstructionVersion string) (
 	requestMessageToTestApiEngineJsonSchema *string,
+	testApiEngineResponseMessageJsonSchema *string,
 	finalTestInstructionExecutionResultJsonSchema *string,
 	responseVariablesJsonSchema *string) {
 
+	// Get the json-schema for 'TestApiEngineResponse'
+	var tempTestApiEngineResponseMessageJsonSchema string
+	tempTestApiEngineResponseMessageJsonSchema = string(testApiEngineResponseMessageJsonSchemaAsByteArray)
+	testApiEngineResponseMessageJsonSchema = &tempTestApiEngineResponseMessageJsonSchema
+
 	// Get the json-schema for 'FinalTestInstructionExecutionResult'
 	var tempFinalTestInstructionExecutionResultJsonSchema string
-	tempFinalTestInstructionExecutionResultJsonSchema = string(finalTestInstructionExecutionResultMessageJsonSchema)
+	tempFinalTestInstructionExecutionResultJsonSchema = string(finalTestInstructionExecutionResultMessageJsonSchemaAsByteArray)
 	finalTestInstructionExecutionResultJsonSchema = &tempFinalTestInstructionExecutionResultJsonSchema
 
 	// Chose Response Schema depending on TestInstruction to be executed
@@ -34,12 +40,12 @@ func GetResponseSchemasToUse(
 
 			// Outgoing Request
 			var tempRequestMessageToTestApiEngineJsonSchema string
-			tempRequestMessageToTestApiEngineJsonSchema = string(sendMT540_v1_0_RequestMessageJsonSchema)
+			tempRequestMessageToTestApiEngineJsonSchema = string(sendMT540_v1_0_RequestMessageJsonSchemaAsByteArray)
 			requestMessageToTestApiEngineJsonSchema = &tempRequestMessageToTestApiEngineJsonSchema
 
 			// Incoming Response
 			var tempResponseVariablesJsonSchema string
-			tempResponseVariablesJsonSchema = string(sendMT540_v1_0_ResponseVariablesMessageJsonSchema)
+			tempResponseVariablesJsonSchema = string(sendMT540_v1_0_ResponseVariablesMessageJsonSchemaAsByteArray)
 			responseVariablesJsonSchema = &tempResponseVariablesJsonSchema
 
 		default:
@@ -60,12 +66,12 @@ func GetResponseSchemasToUse(
 
 			// Outgoing Request
 			var tempRequestMessageToTestApiEngineJsonSchema string
-			tempRequestMessageToTestApiEngineJsonSchema = string(sendMT542_v1_0_RequestMessageJsonSchema)
+			tempRequestMessageToTestApiEngineJsonSchema = string(sendMT542_v1_0_RequestMessageJsonSchemaAsByteArray)
 			requestMessageToTestApiEngineJsonSchema = &tempRequestMessageToTestApiEngineJsonSchema
 
 			// Incoming Response
 			var tempResponseVariablesJsonSchema string
-			tempResponseVariablesJsonSchema = string(sendMT542_v1_0_ResponseVariablesMessageJsonSchema)
+			tempResponseVariablesJsonSchema = string(sendMT542_v1_0_ResponseVariablesMessageJsonSchemaAsByteArray)
 			responseVariablesJsonSchema = &tempResponseVariablesJsonSchema
 
 		default:
@@ -86,12 +92,12 @@ func GetResponseSchemasToUse(
 
 			// Outgoing Request
 			var tempRequestMessageToTestApiEngineJsonSchema string
-			tempRequestMessageToTestApiEngineJsonSchema = string(validateMT544_v1_0_RequestMessageJsonSchema)
+			tempRequestMessageToTestApiEngineJsonSchema = string(validateMT544_v1_0_RequestMessageJsonSchemaAsByteArray)
 			requestMessageToTestApiEngineJsonSchema = &tempRequestMessageToTestApiEngineJsonSchema
 
 			// Incoming Response
 			var tempResponseVariablesJsonSchema string
-			tempResponseVariablesJsonSchema = string(validateMT544_v1_0_ResponseVariablesMessageJsonSchema)
+			tempResponseVariablesJsonSchema = string(validateMT544_v1_0_ResponseVariablesMessageJsonSchemaAsByteArray)
 			responseVariablesJsonSchema = &tempResponseVariablesJsonSchema
 
 		default:

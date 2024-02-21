@@ -29,6 +29,22 @@ type TestInstructionAttributesUuidAndValueStruct struct {
 	TestInstructionAttributeValueAsString TypeAndStructs.AttributeValueAsStringType
 }
 
+// TestApiEngineResponseStruct
+// Specify the structure that the Json-response, from TestApiEngine, will be 'converted into
+type TestApiEngineResponseStruct struct {
+	TestStepExecutionStatus TestStepExecutionStatusStruct `json:"TestStepExecutionStatus"`
+	Details                 string                        `json:"Details"`
+	ResponseVariables       string                        `json:"ResponseVariables"`
+	ExecutionTimeStamp      string                        `json:"ExecutionTimeStamp"`
+}
+
+// TestStepExecutionStatusStruct
+// Holds Status code and Text for TestApiEngine response
+type TestStepExecutionStatusStruct struct {
+	StatusCode int    `json:"StatusCode"`
+	StatusText string `json:"StatusText"`
+}
+
 // TestApiEngineFinalTestInstructionExecutionResultStruct
 // Specify the structure that the Json-response, from TestApiEngine, will be 'converted into
 type TestApiEngineFinalTestInstructionExecutionResultStruct struct {

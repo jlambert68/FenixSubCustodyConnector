@@ -206,9 +206,11 @@ func processTestInstructionExecutionRequest(
 
 		// Get Json-schemas to use
 		var requestMessageToTestApiEngineJsonSchema *string
+		var testApiEngineResponseMessageJsonSchema *string
 		var finalTestInstructionExecutionResultJsonSchema *string
 		var responseVariablesJsonSchema *string
-		requestMessageToTestApiEngineJsonSchema, finalTestInstructionExecutionResultJsonSchema, responseVariablesJsonSchema =
+		requestMessageToTestApiEngineJsonSchema, testApiEngineResponseMessageJsonSchema,
+			finalTestInstructionExecutionResultJsonSchema, responseVariablesJsonSchema =
 			executeTestInstructionUsingTestApiEngine.GetResponseSchemasToUse(
 				TestInstruction_SendOnMQTypeMT_SendMT540.TestInstructionUUID_SubCustody_SendMT540,
 				testInstructionVersion)
@@ -219,6 +221,7 @@ func processTestInstructionExecutionRequest(
 			PostTestInstructionUsingRestCall(
 				testApiEngineRestApiMessageValues,
 				requestMessageToTestApiEngineJsonSchema,
+				testApiEngineResponseMessageJsonSchema,
 				finalTestInstructionExecutionResultJsonSchema,
 				responseVariablesJsonSchema,
 				testInstructionVersion)

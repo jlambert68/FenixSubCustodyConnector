@@ -17,6 +17,7 @@ import (
 func PostTestInstructionUsingRestCall(
 	testApiEngineRestApiMessageValues *TestApiEngineRestApiMessageStruct,
 	requestMessageToTestApiEngineJsonSchema *string,
+	testApiEngineResponseMessageJsonSchema *string,
 	finalTestInstructionExecutionResultJsonSchema *string,
 	responseVariablesJsonSchema *string,
 	testInstructionVersion string) (
@@ -37,15 +38,36 @@ func PostTestInstructionUsingRestCall(
 			TestInstructionAttributeValueAsString)
 	}
 
+	// Create the struct holding full Rest-request to TestApiEngine
+	type testApiEngineRequestStruct struct {
+		TestStepClassName     string            `json:"testStepClassName"`
+		TestStepActionMethod  string            `json:"testStepActionMethod"`
+		TestDataParameterType string            `json:"testDataParameterType"`
+		ExpectedToBePassed    bool              `json:"expectedToBePassed"`
+		MethodParameters      map[string]string `json:"methodParameters"`
+	}
+
 	// Add TestCaseExecutionUuid, TestInstructionExecutionUuid, TestInstructionExecutionVersion and TestInstructionVersion
 	attributesMap["TestInstructionVersion"] = testInstructionVersion
 	attributesMap["TestCaseExecutionUuid"] = testApiEngineRestApiMessageValues.TestCaseExecutionUuid
 	attributesMap["TestInstructionExecutionUuid"] = testApiEngineRestApiMessageValues.TestInstructionExecutionUuid
 	attributesMap["TestInstructionExecutionVersion"] = strconv.Itoa(int(testApiEngineRestApiMessageValues.
 		TestInstructionExecutionVersion))
+	attributesMap["ExpectedToBePassed"] = string(testApiEngineRestApiMessageValues.TestApiEngineExpectedToBePassedValue)
 
+	// Request to be sent to TestApiEngine
+	var tempTestApiEngineRequest testApiEngineRequestStruct
+	tempTestApiEngineRequest = testApiEngineRequestStruct{
+		TestStepClassName:     string(testApiEngineRestApiMessageValues.TestApiEngineClassNameNAME),
+		TestStepActionMethod:  string(testApiEngineRestApiMessageValues.TestApiEngineMethodNameNAME),
+		TestDataParameterType: "FixedValue",
+		ExpectedToBePassed:    true,
+		MethodParameters:      attributesMap,
+	}
+
+	// Marshal to json as byte-array
 	var attributesAsJson []byte
-	attributesAsJson, err = json.Marshal(attributesMap)
+	attributesAsJson, err = json.Marshal(tempTestApiEngineRequest)
 	if err != nil {
 		sharedCode.Logger.WithFields(logrus.Fields{
 			"id":            "e1e74131-5040-43fa-abfc-1023f09d4388",
@@ -78,15 +100,15 @@ func PostTestInstructionUsingRestCall(
 		  "additionalProp3": "string"
 		}'
 	*/
-	var TestApiEngineUrl string
-	TestApiEngineUrl = LocalExecutionMethods.TestApiEngineUrlPath + "/" + string(testApiEngineRestApiMessageValues.TestApiEngineClassNameNAME) +
+	var testApiEngineUrl string
+	testApiEngineUrl = LocalExecutionMethods.TestApiEngineUrlPath + "/" + string(testApiEngineRestApiMessageValues.TestApiEngineClassNameNAME) +
 		"/" + string(testApiEngineRestApiMessageValues.TestApiEngineMethodNameNAME) +
 		"?" + "expectedToBePassed=" + string(testApiEngineRestApiMessageValues.TestApiEngineExpectedToBePassedValue)
 
 	// Use Local web server for test or TestApiEngine
 	if UseInternalWebServerForTestInsteadOfCallingTestApiEngine == true {
 		// Use Local web server for testing
-		TestApiEngineUrl = "http://" + LocalWebServerPort + TestApiEngineUrl
+		testApiEngineUrl = "http://" + LocalWebServerPort + testApiEngineUrl
 
 		sharedCode.Logger.WithFields(logrus.Fields{
 			"id": "724d84e8-ec94-4947-ac74-0c7e5c17cfb6",
@@ -94,10 +116,11 @@ func PostTestInstructionUsingRestCall(
 
 	} else {
 		// Use TestApiEngine address and port
-		TestApiEngineUrl = "http://" + LocalExecutionMethods.TestApiEngineAddress + ":" + LocalExecutionMethods.TestApiEnginePort + TestApiEngineUrl
+		testApiEngineUrl = "https://" + LocalExecutionMethods.TestApiEngineAddress + ":" + LocalExecutionMethods.TestApiEnginePort + testApiEngineUrl
 
 		sharedCode.Logger.WithFields(logrus.Fields{
-			"id": "fa461ab4-789f-4b2a-a215-2653567fe319",
+			"id":               "fa461ab4-789f-4b2a-a215-2653567fe319",
+			"testApiEngineUrl": testApiEngineUrl,
 		}).Debug("Posting TestInstruction to TestApiEngine")
 	}
 	// Create Http-client
@@ -112,13 +135,13 @@ func PostTestInstructionUsingRestCall(
 	// Do RestCall to TestApiEngine
 	var restResponse *http.Response
 	restResponse, err = httpClient.Post(
-		TestApiEngineUrl,
+		testApiEngineUrl,
 		"application/json; charset=utf-8",
 		bytes.NewBuffer(attributesAsJson))
 	if err != nil {
 		sharedCode.Logger.WithFields(logrus.Fields{
 			"id":               "12b846ad-e8bf-41e0-8893-a1a7cef5f396",
-			"TestApiEngineUrl": TestApiEngineUrl,
+			"testApiEngineUrl": testApiEngineUrl,
 		}).Error("Couldn't do call to Rest-execution-server")
 
 		return TestApiEngineFinalTestInstructionExecutionResultStruct{}, err
@@ -130,7 +153,7 @@ func PostTestInstructionUsingRestCall(
 	if err != nil {
 		sharedCode.Logger.WithFields(logrus.Fields{
 			"id":               "838f461a-d207-450b-a46d-dc4557f64422",
-			"TestApiEngineUrl": TestApiEngineUrl,
+			"testApiEngineUrl": testApiEngineUrl,
 		}).Error("Couldn't extract json-body")
 	}
 
@@ -140,6 +163,7 @@ func PostTestInstructionUsingRestCall(
 	// Validate rest-response and convert into 'TestApiEngineFinalTestInstructionExecutionResultStruct'
 	testApiEngineFinalTestInstructionExecutionResult, err = validateAndTransformRestResponse(
 		&bodyAsString,
+		testApiEngineResponseMessageJsonSchema,
 		finalTestInstructionExecutionResultJsonSchema,
 		responseVariablesJsonSchema)
 
@@ -218,12 +242,94 @@ func validateRestRequest(
 // Second that the Response Variable message is valid
 func validateAndTransformRestResponse(
 	finalTestInstructionExecutionResultAsJson *string,
+	testApiEngineResponseMessageJsonSchema *string,
 	finalTestInstructionExecutionResultJsonSchema *string,
 	responseVariablesJsonSchema *string) (
 	testApiEngineFinalTestInstructionExecutionResult TestApiEngineFinalTestInstructionExecutionResultStruct,
 	err error) {
 
 	// *** First Step ***
+
+	// Compile json-schema 'testApiEngineResponseMessageJsonSchema'
+	var jsonSchemaValidatortestApiEngineResponseMessage *jsonschema.Schema
+	jsonSchemaValidatortestApiEngineResponseMessage, err = jsonschema.CompileString("schema.json", *testApiEngineResponseMessageJsonSchema)
+	if err != nil {
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id":                                     "2b42469d-7ccc-4f0e-9fec-3e992ba8febb",
+			"err":                                    err,
+			"testApiEngineResponseMessageJsonSchema": *testApiEngineResponseMessageJsonSchema,
+		}).Error("Couldn't compile the json-schema for 'testApiEngineResponseMessageJsonSchema'")
+
+		return TestApiEngineFinalTestInstructionExecutionResultStruct{}, err
+
+	}
+
+	// Convert to object that can be validated
+	var jsonObjectedToBeValidated interface{}
+	err = json.Unmarshal([]byte(*testApiEngineResponseMessageJsonSchema), &jsonObjectedToBeValidated)
+
+	if err != nil {
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id":                                     "3d30bb05-c58f-43b0-b244-d62a8bdd32a2",
+			"err":                                    err,
+			"testApiEngineResponseMessageJsonSchema": *testApiEngineResponseMessageJsonSchema,
+		}).Error("Couldn't Unmarshal the json, testApiEngineResponseMessageJsonSchema, into object that can be validated")
+
+		return TestApiEngineFinalTestInstructionExecutionResultStruct{}, err
+	}
+
+	// Validate that the overall message is valid -'finalTestInstructionExecutionResultJsonSchema'
+	err = jsonSchemaValidatortestApiEngineResponseMessage.Validate(jsonObjectedToBeValidated)
+	if err != nil {
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id":                                     "771b579b-3191-4877-b126-64affafe7fc0",
+			"err":                                    err,
+			"testApiEngineResponseMessageJsonSchema": *testApiEngineResponseMessageJsonSchema,
+		}).Error("'finalTestInstructionExecutionResultAsJson' is not valid to json-schema " +
+			"'testApiEngineResponseMessageJsonSchema'")
+
+		return TestApiEngineFinalTestInstructionExecutionResultStruct{}, err
+
+	} else {
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id":                                     "2a2cb32d-84d7-4a7f-aced-2b1466982513",
+			"testApiEngineResponseMessageJsonSchema": *testApiEngineResponseMessageJsonSchema,
+		}).Debug("'finalTestInstructionExecutionResultAsJson' is valid to json-schema " +
+			"'testApiEngineResponseMessageJsonSchema'")
+	}
+
+	// UmMarshal TestApiEngine-json into Go-struct
+	var tempTestApiEngineResponse TestApiEngineResponseStruct
+	err = json.Unmarshal([]byte(*finalTestInstructionExecutionResultAsJson),
+		&tempTestApiEngineResponse)
+	if err != nil {
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id": "4997b271-fcf0-44fa-ac29-cdab53f7cdbb",
+			"finalTestInstructionExecutionResultAsJson": *finalTestInstructionExecutionResultAsJson,
+		}).Error("Couldn't Unmarshal 'finalTestInstructionExecutionResultAsJson' into Go-struct")
+
+		return TestApiEngineFinalTestInstructionExecutionResultStruct{}, err
+	}
+
+	// Extract FinalTestInstructionExecutionResult
+	var testAPiEngineResponseVariables []ResponseVariableStruct
+	testAPiEngineResponseVariables = testApiEngineFinalTestInstructionExecutionResult.ResponseVariables
+
+	// Convert 'Response Variables' into json, to be validated towards json-schema
+	var testAPiEngineResponseVariablesAsJsonByteArray []byte
+	testAPiEngineResponseVariablesAsJsonByteArray, err = json.Marshal(testAPiEngineResponseVariables)
+	if err != nil {
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id":                             "4997b271-fcf0-44fa-ac29-cdab53f7cdb",
+			"err":                            err,
+			"testAPiEngineResponseVariables": testAPiEngineResponseVariables,
+		}).Error("Couldn't marshal 'testAPiEngineResponseVariables' into json")
+
+		return TestApiEngineFinalTestInstructionExecutionResultStruct{}, err
+
+	}
+
+	// *** Second Step ***
 
 	// Compile json-schema 'finalTestInstructionExecutionResultJsonSchema'
 	var jsonSchemaValidatorFinalTestInstructionExecutionResult *jsonschema.Schema
@@ -240,7 +346,6 @@ func validateAndTransformRestResponse(
 	}
 
 	// Convert to object that can be validated
-	var jsonObjectedToBeValidated interface{}
 	err = json.Unmarshal([]byte(*finalTestInstructionExecutionResultAsJson), &jsonObjectedToBeValidated)
 
 	if err != nil {
@@ -303,7 +408,7 @@ func validateAndTransformRestResponse(
 
 	}
 
-	// 	// *** Second Step ***
+	// 	// *** Third Step ***
 
 	// Compile json-schema 'responseVariablesJsonSchema'
 	var jsonSchemaValidatorResponseVariables *jsonschema.Schema
