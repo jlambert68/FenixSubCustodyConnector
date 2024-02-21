@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Schema used to validate main response from TestApiEngine",
+  "type": "object",
+  "properties": {
+    "testStepExecutionStatus": {
+      "type": "object",
+      "properties": {
+        "statusCode": {
+          "type": "integer"
+        },
+        "statusText": {
+          "type": "string"
+        }
+      },
+      "required": ["statusCode", "statusText"],
+      "additionalProperties": false
+    },
+    "details": {
+      "type": "string"
+    },
+    "responseVariables": {
+      "type": "string"
+    },
+    "executionTimeStamp": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": ["testStepExecutionStatus", "details", "responseVariables", "executionTimeStamp"],
+  "additionalProperties": false
+}

@@ -33,10 +33,14 @@ CrossBuildForWindows_SEB_test:
 
 Download-json-schemas:
 
-	echo "$(fullLocalFilePathValidateMT544_v1_0)"
-	echo "$(fullRemoteFilePathSendMT542Request_v1_0)"
+	echo "$(fullLocalFilePathOverAll)"
+	echo "$(fullRemoteFilePathOverAll)"
+	echo "......."
+	echo "$(fullLocalFilePathTestApiEngineResponse)"
+	echo "$(fullRemoteFilePathTestApiEngineResponse)"
 
 	@curl -L -o $(fullLocalFilePathOverAll) "$(fullRemoteFilePathOverAll)"
+	@curl -L -o $(fullLocalFilePathTestApiEngineResponse) "$(fullRemoteFilePathTestApiEngineResponse)"
 
 	@curl -L -o $(fullLocalFilePathSendMT540Request_v1_0) "$(fullRemoteFilePathSendMT540Request_v1_0)"
 	@curl -L -o $(fullLocalFilePathSendMT540_v1_0) "$(fullRemoteFilePathSendMT540Response_v1_0)"

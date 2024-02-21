@@ -3,35 +3,88 @@
   "title": "ValidateMT544 Request, version 1.0",
   "type": "object",
   "properties": {
-    "TestInstructionVersion": {
+    "testStepClassName": {
       "type": "string",
-      "enum": ["v1.0"]
+      "enum": [
+        "ValidateMQTypeMT54x"
+      ]
     },
-    "TestCaseExecutionUuid": {
+    "testStepActionMethod": {
       "type": "string",
-      "format": "uuid"
+      "enum": [
+        "ValidateMT544_v1_0"
+      ]
     },
-    "TestInstructionExecutionUuid": {
+    "testDataParameterType": {
       "type": "string",
-      "format": "uuid"
-    },
-    "TestInstructionExecutionVersion": {
-      "type": "string",
-      "pattern": "^[0-9]+$"
+      "enum": [
+        "FixedValue"
+      ]
     },
     "ExpectedToBePassed": {
       "type": "string",
-      "enum": ["true", "false"]
+      "enum": [
+        "true",
+        "false"
+      ]
     },
-    "RelatedReference_54x_20CRELA": {
-      "type": "string"
+    "methodParameters": {
+      "type": "object",
+      "items": {
+        "$ref": "#/definitions/MethodParameters"
+      }
     }
   },
-  "required": ["TestInstructionVersion",
-    "TestCaseExecutionUuid",
-    "TestInstructionExecutionUuid",
-    "TestInstructionExecutionVersion",
-    "ExpectedToBePassed",
-    "RelatedReference_54x_20CRELA"],
-  "additionalProperties": false
+  "required": [
+    "testStepClassName",
+    "testStepActionMethod",
+    "testDataParameterType",
+    "expectedToBePassed",
+    "methodParameters"
+  ],
+  "additionalProperties": false,
+  "definitions": {
+    "MethodParameters": {
+      "type": "object",
+      "properties": {
+        "TestInstructionVersion": {
+          "type": "string",
+          "enum": [
+            "v1.0"
+          ]
+        },
+        "TestCaseExecutionUuid": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "TestInstructionExecutionUuid": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "TestInstructionExecutionVersion": {
+          "type": "string",
+          "pattern": "^[0-9]+$"
+        },
+        "ExpectedToBePassed": {
+          "type": "string",
+          "enum": [
+            "true",
+            "false"
+          ]
+        },
+        "RelatedReference_54x_20CRELA": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "TestInstructionVersion",
+        "TestCaseExecutionUuid",
+        "TestInstructionExecutionUuid",
+        "TestInstructionExecutionVersion",
+        "ExpectedToBePassed",
+        "RelatedReference_54x_20CRELA"
+      ],
+      "additionalProperties": false
+    }
+  }
 }

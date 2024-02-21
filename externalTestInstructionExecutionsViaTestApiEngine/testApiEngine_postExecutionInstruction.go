@@ -38,11 +38,11 @@ func PostTestInstructionUsingRestCall(
 	}
 
 	// Add TestCaseExecutionUuid, TestInstructionExecutionUuid, TestInstructionExecutionVersion and TestInstructionVersion
+	attributesMap["TestInstructionVersion"] = testInstructionVersion
 	attributesMap["TestCaseExecutionUuid"] = testApiEngineRestApiMessageValues.TestCaseExecutionUuid
 	attributesMap["TestInstructionExecutionUuid"] = testApiEngineRestApiMessageValues.TestInstructionExecutionUuid
 	attributesMap["TestInstructionExecutionVersion"] = strconv.Itoa(int(testApiEngineRestApiMessageValues.
 		TestInstructionExecutionVersion))
-	attributesMap["TestInstructionVersion"] = testInstructionVersion
 
 	var attributesAsJson []byte
 	attributesAsJson, err = json.Marshal(attributesMap)

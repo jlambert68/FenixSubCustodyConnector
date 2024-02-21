@@ -26,6 +26,22 @@ fullLocalFilePathOverAll := $(fullLocalPath)/$(jsonSchemaFileNameOverAllL)
 
 
 
+# **** Remote Json-Schemas TestApiEngineResponse ****
+jsonSchemaPathTestApiEngineResponse := TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_SendOnMQTypeMT_SendMT540/version_1_0/
+jsonSchemaFileNameTestApiEngineResponse := TestApiEngineResponse-json-schema.json
+
+# Full Remote Path and FilePath - TestApiEngineResponse
+fullRemotePathTestApiEngineResponse := $(remoteUrl)/$(githubUsername)/$(repositoryOverAll)/$(branchOverAll)/$(jsonSchemaPathOverAll)
+fullRemoteFilePathTestApiEngineResponse := $(fullRemotePathTestApiEngineResponse)/$(jsonSchemaFileNameTestApiEngineResponse)
+
+# Local - TestApiEngineResponse
+localJsonSchemaFileNameTestApiEngineResponse := TestApiEngineResponse-json-schema.json
+fullLocalFilePathTestApiEngineResponse := $(fullLocalPath)/$(localJsonSchemaFileNameTestApiEngineResponse)
+
+
+
+
+
 # **** Remote Json-Schemas SendMT540 ****
 jsonSchemaPathSendMT540_v1_0 := TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_SendOnMQTypeMT_SendMT540/version_1_0/
 jsonSchemaFileNameSendMT540Request := Send540.json-schema.json
