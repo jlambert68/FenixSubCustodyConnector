@@ -38,7 +38,7 @@ var (
 )
 
 // Used for hard coding if Injected or real Environment Variables are expected
-var falseOrTrueValue string = "true"
+var falseOrTrueValue string = "false"
 
 // Map used when Extracting the value of the injected variable
 var injectedVariablesMap = map[string]*string{

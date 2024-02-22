@@ -13,13 +13,15 @@
           "type": "string"
         }
       },
-      "required": ["statusCode", "statusText"],
+      "required": [
+        "statusCode",
+        "statusText"],
       "additionalProperties": false
     },
     "details": {
       "type": "string"
     },
-    "responseVariables": {
+    "responseValue": {
       "type": "string"
     },
     "executionTimeStamp": {
@@ -27,6 +29,10 @@
       "format": "date-time"
     }
   },
-  "required": ["testStepExecutionStatus", "details", "responseVariables", "executionTimeStamp"],
+  "required": [
+    "testStepExecutionStatus",
+    "details",
+    "responseValue",
+    "executionTimeStamp"],
   "additionalProperties": false
 }

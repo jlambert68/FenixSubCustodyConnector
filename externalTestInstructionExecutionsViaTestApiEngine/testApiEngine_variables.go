@@ -32,11 +32,18 @@ type TestInstructionAttributesUuidAndValueStruct struct {
 // TestApiEngineResponseStruct
 // Specify the structure that the Json-response, from TestApiEngine, will be 'converted into
 // This is the response from TestApiEngine
-type TestApiEngineResponseStruct struct {
+type TestApiEngineResponseWithResponseValueAsStringStruct struct {
 	TestStepExecutionStatus TestStepExecutionStatusStruct `json:"TestStepExecutionStatus"`
 	Details                 string                        `json:"Details"`
-	ResponseVariables       string                        `json:"ResponseVariables"`
+	ResponseValue           string                        `json:"ResponseValue"`
 	ExecutionTimeStamp      string                        `json:"ExecutionTimeStamp"`
+}
+
+type TestApiEngineResponseWithResponseValueAsTestApiEngineFinalTestInstructionExecutionResultStruct struct {
+	TestStepExecutionStatus TestStepExecutionStatusStruct                          `json:"TestStepExecutionStatus"`
+	Details                 string                                                 `json:"Details"`
+	ResponseValue           TestApiEngineFinalTestInstructionExecutionResultStruct `json:"ResponseValue"`
+	ExecutionTimeStamp      string                                                 `json:"ExecutionTimeStamp"`
 }
 
 // TestStepExecutionStatusStruct
@@ -48,14 +55,14 @@ type TestStepExecutionStatusStruct struct {
 
 // TestApiEngineFinalTestInstructionExecutionResultStruct
 // Specify the structure that the Json-response, from TestApiEngine, will be 'converted into
-// This is the unique Fenix-parts of the TestApiEngine-response, which exists as an inner json 'ResponseVariables'
+// This is the unique Fenix-parts of the TestApiEngine-response, which exists as an inner json 'ResponseValue'
 type TestApiEngineFinalTestInstructionExecutionResultStruct struct {
 	TestInstructionExecutionUUID           string                   `json:"TestInstructionExecutionUuid"`
 	TestInstructionExecutionVersion        string                   `json:"TestInstructionExecutionVersion"`
 	TestInstructionExecutionStatus         string                   `json:"TestInstructionExecutionStatus"`
 	TestInstructionExecutionStartTimeStamp string                   `json:"TestInstructionExecutionStartTimeStamp"`
 	TestInstructionExecutionEndTimeStamp   string                   `json:"TestInstructionExecutionEndTimeStamp"`
-	ResponseVariables                      []ResponseVariableStruct `json:"ResponseVariables"`
+	ResponseVariables                      []ResponseVariableStruct `json:"ResponseValue"`
 	LogPosts                               []LogPostStruct          `json:"LogPosts"`
 }
 

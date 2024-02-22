@@ -22,10 +22,10 @@
       ]
     },
     "ExpectedToBePassed": {
-      "type": "string",
+      "type": "boolean",
       "enum": [
-        "true",
-        "false"
+        true,
+        false
       ]
     },
     "methodParameters": {

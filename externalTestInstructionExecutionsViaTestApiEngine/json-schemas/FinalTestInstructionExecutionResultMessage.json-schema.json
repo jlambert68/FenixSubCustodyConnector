@@ -20,11 +20,18 @@
             "type": "string",
             "format": "date-time"
         },
-        "ResponseVariables": {
-            "type": "array",
-            "items": {
-                "$ref": "#/definitions/ResponseVariableMessage"
-            }
+        "ResponseValue": {
+            "oneOf": [
+                {
+                    "type": "null"
+                },
+                {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/LogPostMessage"
+                    }
+                }
+            ]
         },
         "LogPosts": {
             "type": "array",
@@ -39,6 +46,7 @@
         "TestInstructionExecutionStatus",
         "TestInstructionExecutionStartTimeStamp",
         "TestInstructionExecutionEndTimeStamp",
+        "ResponseValue",
         "LogPosts"
     ],
     "additionalProperties": false,
@@ -73,14 +81,26 @@
                 "LogPostText": {
                     "type": "string"
                 },
-                "FoundVersusExpectedValue": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/FoundVersusExpectedValueMessage"
-                    }
+                "FoundVersusExpectedValueForVariables": {
+                    "oneOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/FoundVersusExpectedValueMessage"
+                            }
+                        }
+                    ]
                 }
             },
-            "required": ["LogPostTimeStamp", "LogPostStatus", "LogPostText", "FoundVersusExpectedValue"],
+            "required": [
+                "LogPostTimeStamp",
+                "LogPostStatus",
+                "LogPostText",
+                "FoundVersusExpectedValueForVariables"
+            ],
             "additionalProperties": false
         },
         "LogPostStatusEnum": {
@@ -104,7 +124,10 @@
                     "type": "string"
                 }
             },
-            "required": ["FoundValue", "ExpectedValue"],
+            "required": [
+                "FoundValue",
+                "ExpectedValue"
+            ],
             "additionalProperties": false
         },
         "ResponseVariableMessage": {
@@ -120,7 +143,11 @@
                     "type": "string"
                 }
             },
-            "required": ["ResponseVariableUuid", "ResponseVariableName", "ResponseVariableValueAsString"],
+            "required": [
+                "ResponseVariableUuid",
+                "ResponseVariableName",
+                "ResponseVariableValueAsString"
+            ],
             "additionalProperties": false
         }
     }

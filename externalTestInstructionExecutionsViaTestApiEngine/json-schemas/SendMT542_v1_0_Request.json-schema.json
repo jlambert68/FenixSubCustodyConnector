@@ -21,11 +21,11 @@
         "FixedValue"
       ]
     },
-    "ExpectedToBePassed": {
-      "type": "string",
+    "expectedToBePassed": {
+      "type": "boolean",
       "enum": [
-        "true",
-        "false"
+        true,
+        false
       ]
     },
     "methodParameters": {
