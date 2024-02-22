@@ -117,5 +117,6 @@ func GetResponseSchemasToUse(
 
 	}
 
-	return requestMessageToTestApiEngineJsonSchema, finalTestInstructionExecutionResultJsonSchema, responseVariablesJsonSchema
+	return requestMessageToTestApiEngineJsonSchema,
+		testApiEngineResponseMessageJsonSchema, finalTestInstructionExecutionResultJsonSchema, responseVariablesJsonSchema
 }

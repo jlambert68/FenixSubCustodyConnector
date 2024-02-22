@@ -31,6 +31,7 @@ type TestInstructionAttributesUuidAndValueStruct struct {
 
 // TestApiEngineResponseStruct
 // Specify the structure that the Json-response, from TestApiEngine, will be 'converted into
+// This is the response from TestApiEngine
 type TestApiEngineResponseStruct struct {
 	TestStepExecutionStatus TestStepExecutionStatusStruct `json:"TestStepExecutionStatus"`
 	Details                 string                        `json:"Details"`
@@ -47,6 +48,7 @@ type TestStepExecutionStatusStruct struct {
 
 // TestApiEngineFinalTestInstructionExecutionResultStruct
 // Specify the structure that the Json-response, from TestApiEngine, will be 'converted into
+// This is the unique Fenix-parts of the TestApiEngine-response, which exists as an inner json 'ResponseVariables'
 type TestApiEngineFinalTestInstructionExecutionResultStruct struct {
 	TestInstructionExecutionUUID           string                   `json:"TestInstructionExecutionUuid"`
 	TestInstructionExecutionVersion        string                   `json:"TestInstructionExecutionVersion"`
@@ -57,7 +59,8 @@ type TestApiEngineFinalTestInstructionExecutionResultStruct struct {
 	LogPosts                               []LogPostStruct          `json:"LogPosts"`
 }
 
-// LogPostStruct, within 'TestApiEngineFinalTestInstructionExecutionResultStruct'
+// LogPostStruct
+// within 'TestApiEngineFinalTestInstructionExecutionResultStruct'
 // Hold one logpost item
 type LogPostStruct struct {
 	LogPostTimeStamp                     string                                      `json:"LogPostTimeStamp"`
