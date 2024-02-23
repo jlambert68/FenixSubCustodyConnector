@@ -625,7 +625,7 @@ func validateAndConvertTestApiEngineResponse(
 		foundError = true
 	}
 
-	// Convert ResponseVariables
+	// Convert ResponseValue
 	var tempResponseVariablesGrpc []*fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage_ResponseVariableMessage
 
 	// Loop response variables from TestApiEngine

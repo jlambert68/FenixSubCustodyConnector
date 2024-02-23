@@ -20,7 +20,7 @@
             "type": "string",
             "format": "date-time"
         },
-        "ResponseValue": {
+        "ResponseVariables": {
             "oneOf": [
                 {
                     "type": "null"
@@ -28,7 +28,7 @@
                 {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/LogPostMessage"
+                        "$ref": "#/definitions/FoundVersusExpectedValueMessage"
                     }
                 }
             ]
@@ -46,7 +46,7 @@
         "TestInstructionExecutionStatus",
         "TestInstructionExecutionStartTimeStamp",
         "TestInstructionExecutionEndTimeStamp",
-        "ResponseValue",
+        "ResponseVariables",
         "LogPosts"
     ],
     "additionalProperties": false,
@@ -81,7 +81,7 @@
                 "LogPostText": {
                     "type": "string"
                 },
-                "FoundVersusExpectedValueForVariables": {
+                "FoundVersusExpectedValue": {
                     "oneOf": [
                         {
                             "type": "null"
@@ -99,7 +99,7 @@
                 "LogPostTimeStamp",
                 "LogPostStatus",
                 "LogPostText",
-                "FoundVersusExpectedValueForVariables"
+                "FoundVersusExpectedValue"
             ],
             "additionalProperties": false
         },
