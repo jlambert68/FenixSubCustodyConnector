@@ -300,39 +300,30 @@ func validateAndTransformRestResponse(
 			"'testApiEngineResponseMessageJsonSchema'")
 	}
 
-	// Clean from '\"' into '"'. The reason is that all '"' are escaped within the string
-	//var cleanedResponseValueAsString string
-	cleanedTestApiEngineResponseMessageJson = strings.ReplaceAll(cleanedTestApiEngineResponseMessageJson, `\"`, `"`)
-
-	// Create a proper json for the string of "responseValue"
-	cleanedTestApiEngineResponseMessageJson = strings.ReplaceAll(cleanedTestApiEngineResponseMessageJson, `responseValue":"{`, `responseValue":{`)
-	cleanedTestApiEngineResponseMessageJson = strings.ReplaceAll(cleanedTestApiEngineResponseMessageJson, `}","executionTimeStamp`, `},"executionTimeStamp`)
-
 	// UmMarshal TestApiEngine-json into Go-struct
-	var tempTestApiEngineResponseWithResponseValueAsTestApiEngineFinalTestInstructionExecutionResult TestApiEngineResponseWithResponseValueAsTestApiEngineFinalTestInstructionExecutionResultStruct
+	var tempTestApiEngineResponseWithResponseValueAsString TestApiEngineResponseWithResponseValueAsStringStruct
 	err = json.Unmarshal([]byte(cleanedTestApiEngineResponseMessageJson),
-		&tempTestApiEngineResponseWithResponseValueAsTestApiEngineFinalTestInstructionExecutionResult)
+		&tempTestApiEngineResponseWithResponseValueAsString)
 	if err != nil {
 		sharedCode.Logger.WithFields(logrus.Fields{
-			"id":                               "c91706b3-d462-4943-929e-d424a11a7258",
-			"testApiEngineResponseMessageJson": *testApiEngineResponseMessageJson,
-		}).Error("Couldn't Unmarshal 'testApiEngineResponseMessageJson' into Go-struct")
+			"id": "c91706b3-d462-4943-929e-d424a11a7258",
+			"cleanedTestApiEngineResponseMessageJson": cleanedTestApiEngineResponseMessageJson,
+		}).Error("Couldn't Unmarshal 'cleanedTestApiEngineResponseMessageJson' into Go-struct of type 'TestApiEngineResponseWithResponseValueAsStringStruct'")
 
 		return TestApiEngineFinalTestInstructionExecutionResultStruct{}, err
 	}
 
 	// Extract Fenix-response, which is 'hidden' in a string TestApiEngine-json
-	var testApiEngineFinalTestInstructionExecutionResultJsonByteArray []byte
-	testApiEngineFinalTestInstructionExecutionResultJsonByteArray, err = json.Marshal(tempTestApiEngineResponseWithResponseValueAsTestApiEngineFinalTestInstructionExecutionResult.ResponseValue)
-	if err != nil {
-		sharedCode.Logger.WithFields(logrus.Fields{
-			"id":  "032f3b85-8870-45a8-9b98-7bdf3888d04d",
-			"err": err,
-			"testApiEngineFinalTestInstructionExecutionResult": testApiEngineFinalTestInstructionExecutionResult,
-		}).Error("Couldn't Marshal 'testApiEngineFinalTestInstructionExecutionResult' into a json")
+	var fenixMessageInTestApiEngineResponseValueAsJsonString string
+	fenixMessageInTestApiEngineResponseValueAsJsonString = tempTestApiEngineResponseWithResponseValueAsString.ResponseValue
 
-		return TestApiEngineFinalTestInstructionExecutionResultStruct{}, err
-	}
+	// Clean from '\"' into '"'. The reason is that all '"' are escaped within the string
+	var cleanedFenixMessageInTestApiEngineResponseValueAsJsonString string
+	cleanedFenixMessageInTestApiEngineResponseValueAsJsonString = strings.ReplaceAll(fenixMessageInTestApiEngineResponseValueAsJsonString, `\"`, `"`)
+
+	// Create a proper json for the string of "responseValue"
+	cleanedFenixMessageInTestApiEngineResponseValueAsJsonString = strings.ReplaceAll(cleanedFenixMessageInTestApiEngineResponseValueAsJsonString, `responseValue":"{`, `responseValue":{`)
+	cleanedFenixMessageInTestApiEngineResponseValueAsJsonString = strings.ReplaceAll(cleanedFenixMessageInTestApiEngineResponseValueAsJsonString, `}","executionTimeStamp`, `},"executionTimeStamp`)
 
 	// *** Second Step ***
 
@@ -351,14 +342,14 @@ func validateAndTransformRestResponse(
 	}
 
 	// Convert to object that can be validated
-	err = json.Unmarshal(testApiEngineFinalTestInstructionExecutionResultJsonByteArray, &jsonObjectedToBeValidated)
+	err = json.Unmarshal([]byte(cleanedFenixMessageInTestApiEngineResponseValueAsJsonString), &jsonObjectedToBeValidated)
 
 	if err != nil {
 		sharedCode.Logger.WithFields(logrus.Fields{
 			"id":  "3e01379c-166b-4c58-a48c-fad7692387da",
 			"err": err,
-			"testApiEngineFinalTestInstructionExecutionResultJsonByteArray": testApiEngineFinalTestInstructionExecutionResultJsonByteArray,
-		}).Error("Couldn't Unmarshal the json, testApiEngineFinalTestInstructionExecutionResultJsonByteArray, into object that can be validated")
+			"cleanedFenixMessageInTestApiEngineResponseValueAsJsonString": cleanedFenixMessageInTestApiEngineResponseValueAsJsonString,
+		}).Error("Couldn't Unmarshal the json, cleanedFenixMessageInTestApiEngineResponseValueAsJsonString, into object that can be validated")
 
 		return TestApiEngineFinalTestInstructionExecutionResultStruct{}, err
 	}
@@ -369,46 +360,43 @@ func validateAndTransformRestResponse(
 		sharedCode.Logger.WithFields(logrus.Fields{
 			"id":  "0bd7fcff-ac59-4747-aeaf-f60ef4e0aa37",
 			"err": err,
-			"testApiEngineFinalTestInstructionExecutionResultJsonByteArray": string(testApiEngineFinalTestInstructionExecutionResultJsonByteArray),
-		}).Error("'testApiEngineFinalTestInstructionExecutionResultJsonByteArray' is not valid to json-schema " +
+			"cleanedFenixMessageInTestApiEngineResponseValueAsJsonString": cleanedFenixMessageInTestApiEngineResponseValueAsJsonString,
+			"finalTestInstructionExecutionResultJsonSchema":               *finalTestInstructionExecutionResultJsonSchema,
+		}).Error("'cleanedFenixMessageInTestApiEngineResponseValueAsJsonString' is not valid to json-schema " +
 			"'finalTestInstructionExecutionResultJsonSchema'")
 
 		return TestApiEngineFinalTestInstructionExecutionResultStruct{}, err
 
 	} else {
 		sharedCode.Logger.WithFields(logrus.Fields{
-			"id": "2a2cb32d-84d7-4a7f-aced-2b1466982513",
-			"testApiEngineFinalTestInstructionExecutionResultJsonByteArray": string(testApiEngineFinalTestInstructionExecutionResultJsonByteArray),
-		}).Debug("'testApiEngineFinalTestInstructionExecutionResultJsonByteArray' is valid to json-schema " +
+			"id":  "2a2cb32d-84d7-4a7f-aced-2b1466982513",
+			"err": err,
+			"cleanedFenixMessageInTestApiEngineResponseValueAsJsonString": cleanedFenixMessageInTestApiEngineResponseValueAsJsonString,
+		}).Debug("'cleanedFenixMessageInTestApiEngineResponseValueAsJsonString' is valid to json-schema " +
 			"'finalTestInstructionExecutionResultJsonSchema'")
 	}
 
-	// Extract Response Variables
-	var testAPiEngineResponseVariables []ResponseVariableStruct
-	testAPiEngineResponseVariables = tempTestApiEngineResponseWithResponseValueAsTestApiEngineFinalTestInstructionExecutionResult.ResponseValue.ResponseVariables
+	// 	 *** Third Step ***
 
-	// Convert 'Response Variables' into json, to be validated towards json-schema
-	var testAPiEngineResponseVariablesAsJsonByteArray []byte
-	testAPiEngineResponseVariablesAsJsonByteArray, err = json.Marshal(testAPiEngineResponseVariables)
+	// UmMarshal 'cleanedFenixMessageInTestApiEngineResponseValueAsJsonString' into Go-struct
+	err = json.Unmarshal([]byte(cleanedFenixMessageInTestApiEngineResponseValueAsJsonString),
+		&testApiEngineFinalTestInstructionExecutionResult)
+
 	if err != nil {
 		sharedCode.Logger.WithFields(logrus.Fields{
-			"id":                             "4997b271-fcf0-44fa-ac29-cdab53f7cdb",
-			"err":                            err,
-			"testAPiEngineResponseVariables": testAPiEngineResponseVariables,
-		}).Error("Couldn't marshal 'testAPiEngineResponseVariables' into json")
+			"id": "b25bcf70-3740-490a-ba68-5483cfa94427",
+			"cleanedFenixMessageInTestApiEngineResponseValueAsJsonString": cleanedFenixMessageInTestApiEngineResponseValueAsJsonString,
+		}).Error("Couldn't Unmarshal 'cleanedFenixMessageInTestApiEngineResponseValueAsJsonString' into Go-struct of type 'TestApiEngineFinalTestInstructionExecutionResultStruct'")
 
 		return TestApiEngineFinalTestInstructionExecutionResultStruct{}, err
-
 	}
-
-	// 	// *** Third Step ***
 
 	// Compile json-schema 'responseVariablesJsonSchema'
 	var jsonSchemaValidatorResponseVariables *jsonschema.Schema
 	jsonSchemaValidatorResponseVariables, err = jsonschema.CompileString("schema.json", *responseVariablesJsonSchema)
 	if err != nil {
 		sharedCode.Logger.WithFields(logrus.Fields{
-			"id":                          "a852d237-13e0-4925-893d-c185c316ed17",
+			"id":                          "955f13ca-f450-44ed-9d17-ca8bfb3f601c",
 			"err":                         err,
 			"responseVariablesJsonSchema": *responseVariablesJsonSchema,
 		}).Fatal("Couldn't compile the json-schema for 'responseVariablesJsonSchema'")
@@ -416,37 +404,52 @@ func validateAndTransformRestResponse(
 		return TestApiEngineFinalTestInstructionExecutionResultStruct{}, err
 	}
 
+	// Extract Response Variables
+	var testAPiEngineResponseVariables []ResponseVariableStruct
+	testAPiEngineResponseVariables = testApiEngineFinalTestInstructionExecutionResult.ResponseVariables
+
+	// Convert Response Variables into json-byte-array
+	var responseVariablesAsJsonByteArray []byte
+	responseVariablesAsJsonByteArray, err = json.Marshal(testAPiEngineResponseVariables)
+	if err != nil {
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id": "27ce4027-f030-469d-9b1c-3afb7d62fc84",
+			"string(responseVariablesAsJsonByteArray)": string(responseVariablesAsJsonByteArray),
+		}).Error("Couldn't Marshal testAPiEngineResponseVariables into json")
+
+		return TestApiEngineFinalTestInstructionExecutionResultStruct{}, err
+	}
+
 	// Convert to object that can be validated
-	err = json.Unmarshal(testAPiEngineResponseVariablesAsJsonByteArray, &jsonObjectedToBeValidated)
+	err = json.Unmarshal(responseVariablesAsJsonByteArray, &jsonObjectedToBeValidated)
 
 	if err != nil {
 		sharedCode.Logger.WithFields(logrus.Fields{
-			"id":                             "ae00dc85-24ee-4b8f-b300-ba17d31dba6f",
-			"err":                            err,
-			"testAPiEngineResponseVariables": testAPiEngineResponseVariables,
-		}).Error("Couldn't Unmarshal the json, testAPiEngineResponseVariablesAsJsonByteArray, into object that can be validated")
+			"id":                               "ae00dc85-24ee-4b8f-b300-ba17d31dba6f",
+			"err":                              err,
+			"responseVariablesAsJsonByteArray": string(responseVariablesAsJsonByteArray),
+		}).Error("Couldn't Unmarshal the json, responseVariablesAsJsonByteArray, into object that can be validated")
 
 		return TestApiEngineFinalTestInstructionExecutionResultStruct{}, err
 	}
 
 	// Second validate that the 'Response Variables' is valid -'responseVariablesJsonSchema'
-	err = jsonSchemaValidatorResponseVariables.Validate(
-		strings.NewReader(string(testAPiEngineResponseVariablesAsJsonByteArray)))
+	err = jsonSchemaValidatorResponseVariables.Validate(jsonObjectedToBeValidated)
 	if err != nil {
 		sharedCode.Logger.WithFields(logrus.Fields{
-			"id":  "74916f92-fb0f-445c-ae0a-6a5bd2bd0fcf",
-			"err": err,
-			"string(testAPiEngineResponseVariablesAsJsonByteArray)": string(testAPiEngineResponseVariablesAsJsonByteArray),
-		}).Error("'string(testAPiEngineResponseVariablesAsJsonByteArray)' is not valid to json-schema " +
+			"id":                               "74916f92-fb0f-445c-ae0a-6a5bd2bd0fcf",
+			"err":                              err,
+			"responseVariablesAsJsonByteArray": string(responseVariablesAsJsonByteArray),
+		}).Error("'testAPiEngineResponseVariables' is not valid to json-schema " +
 			"'responseVariablesJsonSchema'")
 
 		return TestApiEngineFinalTestInstructionExecutionResultStruct{}, err
 
 	} else {
 		sharedCode.Logger.WithFields(logrus.Fields{
-			"id": "e498ecb2-8d50-4d99-8984-3171dbd9ed6c",
-			"string(testAPiEngineResponseVariablesAsJsonByteArray)": string(testAPiEngineResponseVariablesAsJsonByteArray),
-		}).Debug("'string(testAPiEngineResponseVariablesAsJsonByteArray)' is valid to json-schema " +
+			"id":                             "e498ecb2-8d50-4d99-8984-3171dbd9ed6c",
+			"testAPiEngineResponseVariables": string(responseVariablesAsJsonByteArray),
+		}).Debug("'testAPiEngineResponseVariables' is valid to json-schema " +
 			"'responseVariablesJsonSchema'")
 	}
 

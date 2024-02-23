@@ -62,7 +62,7 @@ type TestApiEngineFinalTestInstructionExecutionResultStruct struct {
 	TestInstructionExecutionStatus         string                   `json:"TestInstructionExecutionStatus"`
 	TestInstructionExecutionStartTimeStamp string                   `json:"TestInstructionExecutionStartTimeStamp"`
 	TestInstructionExecutionEndTimeStamp   string                   `json:"TestInstructionExecutionEndTimeStamp"`
-	ResponseVariables                      []ResponseVariableStruct `json:"ResponseValue"`
+	ResponseVariables                      []ResponseVariableStruct `json:"ResponseVariables"`
 	LogPosts                               []LogPostStruct          `json:"LogPosts"`
 }
 
