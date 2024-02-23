@@ -28,7 +28,7 @@
                 {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/FoundVersusExpectedValueMessage"
+                        "$ref": "#/definitions/ResponseVariableMessage"
                     }
                 }
             ]

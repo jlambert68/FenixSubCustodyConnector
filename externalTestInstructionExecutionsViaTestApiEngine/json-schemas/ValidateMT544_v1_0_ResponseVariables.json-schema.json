@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Response Variables for ValidateMT544",
+  "title": "Response Variables Schema for ValidateMT544",
   "type": "array",
   "items": {
     "type": "object",
@@ -22,10 +22,12 @@
       "ResponseVariableValueAsString"
     ],
     "additionalProperties": false,
-    "enum": [
+    "oneOf": [
       {
-        "ResponseVariableUuid": "39818ba1-676d-42d0-87da-e1080e9d5ffd",
-        "ResponseVariableName": ":20C::SEME//"
+        "properties": {
+          "ResponseVariableUuid": {"const": "39818ba1-676d-42d0-87da-e1080e9d5ffd"},
+          "ResponseVariableName": {"const": ":20C::SEME//"}
+        }
       }
     ]
   }
