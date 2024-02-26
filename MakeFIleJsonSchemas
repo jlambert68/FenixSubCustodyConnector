@@ -94,3 +94,56 @@ localJsonSchemaFileNameValidateMT544_v1_0 := ValidateMT544_v1_0_ResponseVariable
 fullLocalFilePathValidateMT544Request_v1_0 := $(fullLocalPath)/$(localJsonSchemaFileNameValidateMT544Request_v1_0)
 fullLocalFilePathValidateMT544_v1_0 := $(fullLocalPath)/$(localJsonSchemaFileNameValidateMT544_v1_0)
 
+
+
+# **** Remote Json-Schemas ValidateMT544 ****
+jsonSchemaPathValidateMT544_v1_0 := TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_ValidateMQTypeMT54x_ValidateMT544/version_1_0/
+jsonSchemaFileNameValidateMT544Request := Validate544.json-schema.json
+jsonSchemaFileNameValidateMT544Response := ValidateMT544_ResponseVariables.json-schema.json
+
+# Full Remote Path and FilePath - ValidateMT544
+fullRemotePathValidateMT544_v1_0 := $(remoteUrl)/$(githubUsername)/$(repositorySubCustody)/$(branchSpecific)/$(jsonSchemaPathValidateMT544_v1_0)
+fullRemoteFilePathValidateMT544Request_v1_0 := $(fullRemotePathValidateMT544_v1_0)/$(jsonSchemaFileNameValidateMT544Request)
+fullRemoteFilePathValidateMT544_v1_0 := $(fullRemotePathValidateMT544_v1_0)/$(jsonSchemaFileNameValidateMT544Response)
+
+# Local - ValidateMT544
+localJsonSchemaFileNameValidateMT544Request_v1_0 := ValidateMT544_v1_0_Request.json-schema.json
+localJsonSchemaFileNameValidateMT544_v1_0 := ValidateMT544_v1_0_ResponseVariables.json-schema.json
+fullLocalFilePathValidateMT544Request_v1_0 := $(fullLocalPath)/$(localJsonSchemaFileNameValidateMT544Request_v1_0)
+fullLocalFilePathValidateMT544_v1_0 := $(fullLocalPath)/$(localJsonSchemaFileNameValidateMT544_v1_0)
+
+
+
+# **** Remote Json-Schemas ValidateMT546 ****
+jsonSchemaPathValidateMT546_v1_0 := TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_ValidateMQTypeMT54x_ValidateMT546/version_1_0/
+jsonSchemaFileNameValidateMT546Request := Validate546.json-schema.json
+jsonSchemaFileNameValidateMT546Response := ValidateMT546_ResponseVariables.json-schema.json
+
+# Full Remote Path and FilePath - ValidateMT546
+fullRemotePathValidateMT546_v1_0 := $(remoteUrl)/$(githubUsername)/$(repositorySubCustody)/$(branchSpecific)/$(jsonSchemaPathValidateMT546_v1_0)
+fullRemoteFilePathValidateMT546Request_v1_0 := $(fullRemotePathValidateMT546_v1_0)/$(jsonSchemaFileNameValidateMT546Request)
+fullRemoteFilePathValidateMT546_v1_0 := $(fullRemotePathValidateMT546_v1_0)/$(jsonSchemaFileNameValidateMT546Response)
+
+# Local - ValidateMT546
+localJsonSchemaFileNameValidateMT546Request_v1_0 := ValidateMT546_v1_0_Request.json-schema.json
+localJsonSchemaFileNameValidateMT546_v1_0 := ValidateMT546_v1_0_ResponseVariables.json-schema.json
+fullLocalFilePathValidateMT546Request_v1_0 := $(fullLocalPath)/$(localJsonSchemaFileNameValidateMT546Request_v1_0)
+fullLocalFilePathValidateMT546_v1_0 := $(fullLocalPath)/$(localJsonSchemaFileNameValidateMT546_v1_0)
+
+
+
+# **** Remote Json-Schemas ValidateMT548 ****
+jsonSchemaPathValidateMT548_v1_0 := TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_ValidateMQTypeMT54x_ValidateMT548/version_1_0/
+jsonSchemaFileNameValidateMT548Request := Validate548.json-schema.json
+jsonSchemaFileNameValidateMT548Response := ValidateMT548_ResponseVariables.json-schema.json
+
+# Full Remote Path and FilePath - ValidateMT548
+fullRemotePathValidateMT548_v1_0 := $(remoteUrl)/$(githubUsername)/$(repositorySubCustody)/$(branchSpecific)/$(jsonSchemaPathValidateMT548_v1_0)
+fullRemoteFilePathValidateMT548Request_v1_0 := $(fullRemotePathValidateMT548_v1_0)/$(jsonSchemaFileNameValidateMT548Request)
+fullRemoteFilePathValidateMT548_v1_0 := $(fullRemotePathValidateMT548_v1_0)/$(jsonSchemaFileNameValidateMT548Response)
+
+# Local - ValidateMT548
+localJsonSchemaFileNameValidateMT548Request_v1_0 := ValidateMT548_v1_0_Request.json-schema.json
+localJsonSchemaFileNameValidateMT548_v1_0 := ValidateMT548_v1_0_ResponseVariables.json-schema.json
+fullLocalFilePathValidateMT548Request_v1_0 := $(fullLocalPath)/$(localJsonSchemaFileNameValidateMT548Request_v1_0)
+fullLocalFilePathValidateMT548_v1_0 := $(fullLocalPath)/$(localJsonSchemaFileNameValidateMT548_v1_0)

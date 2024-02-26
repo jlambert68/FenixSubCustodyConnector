@@ -1,0 +1,34 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Response Variables Schema for ValidateMT546",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "ResponseVariableUuid": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "ResponseVariableName": {
+        "type": "string"
+      },
+      "ResponseVariableValueAsString": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "ResponseVariableUuid",
+      "ResponseVariableName",
+      "ResponseVariableValueAsString"
+    ],
+    "additionalProperties": false,
+    "oneOf": [
+      {
+        "properties": {
+          "ResponseVariableUuid": {"const": "5dfd7890-a0b4-4528-804a-451a77f542ad"},
+          "ResponseVariableName": {"const": ":20C::SEME//"}
+        }
+      }
+    ]
+  }
+}
