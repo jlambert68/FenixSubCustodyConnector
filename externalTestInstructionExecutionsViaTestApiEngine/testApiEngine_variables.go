@@ -94,7 +94,10 @@ type FoundVersusExpectedValueStruct struct {
 // ResponseVariableStruct within 'TestApiEngineFinalTestInstructionExecutionResultStruct'
 // Holds one response variable and its value
 type ResponseVariableStruct struct {
+	TestInstructionVersion        string `json:"TestInstructionVersion"`
 	ResponseVariableUUID          string `json:"ResponseVariableUuid"`
 	ResponseVariableName          string `json:"ResponseVariableName"`
+	ResponseVariableTypeUuid      string `json:"ResponseVariableTypeUuid"`
+	ResponseVariableTypeName      string `json:"ResponseVariableTypeName"`
 	ResponseVariableValueAsString string `json:"ResponseVariableValueAsString"`
 }

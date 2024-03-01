@@ -5,6 +5,12 @@
   "items": {
     "type": "object",
     "properties": {
+      "TestInstructionVersion": {
+        "type": "string",
+        "enum": [
+          "v1.0"
+        ]
+      },
       "ResponseVariableUuid": {
         "type": "string",
         "format": "uuid"
@@ -12,13 +18,23 @@
       "ResponseVariableName": {
         "type": "string"
       },
+      "ResponseVariableTypeUuid": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "ResponseVariableTypeName": {
+        "type": "string"
+      },
       "ResponseVariableValueAsString": {
         "type": "string"
       }
     },
     "required": [
+      "TestInstructionVersion",
       "ResponseVariableUuid",
       "ResponseVariableName",
+      "ResponseVariableTypeUuid",
+      "ResponseVariableTypeName",
       "ResponseVariableValueAsString"
     ],
     "additionalProperties": false,
@@ -26,9 +42,12 @@
       {
         "properties": {
           "ResponseVariableUuid": {"const": "39818ba1-676d-42d0-87da-e1080e9d5ffd"},
-          "ResponseVariableName": {"const": ":20C::SEME//"}
+          "ResponseVariableName": {"const": ":20C::SEME//"},
+          "ResponseVariableTypeUuid": {"const": "0f6e945e-1556-4cb0-80e5-e021ebc5d8c1"},
+          "ResponseVariableTypeName": {"const": "54x_:20C::SEME type"}
         }
       }
     ]
   }
 }
+

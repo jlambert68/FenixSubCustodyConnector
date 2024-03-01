@@ -3,6 +3,12 @@
     "title": "Validates the main 'Fenix-data' within the TestApiEngine's 'responseVariables'-field",
     "type": "object",
     "properties": {
+        "TestApiEngineResponseJsonSchemaVersion": {
+            "type": "string",
+            "enum": [
+                "v1.0"
+            ]
+        },
         "TestInstructionExecutionUuid": {
             "type": "string"
         },
@@ -41,6 +47,7 @@
         }
     },
     "required": [
+        "TestApiEngineResponseJsonSchemaVersion",
         "TestInstructionExecutionUuid",
         "TestInstructionExecutionVersion",
         "TestInstructionExecutionStatus",

@@ -5,6 +5,7 @@ import (
 	"FenixSubCustodyConnector/sharedCode"
 	"errors"
 	"fmt"
+	"github.com/google/uuid"
 	fenixConnectorAdminShared_sharedCode "github.com/jlambert68/FenixConnectorAdminShared/common_config"
 	"github.com/jlambert68/FenixConnectorAdminShared/fenixConnectorAdminShared"
 	fenixExecutionWorkerGrpcApi "github.com/jlambert68/FenixGrpcApi/FenixExecutionServer/fenixExecutionWorkerGrpcApi/go_grpc_api"
@@ -148,10 +149,9 @@ func processTestInstructionExecutionRequest(
 		// Create version number to be used in attributes request
 		// Also use version number when getting correct json-schemas
 		var testInstructionVersion string
-		testInstructionVersion = "v" +
-			strconv.Itoa(int(testInstructionExecutionPubSubRequest.TestInstruction.GetMajorVersionNumber())) +
-			"." +
-			strconv.Itoa(int(testInstructionExecutionPubSubRequest.TestInstruction.GetMinorVersionNumber()))
+		testInstructionVersion = fmt.Sprintf("v%s.%s",
+			strconv.Itoa(int(testInstructionExecutionPubSubRequest.TestInstruction.GetMajorVersionNumber())),
+			strconv.Itoa(int(testInstructionExecutionPubSubRequest.TestInstruction.GetMinorVersionNumber())))
 
 		// Convert message into message that can be used when sending to TestApiEngine
 		var testApiEngineRestApiMessageValues *executeTestInstructionUsingTestApiEngine.TestApiEngineRestApiMessageStruct
@@ -179,8 +179,18 @@ func processTestInstructionExecutionRequest(
 				"1",
 				err.Error())
 
+			// Generate new LogPostUuid
+			var logPostUuid uuid.UUID
+			logPostUuid, err = uuid.NewRandom()
+			if err != nil {
+				sharedCode.Logger.WithFields(logrus.Fields{
+					"id": "94378951-2bff-4c45-906c-207bcc530951",
+				}).Error("Failed to generate UUID")
+			}
+
 			var errLogPostToAdd *fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage_LogPostMessage
 			errLogPostToAdd = &fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage_LogPostMessage{
+				LogPostUuid:                         logPostUuid.String(),
 				LogPostTimeStamp:                    timestamppb.Now(),
 				LogPostStatus:                       fenixExecutionWorkerGrpcApi.LogPostStatusEnum_EXECUTION_ERROR,
 				LogPostText:                         logPostText,
@@ -332,8 +342,18 @@ func validateAndConvertTestApiEngineResponse(
 			"1",
 			testApiEngineFinalTestInstructionExecutionResult.TestInstructionExecutionVersion)
 
+		// Generate new LogPostUuid
+		var logPostUuid uuid.UUID
+		logPostUuid, err = uuid.NewRandom()
+		if err != nil {
+			sharedCode.Logger.WithFields(logrus.Fields{
+				"id": "9105c341-ed86-4b61-81a7-cb0d35916cfe",
+			}).Error("Failed to generate UUID")
+		}
+
 		var errLogPostToAdd *fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage_LogPostMessage
 		errLogPostToAdd = &fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage_LogPostMessage{
+			LogPostUuid:                         logPostUuid.String(),
 			LogPostTimeStamp:                    timestamppb.Now(),
 			LogPostStatus:                       fenixExecutionWorkerGrpcApi.LogPostStatusEnum_EXECUTION_ERROR,
 			LogPostText:                         logPostText,
@@ -384,8 +404,18 @@ func validateAndConvertTestApiEngineResponse(
 			testApiEngineFinalTestInstructionExecutionResult.TestInstructionExecutionStartTimeStamp,
 			err.Error())
 
+		// Generate new LogPostUuid
+		var logPostUuid uuid.UUID
+		logPostUuid, err = uuid.NewRandom()
+		if err != nil {
+			sharedCode.Logger.WithFields(logrus.Fields{
+				"id": "c61f5c4f-8983-4993-ba19-c3475a42116b",
+			}).Error("Failed to generate UUID")
+		}
+
 		var errLogPostToAdd *fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage_LogPostMessage
 		errLogPostToAdd = &fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage_LogPostMessage{
+			LogPostUuid:                         logPostUuid.String(),
 			LogPostTimeStamp:                    timestamppb.Now(),
 			LogPostStatus:                       fenixExecutionWorkerGrpcApi.LogPostStatusEnum_EXECUTION_ERROR,
 			LogPostText:                         logPostText,
@@ -437,8 +467,18 @@ func validateAndConvertTestApiEngineResponse(
 				testApiEngineFinalTestInstructionExecutionResult.TestInstructionExecutionStartTimeStamp,
 				err.Error())
 
+			// Generate new LogPostUuid
+			var logPostUuid uuid.UUID
+			logPostUuid, err = uuid.NewRandom()
+			if err != nil {
+				sharedCode.Logger.WithFields(logrus.Fields{
+					"id": "49d16433-4591-42ce-88dd-d469ac930c93",
+				}).Error("Failed to generate UUID")
+			}
+
 			var errLogPostToAdd *fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage_LogPostMessage
 			errLogPostToAdd = &fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage_LogPostMessage{
+				LogPostUuid:                         logPostUuid.String(),
 				LogPostTimeStamp:                    timestamppb.Now(),
 				LogPostStatus:                       fenixExecutionWorkerGrpcApi.LogPostStatusEnum_EXECUTION_ERROR,
 				LogPostText:                         logPostText,
@@ -490,8 +530,18 @@ func validateAndConvertTestApiEngineResponse(
 			testApiEngineFinalTestInstructionExecutionResult.TestInstructionExecutionEndTimeStamp,
 			err.Error())
 
+		// Generate new LogPostUuid
+		var logPostUuid uuid.UUID
+		logPostUuid, err = uuid.NewRandom()
+		if err != nil {
+			sharedCode.Logger.WithFields(logrus.Fields{
+				"id": "54a77942-37f1-461d-b100-16d2c1beb651",
+			}).Error("Failed to generate UUID")
+		}
+
 		var errLogPostToAdd *fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage_LogPostMessage
 		errLogPostToAdd = &fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage_LogPostMessage{
+			LogPostUuid:                         logPostUuid.String(),
 			LogPostTimeStamp:                    timestamppb.Now(),
 			LogPostStatus:                       fenixExecutionWorkerGrpcApi.LogPostStatusEnum_EXECUTION_ERROR,
 			LogPostText:                         logPostText,
@@ -543,8 +593,18 @@ func validateAndConvertTestApiEngineResponse(
 				testApiEngineFinalTestInstructionExecutionResult.TestInstructionExecutionEndTimeStamp,
 				err.Error())
 
+			// Generate new LogPostUuid
+			var logPostUuid uuid.UUID
+			logPostUuid, err = uuid.NewRandom()
+			if err != nil {
+				sharedCode.Logger.WithFields(logrus.Fields{
+					"id": "924656e3-ce2b-4415-837e-4fe7533ee03f",
+				}).Error("Failed to generate UUID")
+			}
+
 			var errLogPostToAdd *fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage_LogPostMessage
 			errLogPostToAdd = &fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage_LogPostMessage{
+				LogPostUuid:                         logPostUuid.String(),
 				LogPostTimeStamp:                    timestamppb.Now(),
 				LogPostStatus:                       fenixExecutionWorkerGrpcApi.LogPostStatusEnum_EXECUTION_ERROR,
 				LogPostText:                         logPostText,
@@ -599,8 +659,18 @@ func validateAndConvertTestApiEngineResponse(
 			testApiEngineFinalTestInstructionExecutionResult.TestInstructionExecutionVersion,
 			testApiEngineFinalTestInstructionExecutionResult.TestInstructionExecutionStatus)
 
+		// Generate new LogPostUuid
+		var logPostUuid uuid.UUID
+		logPostUuid, err = uuid.NewRandom()
+		if err != nil {
+			sharedCode.Logger.WithFields(logrus.Fields{
+				"id": "a46eac85-d73d-4224-84eb-f6364447953e",
+			}).Error("Failed to generate UUID")
+		}
+
 		var errLogPostToAdd *fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage_LogPostMessage
 		errLogPostToAdd = &fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage_LogPostMessage{
+			LogPostUuid:                         logPostUuid.String(),
 			LogPostTimeStamp:                    timestamppb.Now(),
 			LogPostStatus:                       fenixExecutionWorkerGrpcApi.LogPostStatusEnum_EXECUTION_ERROR,
 			LogPostText:                         logPostText,
@@ -636,6 +706,8 @@ func validateAndConvertTestApiEngineResponse(
 		tempResponseVariableGrpc = &fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage_ResponseVariableMessage{
 			ResponseVariableUuid:          tempResponseVariable.ResponseVariableUUID,
 			ResponseVariableName:          tempResponseVariable.ResponseVariableName,
+			ResponseVariableTypeUuid:      tempResponseVariable.ResponseVariableTypeUuid,
+			ResponseVariableTypeName:      tempResponseVariable.ResponseVariableTypeName,
 			ResponseVariableValueAsString: tempResponseVariable.ResponseVariableValueAsString,
 		}
 
@@ -698,8 +770,18 @@ func validateAndConvertTestApiEngineResponse(
 				testApiEngineFinalTestInstructionExecutionResult.TestInstructionExecutionVersion,
 				tempLogPost.LogPostStatus)
 
+			// Generate new LogPostUuid
+			var logPostUuid uuid.UUID
+			logPostUuid, err = uuid.NewRandom()
+			if err != nil {
+				sharedCode.Logger.WithFields(logrus.Fields{
+					"id": "83329796-9654-47f8-80d4-d966378d318d",
+				}).Error("Failed to generate UUID")
+			}
+
 			var errLogPostToAdd *fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage_LogPostMessage
 			errLogPostToAdd = &fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage_LogPostMessage{
+				LogPostUuid:                         logPostUuid.String(),
 				LogPostTimeStamp:                    timestamppb.Now(),
 				LogPostStatus:                       fenixExecutionWorkerGrpcApi.LogPostStatusEnum_EXECUTION_ERROR,
 				LogPostText:                         logPostText,
@@ -749,8 +831,18 @@ func validateAndConvertTestApiEngineResponse(
 				tempLogPost.LogPostTimeStamp,
 				err.Error())
 
+			// Generate new LogPostUuid
+			var logPostUuid uuid.UUID
+			logPostUuid, err = uuid.NewRandom()
+			if err != nil {
+				sharedCode.Logger.WithFields(logrus.Fields{
+					"id": "670d24b1-eec6-431b-ac67-4ca1627892c4",
+				}).Error("Failed to generate UUID")
+			}
+
 			var errLogPostToAdd *fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage_LogPostMessage
 			errLogPostToAdd = &fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage_LogPostMessage{
+				LogPostUuid:                         logPostUuid.String(),
 				LogPostTimeStamp:                    timestamppb.Now(),
 				LogPostStatus:                       fenixExecutionWorkerGrpcApi.LogPostStatusEnum_EXECUTION_ERROR,
 				LogPostText:                         logPostText,
@@ -801,8 +893,18 @@ func validateAndConvertTestApiEngineResponse(
 					tempLogPost.LogPostTimeStamp,
 					err.Error())
 
+				// Generate new LogPostUuid
+				var logPostUuid uuid.UUID
+				logPostUuid, err = uuid.NewRandom()
+				if err != nil {
+					sharedCode.Logger.WithFields(logrus.Fields{
+						"id": "cc2a2a1b-cf00-491c-be89-4c4103eefcec",
+					}).Error("Failed to generate UUID")
+				}
+
 				var errLogPostToAdd *fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage_LogPostMessage
 				errLogPostToAdd = &fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage_LogPostMessage{
+					LogPostUuid:                         logPostUuid.String(),
 					LogPostTimeStamp:                    timestamppb.Now(),
 					LogPostStatus:                       fenixExecutionWorkerGrpcApi.LogPostStatusEnum_EXECUTION_ERROR,
 					LogPostText:                         logPostText,
@@ -833,9 +935,19 @@ func validateAndConvertTestApiEngineResponse(
 			return testInstructionExecutionResultMessage
 		}
 
+		// Generate new LogPostUuid
+		var logPostUuid uuid.UUID
+		logPostUuid, err = uuid.NewRandom()
+		if err != nil {
+			sharedCode.Logger.WithFields(logrus.Fields{
+				"id": "cc6f7a43-3777-4f65-a9a0-d7c17fde815b",
+			}).Error("Failed to generate UUID")
+		}
+
 		// Create gRPC-LogPost variable
 		var tempLogPostGrpc *fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage_LogPostMessage
 		tempLogPostGrpc = &fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage_LogPostMessage{
+			LogPostUuid:                         logPostUuid.String(),
 			LogPostTimeStamp:                    timestamppb.New(logPostTimeStamp),
 			LogPostStatus:                       fenixExecutionWorkerGrpcApi.LogPostStatusEnum(tempLogPostStatus),
 			LogPostText:                         tempLogPost.LogPostText,
