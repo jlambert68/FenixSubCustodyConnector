@@ -13,6 +13,8 @@ import (
 	TestInstruction_SendOnMQTypeMT_SendMT540 "github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_SendOnMQTypeMT_SendMT540/version_1_0"
 	TestInstruction_SendOnMQTypeMT_SendMT542 "github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_SendOnMQTypeMT_SendMT542/version_1_0"
 	TestInstruction_ValidateMQTypeMT54x_ValidateMT544 "github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_ValidateMQTypeMT54x_ValidateMT544/version_1_0"
+	"github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_ValidateMQTypeMT54x_ValidateMT546"
+	"github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_ValidateMQTypeMT54x_ValidateMT548"
 	"github.com/jlambert68/FenixTestInstructionsAdminShared/TestInstructionAndTestInstuctionContainerTypes"
 	"github.com/jlambert68/FenixTestInstructionsAdminShared/TypeAndStructs"
 	"github.com/sirupsen/logrus"
@@ -142,9 +144,12 @@ func processTestInstructionExecutionRequest(
 	// Depending on TestInstruction then choose how to execution the TestInstruction
 	switch TypeAndStructs.OriginalElementUUIDType(testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionUuid) {
 
-	// Send a MT540 on MQ
-	case TestInstruction_SendOnMQTypeMT_SendMT540.TestInstructionUUID_SubCustody_SendMT540:
-		fmt.Println("case TestInstruction_SendOnMQTypeMT_SendMT540.TestInstructionUUID_SubCustody_SendMT540:")
+	// Send a MT54x on MQ or Validate MT54x
+	case TestInstruction_SendOnMQTypeMT_SendMT540.TestInstructionUUID_SubCustody_SendMT540,
+		TestInstruction_SendOnMQTypeMT_SendMT542.TestInstructionUUID_SubCustody_SendMT542,
+		TestInstruction_ValidateMQTypeMT54x_ValidateMT544.TestInstructionUUID_SubCustody_ValidateMT544,
+		TestInstruction_ValidateMQTypeMT54x_ValidateMT546.TestInstructionUUID_SubCustody_ValidateMT546,
+		TestInstruction_ValidateMQTypeMT54x_ValidateMT548.TestInstructionUUID_SubCustody_ValidateMT548:
 
 		// Create version number to be used in attributes request
 		// Also use version number when getting correct json-schemas
@@ -219,11 +224,67 @@ func processTestInstructionExecutionRequest(
 		var testApiEngineResponseMessageJsonSchema *string
 		var finalTestInstructionExecutionResultJsonSchema *string
 		var responseVariablesJsonSchema *string
-		requestMessageToTestApiEngineJsonSchema, testApiEngineResponseMessageJsonSchema,
-			finalTestInstructionExecutionResultJsonSchema, responseVariablesJsonSchema =
-			executeTestInstructionUsingTestApiEngine.GetResponseSchemasToUse(
-				TestInstruction_SendOnMQTypeMT_SendMT540.TestInstructionUUID_SubCustody_SendMT540,
-				testInstructionVersion)
+
+		// Get correct Response Schema depending on message type
+		switch TypeAndStructs.OriginalElementUUIDType(testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionUuid) {
+
+		// Send a MT540 on MQ
+		case TestInstruction_SendOnMQTypeMT_SendMT540.TestInstructionUUID_SubCustody_SendMT540:
+			requestMessageToTestApiEngineJsonSchema, testApiEngineResponseMessageJsonSchema,
+				finalTestInstructionExecutionResultJsonSchema, responseVariablesJsonSchema =
+				executeTestInstructionUsingTestApiEngine.GetResponseSchemasToUse(
+					TestInstruction_SendOnMQTypeMT_SendMT540.TestInstructionUUID_SubCustody_SendMT540,
+					testInstructionVersion)
+
+		case TestInstruction_SendOnMQTypeMT_SendMT542.TestInstructionUUID_SubCustody_SendMT542:
+			requestMessageToTestApiEngineJsonSchema, testApiEngineResponseMessageJsonSchema,
+				finalTestInstructionExecutionResultJsonSchema, responseVariablesJsonSchema =
+				executeTestInstructionUsingTestApiEngine.GetResponseSchemasToUse(
+					TestInstruction_SendOnMQTypeMT_SendMT542.TestInstructionUUID_SubCustody_SendMT542,
+					testInstructionVersion)
+
+		case TestInstruction_ValidateMQTypeMT54x_ValidateMT544.TestInstructionUUID_SubCustody_ValidateMT544:
+			requestMessageToTestApiEngineJsonSchema, testApiEngineResponseMessageJsonSchema,
+				finalTestInstructionExecutionResultJsonSchema, responseVariablesJsonSchema =
+				executeTestInstructionUsingTestApiEngine.GetResponseSchemasToUse(
+					TestInstruction_ValidateMQTypeMT54x_ValidateMT544.TestInstructionUUID_SubCustody_ValidateMT544,
+					testInstructionVersion)
+
+		case TestInstruction_ValidateMQTypeMT54x_ValidateMT546.TestInstructionUUID_SubCustody_ValidateMT546:
+			requestMessageToTestApiEngineJsonSchema, testApiEngineResponseMessageJsonSchema,
+				finalTestInstructionExecutionResultJsonSchema, responseVariablesJsonSchema =
+				executeTestInstructionUsingTestApiEngine.GetResponseSchemasToUse(
+					TestInstruction_ValidateMQTypeMT54x_ValidateMT546.TestInstructionUUID_SubCustody_ValidateMT546,
+					testInstructionVersion)
+
+		case TestInstruction_ValidateMQTypeMT54x_ValidateMT548.TestInstructionUUID_SubCustody_ValidateMT548:
+			requestMessageToTestApiEngineJsonSchema, testApiEngineResponseMessageJsonSchema,
+				finalTestInstructionExecutionResultJsonSchema, responseVariablesJsonSchema =
+				executeTestInstructionUsingTestApiEngine.GetResponseSchemasToUse(
+					TestInstruction_ValidateMQTypeMT54x_ValidateMT548.TestInstructionUUID_SubCustody_ValidateMT548,
+					testInstructionVersion)
+
+		default:
+			testInstructionExecutionResultMessage = &fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage{
+				ClientSystemIdentification: nil,
+				TestInstructionExecutionUuid: testInstructionExecutionPubSubRequest.GetTestInstruction().
+					TestInstructionExecutionUuid,
+				TestInstructionExecutionStatus: fenixExecutionWorkerGrpcApi.
+					TestInstructionExecutionStatusEnum_TIE_UNEXPECTED_INTERRUPTION,
+				TestInstructionExecutionStartTimeStamp: tempTestInstructionExecutionStartTimeStamp,
+				TestInstructionExecutionEndTimeStamp:   timestamppb.Now(),
+				ResponseVariables:                      nil,
+				LogPosts:                               nil,
+			}
+
+			sharedCode.Logger.WithFields(logrus.Fields{
+				"id": "6f559867-9061-4985-8b01-38b01e5aacd6",
+				"TypeAndStructs.OriginalElementUUIDType(testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionUuid)": TypeAndStructs.OriginalElementUUIDType(testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionUuid),
+			}).Fatalln("Unhandled message when getting json-schema for Response message. Hard exit")
+
+			break
+
+		}
 
 		// Do Rest-call to 'TestApiEngine' for executing the TestInstruction
 		var testApiEngineFinalTestInstructionExecutionResult executeTestInstructionUsingTestApiEngine.TestApiEngineFinalTestInstructionExecutionResultStruct
@@ -267,34 +328,6 @@ func processTestInstructionExecutionRequest(
 			testInstructionExecutionPubSubRequest)
 
 		break
-
-	// Send a MT542 on MQ
-	case TestInstruction_SendOnMQTypeMT_SendMT542.TestInstructionUUID_SubCustody_SendMT542:
-		fmt.Println("case TestInstruction_SendOnMQTypeMT_SendMT542.TestInstructionUUID_SubCustody_SendMT542:")
-
-		// Do Rest-call to 'TestApiEngine' for executing the TestInstruction
-		testInstructionExecutionResultMessage = &fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage{
-			ClientSystemIdentification: nil,
-			TestInstructionExecutionUuid: testInstructionExecutionPubSubRequest.GetTestInstruction().
-				TestInstructionExecutionUuid,
-			TestInstructionExecutionStatus: fenixExecutionWorkerGrpcApi.
-				TestInstructionExecutionStatusEnum_TIE_FINISHED_OK,
-			TestInstructionExecutionEndTimeStamp: timestamppb.Now(),
-		}
-
-	// Validate the MT544 based on Related Reference received from MT54x
-	case TestInstruction_ValidateMQTypeMT54x_ValidateMT544.TestInstructionUUID_SubCustody_ValidateMT544:
-		fmt.Println("case TestInstruction_ValidateMQTypeMT54x_ValidateMT544.TestInstructionUUID_SubCustody_ValidateMT544:")
-
-		// Do Rest-call to 'TestApiEngine' for executing the TestInstruction
-		testInstructionExecutionResultMessage = &fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage{
-			ClientSystemIdentification: nil,
-			TestInstructionExecutionUuid: testInstructionExecutionPubSubRequest.GetTestInstruction().
-				TestInstructionExecutionUuid,
-			TestInstructionExecutionStatus: fenixExecutionWorkerGrpcApi.
-				TestInstructionExecutionStatusEnum_TIE_FINISHED_OK,
-			TestInstructionExecutionEndTimeStamp: timestamppb.Now(),
-		}
 
 	default:
 		sharedCode.Logger.WithFields(logrus.Fields{

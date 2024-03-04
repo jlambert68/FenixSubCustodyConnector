@@ -1,0 +1,36 @@
+{
+  "DomainIdentificationAnfProtoFileVersionUsedByClient": {
+    "DomainUuid": "7edf2269-a8d3-472c-aed6-8cdcc4a8b6ae",
+    "ExecutionDomainUuid": "7edf2269-a8d3-472c-aed6-8cdcc4a8b6ae",
+    "ProtoFileVersionUsedByClient": "VERSION_0_4"
+  },
+  "TestInstruction": {
+    "TestInstructionAttributes": [
+      {
+        "TestInstructionAttributeType": "TEXTBOX",
+        "TestInstructionAttributeUuid": "3b10634a-aaf5-4b62-89e6-90011d76b21d",
+        "TestInstructionAttributeName": "ExpectedToBePassed",
+        "AttributeValueAsString": "true",
+        "AttributeValueUuid": "42f5daf8-499c-42cc-b671-2439096c7ee1",
+        "TestInstructionAttributeTypeUuid": "42f5daf8-499c-42cc-b671-2439096c7ee1",
+        "TestInstructionAttributeTypeName": "TestInstructionAttributeTypeName"
+      },
+      {
+        "TestInstructionAttributeType": "TEXTBOX",
+        "TestInstructionAttributeUuid": "7de76297-9495-41f0-8861-26d03bca3d6a",
+        "TestInstructionAttributeName": "RelatedReference_54x_20CRELA",
+        "AttributeValueAsString": "MyCoolValue",
+        "AttributeValueUuid": "9910634a-aaf5-4b62-89e6-90011d76b21d",
+        "TestInstructionAttributeTypeUuid": "42f5daf8-499c-42cc-b671-2439096c7ee1",
+        "TestInstructionAttributeTypeName": "TestInstructionAttributeTypeName"
+      }
+    ],
+    "TestInstructionUuid": "6c2f4d5c-74d0-4be9-9ea1-b6a65f277dde",
+    "TestInstructionExecutionVersion": 1,
+    "TestInstructionName": "VerifyMT544",
+    "MajorVersionNumber": 1,
+    "MinorVersionNumber": 0,
+    "TestInstructionExecutionUuid": "ae344db4-2d34-474e-bd91-1b24ac408b75"
+  },
+  "TestCaseExecutionUuid": "a0161997-4323-45a8-93fa-8ff7d64d1b7a"
+}

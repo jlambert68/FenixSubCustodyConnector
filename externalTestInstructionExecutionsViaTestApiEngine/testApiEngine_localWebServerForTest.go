@@ -669,7 +669,7 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 	case "SendMT540_v1_0", "SendMT542_v1_0":
 		// No extra parameters
 
-	case "VerifyMT544_v1_0", "VerifyMT546_v1_0", "VerifyMT548_v1_0":
+	case "ValidateMT544_v1_0", "VerifyMT546_v1_0", "VerifyMT548_v1_0":
 		// Extract 'RelatedReference_54x_20CRELA'
 
 		// *** Extract RelatedReference_54x_20CRELA ****
@@ -738,7 +738,9 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 			TestApiEngineResponseJsonSchemaVersion: "v1.0",
 			TestInstructionExecutionUUID:           testInstructionExecutionUuid,
 			TestInstructionExecutionVersion:        testInstructionExecutionVersionAsString,
-			TestInstructionExecutionStatus:         fenixExecutionWorkerGrpcApi.TestInstructionExecutionStatusEnum_name[int32(fenixExecutionWorkerGrpcApi.TestInstructionExecutionStatusEnum_TIE_FINISHED_NOT_OK)],
+			TestInstructionExecutionStatus: fenixExecutionWorkerGrpcApi.
+				TestInstructionExecutionStatusEnum_name[int32(fenixExecutionWorkerGrpcApi.
+				TestInstructionExecutionStatusEnum_TIE_FINISHED_NOT_OK)],
 			TestInstructionExecutionStartTimeStamp: tempTestInstructionExecutionStartTimeStamp.Format(time.RFC3339),
 			TestInstructionExecutionEndTimeStamp:   time.Now().Format(time.RFC3339),
 			ResponseVariables:                      nil,
@@ -794,7 +796,7 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 	// Depending on 'testStepActionMethod', create correct response extra incoming parameters
 	switch testStepActionMethod {
 
-	case "SendMT540_v1_0", "SendMT542_v1_0", "VerifyMT544_v1_0", "VerifyMT546_v1_0", "VerifyMT548_v1_0":
+	case "SendMT540_v1_0", "SendMT542_v1_0", "ValidateMT544_v1_0", "ValidateMT546_v1_0", "ValidateMT548_v1_0":
 
 		// Create correct Response Variable
 		var resoponseVariables ResponseVariableStruct
@@ -804,7 +806,7 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 			resoponseVariables = ResponseVariableStruct{
 				TestInstructionVersion:        "v1.0",
 				ResponseVariableUUID:          "24fa2f84-827a-4c01-a86c-da42d888c295",
-				ResponseVariableName:          ":20C::SEME",
+				ResponseVariableName:          ":20C::SEME//",
 				ResponseVariableTypeUuid:      "0f6e945e-1556-4cb0-80e5-e021ebc5d8c1",
 				ResponseVariableTypeName:      "54x_:20C::SEME type",
 				ResponseVariableValueAsString: "MT540_" + uuid.NewString()[:8],
@@ -814,36 +816,36 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 			resoponseVariables = ResponseVariableStruct{
 				TestInstructionVersion:        "v1.0",
 				ResponseVariableUUID:          "9dd57f25-75e0-4024-862b-e0728c066604",
-				ResponseVariableName:          ":20C::SEME",
+				ResponseVariableName:          ":20C::SEME//",
 				ResponseVariableTypeUuid:      "0f6e945e-1556-4cb0-80e5-e021ebc5d8c1",
 				ResponseVariableTypeName:      "54x_:20C::SEME type",
 				ResponseVariableValueAsString: "MT542_" + uuid.NewString()[:8],
 			}
 
-		case "VerifyMT544_v1_0":
+		case "ValidateMT544_v1_0":
 			resoponseVariables = ResponseVariableStruct{
 				TestInstructionVersion:        "v1.0",
 				ResponseVariableUUID:          "39818ba1-676d-42d0-87da-e1080e9d5ffd",
-				ResponseVariableName:          ":20C::SEME",
+				ResponseVariableName:          ":20C::SEME//",
 				ResponseVariableTypeUuid:      "0f6e945e-1556-4cb0-80e5-e021ebc5d8c1",
 				ResponseVariableTypeName:      "54x_:20C::SEME type",
 				ResponseVariableValueAsString: "MT544_" + uuid.NewString()[:8],
 			}
 
-		case "VerifyMT546_v1_0":
+		case "ValidateMT546_v1_0":
 			resoponseVariables = ResponseVariableStruct{
 				TestInstructionVersion:        "v1.0",
 				ResponseVariableUUID:          "5dfd7890-a0b4-4528-804a-451a77f542ad",
-				ResponseVariableName:          ":20C::SEME",
+				ResponseVariableName:          ":20C::SEME//",
 				ResponseVariableTypeUuid:      "0f6e945e-1556-4cb0-80e5-e021ebc5d8c1",
 				ResponseVariableTypeName:      "54x_:20C::SEME type",
 				ResponseVariableValueAsString: "MT546_" + uuid.NewString()[:8],
 			}
-		case "VerifyMT548_v1_0":
+		case "ValidateMT548_v1_0":
 			resoponseVariables = ResponseVariableStruct{
 				TestInstructionVersion:        testInstructionVersion,
 				ResponseVariableUUID:          "8ed1ead9-741b-4115-9f78-f8a7db1d6274",
-				ResponseVariableName:          ":20C::SEME",
+				ResponseVariableName:          ":20C::SEME//",
 				ResponseVariableTypeUuid:      "0f6e945e-1556-4cb0-80e5-e021ebc5d8c1",
 				ResponseVariableTypeName:      "54x_:20C::SEME type",
 				ResponseVariableValueAsString: "MT548_" + uuid.NewString()[:8],
@@ -861,7 +863,9 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 			TestApiEngineResponseJsonSchemaVersion: "v1.0",
 			TestInstructionExecutionUUID:           testInstructionExecutionUuid,
 			TestInstructionExecutionVersion:        testInstructionExecutionVersionAsString,
-			TestInstructionExecutionStatus:         fenixExecutionWorkerGrpcApi.TestInstructionExecutionStatusEnum_name[int32(fenixExecutionWorkerGrpcApi.TestInstructionExecutionStatusEnum_TIE_FINISHED_NOT_OK)],
+			TestInstructionExecutionStatus: fenixExecutionWorkerGrpcApi.
+				TestInstructionExecutionStatusEnum_name[int32(fenixExecutionWorkerGrpcApi.
+				TestInstructionExecutionStatusEnum_TIE_FINISHED_OK)],
 			TestInstructionExecutionStartTimeStamp: tempTestInstructionExecutionStartTimeStamp.Format(time.RFC3339),
 			TestInstructionExecutionEndTimeStamp:   time.Now().Format(time.RFC3339),
 			ResponseVariables: []ResponseVariableStruct{
@@ -926,7 +930,9 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 			TestApiEngineResponseJsonSchemaVersion: "v1.0",
 			TestInstructionExecutionUUID:           testInstructionExecutionUuid,
 			TestInstructionExecutionVersion:        testInstructionExecutionVersionAsString,
-			TestInstructionExecutionStatus:         fenixExecutionWorkerGrpcApi.TestInstructionExecutionStatusEnum_name[int32(fenixExecutionWorkerGrpcApi.TestInstructionExecutionStatusEnum_TIE_FINISHED_NOT_OK)],
+			TestInstructionExecutionStatus: fenixExecutionWorkerGrpcApi.
+				TestInstructionExecutionStatusEnum_name[int32(fenixExecutionWorkerGrpcApi.
+				TestInstructionExecutionStatusEnum_TIE_FINISHED_NOT_OK)],
 			TestInstructionExecutionStartTimeStamp: tempTestInstructionExecutionStartTimeStamp.Format(time.RFC3339),
 			TestInstructionExecutionEndTimeStamp:   time.Now().Format(time.RFC3339),
 			ResponseVariables:                      nil,
