@@ -959,9 +959,11 @@ func validateAndConvertTestApiEngineResponse(
 	}
 
 	testInstructionExecutionResultMessage = &fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage{
+
 		ClientSystemIdentification: nil,
-		TestInstructionExecutionVersion: testInstructionExecutionPubSubRequest.GetTestInstruction().
-			TestInstructionExecutionUuid,
+		TestInstructionExecutionUuid: testInstructionExecutionPubSubRequest.GetTestInstruction().
+			GetTestInstructionExecutionUuid(),
+		TestInstructionExecutionVersion: 1,
 		TestInstructionExecutionStatus: fenixExecutionWorkerGrpcApi.TestInstructionExecutionStatusEnum(
 			testInstructionExecutionStatus),
 		TestInstructionExecutionStartTimeStamp: timestamppb.New(testInstructionExecutionStartTimeStamp),

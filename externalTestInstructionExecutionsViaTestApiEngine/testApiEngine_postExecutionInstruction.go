@@ -106,7 +106,7 @@ func PostTestInstructionUsingRestCall(
 	// Use Local web server for test or TestApiEngine
 	if UseInternalWebServerForTestInsteadOfCallingTestApiEngine == true {
 		// Use Local web server for testing
-		testApiEngineUrl = "http://" + LocalWebServerPort + testApiEngineUrl
+		testApiEngineUrl = "http://:" + LocalWebServerPort + testApiEngineUrl
 
 		sharedCode.Logger.WithFields(logrus.Fields{
 			"id": "724d84e8-ec94-4947-ac74-0c7e5c17cfb6",

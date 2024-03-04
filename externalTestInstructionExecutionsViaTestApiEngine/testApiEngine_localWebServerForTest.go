@@ -5,6 +5,9 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/google/uuid"
+	fenixExecutionWorkerGrpcApi "github.com/jlambert68/FenixGrpcApi/FenixExecutionServer/fenixExecutionWorkerGrpcApi/go_grpc_api"
+	"strconv"
 	"time"
 
 	//"github.com/golang/gddo/httputil/header"
@@ -45,7 +48,7 @@ func RestAPIServer() {
 
 	//specify endpoints
 	router.HandleFunc("/health-check", healthCheck).Methods("GET")
-	router.HandleFunc("/TestCaseExecution/ExecuteTestActionMethod/SendOnMQTypeMT/SendMT540_v1_0", testApiEngineClassTestApiEngineMethod).Methods("POST")
+	router.HandleFunc("/TestCaseExecution/ExecuteTestAction", testApiEngineClassTestApiEngineMethod).Methods("POST")
 	router.NotFoundHandler = http.HandlerFunc(notFound)
 	//router.HandleFunc("/*", allOtherRoutes).Methods("POST")
 	/*
@@ -299,6 +302,10 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 		"id": "9195d621-eb4a-477f-8f68-1109c4aa69c1",
 	}).Debug("Outgoing 'RestApi - (POST) /TestApiEngineClass/TestApiEngineMethod'")
 
+	// StartTime for TestInstructionExecution
+	var tempTestInstructionExecutionStartTimeStamp time.Time
+	tempTestInstructionExecutionStartTimeStamp = time.Now()
+
 	// Variable where Rest-json-payload will end up in
 	//jsonData := &RestSavePinnedInstructionsAndTestInstructionContainersToFenixGuiBuilderServerStruct{}
 
@@ -330,116 +337,688 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 		}).Debug("Incoming Parameters")
 	}
 
-	// Extract 'expectedToBePassedSlice'
-	variables := r.URL.Query() //mux.Vars(r)
-	expectedToBePassedSlice, existInMap := variables["expectedToBePassed"]
+	// Variables to be extracted from jsonMap
+	var (
+		testStepClassName              string
+		testStepActionMethod           string
+		testDataParameterType          string
+		expectedToBePassedTestApiLevel bool
+		methodParameter                map[string]interface{}
+	)
 
-	// Missing parameter 'expectedToBePassedSlice'
+	var (
+		expectedToBePassed              bool
+		testCaseExecutionUuid           string
+		testInstructionExecutionUuid    string
+		testInstructionExecutionVersion int
+		testInstructionVersion          string
+		relatedReference_54x_20CRELA    string
+	)
+
+	var existInMap bool
+	var tempMapVariable interface{}
+	var canCastTempMapVariableToCorrectVariableType bool
+	var variableName string
+	var variableType string
+	var traceId1 string
+	var traceId2 string
+
+	// *** Extract TestStepClassName ****
+	variableName = "testStepClassName"
+	variableType = "string"
+	traceId1 = "ffd7ca86-96d7-448d-ad5f-c66d6a6ef3b4"
+	traceId2 = "f029338f-3be8-43d2-9a0f-87bb388f381f"
+
+	// Verify that Variable exist in json-map and extract variable
+	tempMapVariable, existInMap = jsonMap[variableName]
 	if existInMap == false {
 
-		// Create Header
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusBadRequest)
-
-		// Create Response message
-		responseBody["title"] = "Error - Bad Request"
-		responseBody["status"] = "400"
-		responseBody["detail"] = "Missing parameter 'expectedToBePassed'"
-		responseBody["traceId"] = "88da16af-1ddf-49ca-945b-aeb2a1da6470"
-
-		responseBodydata, _ := json.Marshal(responseBody)
-
-		fmt.Fprintf(w, string(responseBodydata))
-
-		return
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id": "e3d3c6f9-1374-4ca6-9625-c5bc34f8265f",
+		}).Fatalln(fmt.Sprintf("Missing parameter '%s'",
+			variableName))
 	}
 
-	// Exact one parameter 'expectedToBePassed' must exist
-	if len(expectedToBePassedSlice) != 1 {
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusBadRequest)
+	// Transform variable into correct type
+	testStepClassName, canCastTempMapVariableToCorrectVariableType = tempMapVariable.(string)
+	if canCastTempMapVariableToCorrectVariableType == false {
 
-		// Create Response message
-		fmt.Fprintf(w, "Parameter 'expectedToBePassed' must contain exactly one value")
-
-		// Create Header
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusBadRequest)
-
-		// Create Response message
-		responseBody["title"] = "Error - Bad Request"
-		responseBody["status"] = "400"
-		responseBody["detail"] = "Parameter 'expectedToBePassed' must contain exactly one value"
-		responseBody["traceId"] = "71202ccb-8dc4-45d6-a64a-fe1a775d1a73"
-
-		responseBodydata, _ := json.Marshal(responseBody)
-
-		fmt.Fprintf(w, string(responseBodydata))
-
-		return
-	}
-
-	// Parameter 'expectedToBePassed' should be 'true' or 'false'
-	if expectedToBePassedSlice[0] != "true" && expectedToBePassedSlice[0] != "false" {
-
-		// Create Header
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusBadRequest)
-
-		// Create Response message
-		responseBody["title"] = "Error - Bad Request"
-		responseBody["status"] = "400"
-		responseBody["detail"] = "Parameter 'expectedToBePassed' should be 'true' or 'false'"
-		responseBody["traceId"] = "955c80e1-a745-42ae-800a-1ec972fcf255"
-
-		responseBodydata, _ := json.Marshal(responseBody)
-
-		fmt.Fprintf(w, string(responseBodydata))
-
-		return
-	}
-
-	// 'expectedToBePassed' should be 'true'
-	if expectedToBePassedSlice[0] == "true" {
-
-		// Create Header
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusOK)
-
-		// Create Response message
-		responseBody["title"] = "OK"
-		responseBody["status"] = "200"
-		responseBody["detail"] = "OK Test from Test Web server"
-		responseBody["traceId"] = "30418b44-a015-4d94-823f-49faa7622ca6"
-
-		responseBodydata, _ := json.Marshal(responseBody)
-
-		fmt.Fprintf(w, string(responseBodydata))
-
-		return
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id": "e3d3c6f9-1374-4ca6-9625-c5bc34f8265f",
+		}).Fatalln(fmt.Sprintf(" Parameter '%s' couldn't be transformed into a '%s'",
+			variableName,
+			variableType))
 
 	}
 
+	// *** Extract TestStepActionMethod ****
+	variableName = "testStepActionMethod"
+	variableType = "string"
+	traceId1 = "fda068b8-a07b-4ced-81c4-93bc379e27f3"
+	traceId2 = "3e7fd612-b40b-4c47-8aa1-4871df297e8b"
+
+	// Verify that Variable exist in json-map and extract variable
+	tempMapVariable, existInMap = jsonMap[variableName]
+	if existInMap == false {
+
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id": "e3d3c6f9-1374-4ca6-9625-c5bc34f8265f",
+		}).Fatalln(fmt.Sprintf("Missing parameter '%s'",
+			variableName))
+
+	}
+
+	// Transform variable into correct type
+	testStepActionMethod, canCastTempMapVariableToCorrectVariableType = tempMapVariable.(string)
+	if canCastTempMapVariableToCorrectVariableType == false {
+
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id": "e3d3c6f9-1374-4ca6-9625-c5bc34f8265f",
+		}).Fatalln(fmt.Sprintf(" Parameter '%s' couldn't be transformed into a '%s'",
+			variableName,
+			variableType))
+
+	}
+
+	// *** Extract testDataParameterType ****
+	variableName = "testDataParameterType"
+	variableType = "string"
+	traceId1 = "b8bca44a-6967-478e-ac81-023487dc7a4e"
+	traceId2 = "713a1566-852d-4dbf-88ce-beac6e28fca8"
+
+	// Verify that Variable exist in json-map and extract variable
+	tempMapVariable, existInMap = jsonMap[variableName]
+	if existInMap == false {
+
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id": "7867e66a-19af-4217-8c8f-8f3cb6f88c1b",
+		}).Fatalln(fmt.Sprintf("Missing parameter '%s'", variableName))
+
+	}
+
+	// Transform variable into correct type
+	testDataParameterType, canCastTempMapVariableToCorrectVariableType = tempMapVariable.(string)
+	if canCastTempMapVariableToCorrectVariableType == false {
+
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id": "620f1e40-9ac4-47b4-8547-25584da0ad71",
+		}).Fatalln(fmt.Sprintf(" Parameter '%s' couldn't be transformed into a '%s'",
+			variableName,
+			variableType))
+
+	}
+
+	// Verify that value is set to 'FixedValue'
+	if testDataParameterType != "FixedValue" {
+
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id": "a11a2549-5c16-45e8-bf04-0b0d6a233d65",
+		}).Fatalln(fmt.Sprintf(" Parameter '%s' doesn't have value 'FixedValue'",
+			variableName))
+
+	}
+
+	// *** Extract expectedToBePassedTestApiLevel ****
+	variableName = "expectedToBePassedTestApiLevel"
+	variableType = "boolean"
+	traceId1 = "d652f755-c308-42a7-82af-fb38564c4a18"
+	traceId2 = "8a35de26-18b0-40a1-b5b4-19183354c307"
+
+	// Verify that Variable exist in json-map and extract variable
+	tempMapVariable, existInMap = jsonMap[variableName]
+	if existInMap == false {
+
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id": "566b3de7-ec40-4348-8d3b-39ef92e7f828",
+		}).Fatalln(fmt.Sprintf("Missing parameter '%s'", variableName))
+	}
+
+	// Transform variable into correct type
+	expectedToBePassedTestApiLevel, canCastTempMapVariableToCorrectVariableType = tempMapVariable.(bool)
+	if canCastTempMapVariableToCorrectVariableType == false {
+
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id": "620f1e40-9ac4-47b4-8547-25584da0ad71",
+		}).Fatalln(fmt.Sprintf(" Parameter '%s' couldn't be transformed into a '%s'",
+			variableName,
+			variableType))
+
+	}
+
+	// Verify that value is set to 'true'
+	if expectedToBePassedTestApiLevel != true {
+
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id": "a11a2549-5c16-45e8-bf04-0b0d6a233d65",
+		}).Fatalln(fmt.Sprintf(" Parameter '%s' doesn't have value 'true'",
+			variableName))
+
+	}
+
+	// *** Extract methodParameter ****
+	variableName = "methodParameter"
+	variableType = "map[string]interface{}"
+	traceId1 = "beec0936-f9fa-449e-ab54-318eaf5ed6ff"
+	traceId2 = "9f3930a6-5225-4347-92a7-fd604e02201a"
+
+	// Verify that Variable exist in json-map and extract variable
+	tempMapVariable, existInMap = jsonMap[variableName]
+	if existInMap == false {
+
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id": "d1e918b7-9e42-4020-a657-ae56df7e8d78",
+		}).Fatalln(fmt.Sprintf("Missing parameter '%s'", variableName))
+
+	}
+
+	// Transform variable into correct type
+	methodParameter, canCastTempMapVariableToCorrectVariableType = tempMapVariable.(map[string]interface{})
+	if canCastTempMapVariableToCorrectVariableType == false {
+
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id": "806c60d4-900f-4e9f-9cbb-f91fb830fa73",
+		}).Fatalln(fmt.Sprintf(" Parameter '%s' couldn't be transformed into a '%s'",
+			variableName,
+			variableType))
+
+	}
+
+	// *** Extract ExpectedToBePassed ****
+	variableName = "ExpectedToBePassed"
+	variableType = "boolean"
+	traceId1 = "12651252-8969-4cd9-8899-d4de57b853a1"
+	traceId2 = "52b0367c-3e0a-4bc1-922b-305a1cbafea3"
+
+	// Verify that Variable exist in json-map and extract variable
+	tempMapVariable, existInMap = methodParameter[variableName]
+	if existInMap == false {
+
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id": "0db1bff6-7583-4b3d-a9f3-6a498b4c65dc",
+		}).Fatalln(fmt.Sprintf("Missing parameter '%s'", variableName))
+
+	}
+
+	// Transform variable into correct type
+	expectedToBePassed, canCastTempMapVariableToCorrectVariableType = tempMapVariable.(bool)
+	if canCastTempMapVariableToCorrectVariableType == false {
+
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id": "574dd3fb-a0ff-4a11-aa43-34f2aa7477fa",
+		}).Fatalln(fmt.Sprintf(" Parameter '%s' couldn't be transformed into a '%s'",
+			variableName,
+			variableType))
+
+	}
+
+	// *** Extract TestCaseExecutionUuid ****
+	variableName = "TestCaseExecutionUuid"
+	variableType = "string"
+	traceId1 = "154799d1-85f9-41a6-97e8-1f1a53e486e8"
+	traceId2 = "e4212c0b-7270-4676-bc43-af16b27bc7f2"
+
+	// Verify that Variable exist in json-map and extract variable
+	tempMapVariable, existInMap = methodParameter[variableName]
+	if existInMap == false {
+
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id": "0db1bff6-7583-4b3d-a9f3-6a498b4c65dc",
+		}).Fatalln(fmt.Sprintf("Missing parameter '%s'", variableName))
+
+	}
+
+	// Transform variable into correct type
+	testCaseExecutionUuid, canCastTempMapVariableToCorrectVariableType = tempMapVariable.(string)
+	if canCastTempMapVariableToCorrectVariableType == false {
+
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id": "d343b69f-75b7-4c74-b337-eeada05f7289",
+		}).Fatalln(fmt.Sprintf(" Parameter '%s' couldn't be transformed into a '%s'",
+			variableName,
+			variableType))
+	}
+
+	// *** Extract TestInstructionExecutionUuid ****
+	variableName = "TestInstructionExecutionUuid"
+	variableType = "string"
+	traceId1 = "2f1c5086-0fb0-47fe-97f1-31374439ac51"
+	traceId2 = "8fbf4f5f-22ce-4c05-bccd-96ca62ad9e90"
+
+	// Verify that Variable exist in json-map and extract variable
+	tempMapVariable, existInMap = methodParameter[variableName]
+	if existInMap == false {
+
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id": "0db1bff6-7583-4b3d-a9f3-6a498b4c65dc",
+		}).Fatalln(fmt.Sprintf("Missing parameter '%s'", variableName))
+
+	}
+
+	// Transform variable into correct type
+	testInstructionExecutionUuid, canCastTempMapVariableToCorrectVariableType = tempMapVariable.(string)
+	if canCastTempMapVariableToCorrectVariableType == false {
+
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id": "14c93b8f-f9bd-42dd-ba72-30b850fba39b",
+		}).Fatalln(fmt.Sprintf(" Parameter '%s' couldn't be transformed into a '%s'",
+			variableName,
+			variableType))
+
+	}
+
+	// *** Extract TestInstructionExecutionVersion ****
+	variableName = "TestInstructionExecutionVersion"
+	variableType = "Integer"
+	traceId1 = "318eb50a-8d79-4d3c-a0be-35f623d3bb65"
+	traceId2 = "00acb4bf-2643-4274-8720-6d8a25df0deb"
+
+	// Verify that Variable exist in json-map and extract variable
+	tempMapVariable, existInMap = methodParameter[variableName]
+	if existInMap == false {
+
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id": "e20def48-50a4-4a54-adb1-68ae23302e26",
+		}).Fatalln(fmt.Sprintf("Missing parameter '%s'", variableName))
+
+	}
+
+	// Transform variable into correct type
+	testInstructionExecutionVersion, canCastTempMapVariableToCorrectVariableType = tempMapVariable.(int)
+	if canCastTempMapVariableToCorrectVariableType == false {
+
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id": "976b32b9-1f75-4d46-9ec2-0bd0c5cf983f",
+		}).Fatalln(fmt.Sprintf(" Parameter '%s' couldn't be transformed into a '%s'",
+			variableName,
+			variableType))
+
+	}
+
+	// *** Extract TestInstructionVersion ****
+	variableName = "TestInstructionVersion"
+	variableType = "String"
+	traceId1 = "c067c31b-3c8b-44fd-857a-345b58a8229a"
+	traceId2 = "2e3509cc-3e51-4f7e-b511-db18ff3f29f2"
+
+	// Verify that Variable exist in json-map and extract variable
+	tempMapVariable, existInMap = methodParameter[variableName]
+	if existInMap == false {
+
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id": "e20def48-50a4-4a54-adb1-68ae23302e26",
+		}).Fatalln(fmt.Sprintf("Missing parameter '%s'", variableName))
+
+	}
+
+	// Transform variable into correct type
+	testInstructionVersion, canCastTempMapVariableToCorrectVariableType = tempMapVariable.(string)
+	if canCastTempMapVariableToCorrectVariableType == false {
+
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id": "87c1a80c-f5da-47a1-8d25-2c232ee7f770",
+		}).Fatalln(fmt.Sprintf(" Parameter '%s' couldn't be transformed into a '%s'",
+			variableName,
+			variableType))
+
+	}
+
+	// Depending on 'testStepActionMethod', extract extra incoming parameters
+	switch testStepActionMethod {
+
+	case "SendMT540_v1_0", "SendMT542_v1_0":
+		// No extra parameters
+
+	case "VerifyMT544_v1_0", "VerifyMT546_v1_0", "VerifyMT548_v1_0":
+		// Extract 'RelatedReference_54x_20CRELA'
+
+		// *** Extract RelatedReference_54x_20CRELA ****
+		variableName = "RelatedReference_54x_20CRELA"
+		variableType = "String"
+		traceId1 = "40c4e102-894e-4b13-96c4-229f3aa4f23d"
+		traceId2 = "8daf0525-56d3-4b87-9899-eaccbf70fa31"
+
+		// Verify that Variable exist in json-map and extract variable
+		tempMapVariable, existInMap = methodParameter[variableName]
+		if existInMap == false {
+			// Create Header
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusBadRequest)
+
+			// Create Response message
+			responseBody["title"] = "Error - Bad Request"
+			responseBody["status"] = "400"
+			responseBody["detail"] = fmt.Sprintf("Missing parameter '%s'", variableName)
+			responseBody["traceId"] = traceId1
+
+			responseBodydata, _ := json.Marshal(responseBody)
+
+			fmt.Fprintf(w, string(responseBodydata))
+
+			return
+		}
+
+		// Transform variable into correct type
+		relatedReference_54x_20CRELA, canCastTempMapVariableToCorrectVariableType = tempMapVariable.(string)
+		if canCastTempMapVariableToCorrectVariableType == false {
+			// Create Header
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusBadRequest)
+
+			// Create Response message
+			responseBody["title"] = "Error - Bad Request"
+			responseBody["status"] = "400"
+			responseBody["detail"] = fmt.Sprintf(" Parameter '%s' couldn't be transformed into a '%s'",
+				variableName,
+				variableType)
+			responseBody["traceId"] = traceId2
+
+			responseBodydata, _ := json.Marshal(responseBody)
+
+			fmt.Fprintf(w, string(responseBodydata))
+
+			return
+		}
+
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id": "beee23b8-5cab-4f8b-9cea-0a2301e78c06",
+		}).Info(fmt.Sprintf("Got 'RelatedReference_54x_20CRELA' = '%s' as input",
+			relatedReference_54x_20CRELA))
+
+	default:
+		// Unhandled Extra parameters
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id": "6b85e2f1-3faa-4880-b89f-b50741ccca72",
+		}).Fatalln(fmt.Sprintf("Couldn't find 'relatedReference_54x_20CRELA' as input. Exiting..."))
+	}
+
+	// Got this as input
+	sharedCode.Logger.WithFields(logrus.Fields{
+		"id":                              "df221e75-8089-47f0-8fec-7cbc68dc2620",
+		"testStepClassName":               testStepClassName,
+		"testStepActionMethod":            testStepActionMethod,
+		"testDataParameterType":           testDataParameterType,
+		"expectedToBePassedTestApiLevel":  expectedToBePassedTestApiLevel,
+		"methodParameter":                 methodParameter,
+		"expectedToBePassed":              expectedToBePassed,
+		"testCaseExecutionUuid":           testCaseExecutionUuid,
+		"testInstructionExecutionUuid":    testInstructionExecutionUuid,
+		"testInstructionExecutionVersion": testInstructionExecutionVersion,
+		"testInstructionVersion":          testInstructionVersion,
+		"relatedReference_54x_20CRELA":    relatedReference_54x_20CRELA,
+	}).Info(fmt.Sprintf("Got these parameters as input"))
+
+	// **** Start creating Responses ***
+
+	// If this TestStep is not expected to be passed then respond her
 	// 'expectedToBePassed' is 'false' - Will always go in here
-	if expectedToBePassedSlice[0] == "false" {
+	if expectedToBePassed == false {
+
+		// Create the Response from the "Fenix-code"
+		var tempTestApiEngineFinalTestInstructionExecutionResult TestApiEngineFinalTestInstructionExecutionResultStruct
+		tempTestApiEngineFinalTestInstructionExecutionResult = TestApiEngineFinalTestInstructionExecutionResultStruct{
+			TestInstructionExecutionUUID:           testInstructionExecutionUuid,
+			TestInstructionExecutionVersion:        strconv.Itoa(testInstructionExecutionVersion),
+			TestInstructionExecutionStatus:         fenixExecutionWorkerGrpcApi.TestInstructionExecutionStatusEnum_name[int32(fenixExecutionWorkerGrpcApi.TestInstructionExecutionStatusEnum_TIE_FINISHED_NOT_OK)],
+			TestInstructionExecutionStartTimeStamp: tempTestInstructionExecutionStartTimeStamp.String(),
+			TestInstructionExecutionEndTimeStamp:   time.Now().String(),
+			ResponseVariables:                      nil,
+			LogPosts: []LogPostStruct{
+				{
+					LogPostTimeStamp:                     time.Now().String(),
+					LogPostStatus:                        fenixExecutionWorkerGrpcApi.LogPostStatusEnum_name[int32(fenixExecutionWorkerGrpcApi.LogPostStatusEnum_EXECUTION_ERROR)],
+					LogPostText:                          "Variable 'expectedToBePassed' is 'false' and in the mocked version then the TestInstructionExecution fails!",
+					FoundVersusExpectedValueForVariables: nil,
+				},
+			},
+		}
+
+		var jsonBytes []byte
+		jsonBytes, err = json.Marshal(tempTestApiEngineFinalTestInstructionExecutionResult)
+		if err != nil {
+			sharedCode.Logger.WithFields(logrus.Fields{
+				"id":  "90b567d0-be45-4819-b1a6-fb8c74541034",
+				"err": err,
+				"tempTestApiEngineFinalTestInstructionExecutionResult": tempTestApiEngineFinalTestInstructionExecutionResult,
+			}).Fatalln("Couldn't convert 'tempTestApiEngineFinalTestInstructionExecutionResult' into json. Exiting...")
+		}
+
+		// Convert '"' into '\"'
+		var jsonAsString string
+		jsonAsString = strings.ReplaceAll(string(jsonBytes), `"`, `\"`)
+
+		// Create the Final Response
+		var tempTestApiEngineResponseWithResponseValueAsString TestApiEngineResponseWithResponseValueAsStringStruct
+		tempTestApiEngineResponseWithResponseValueAsString = TestApiEngineResponseWithResponseValueAsStringStruct{
+			TestStepExecutionStatus: TestStepExecutionStatusStruct{
+				StatusCode: 4,
+				StatusText: "FETSE_FINISHED_OK",
+			},
+			Details:            "",
+			ResponseValue:      jsonAsString,
+			ExecutionTimeStamp: time.Now().String(),
+		}
 
 		// Create Header
 		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusInternalServerError) //TODO Fang must change this
+		w.WriteHeader(http.StatusOK) //TODO Fang must change this
 
 		// Create Response message
-		fmt.Fprintf(w, "Not a OK Test from Test Web server")
-		// Create Response message
-		responseBody["title"] = "Error - Internal Server Error"
-		responseBody["status"] = "500"
-		responseBody["detail"] = "Not a OK Test from Test Web server"
-		responseBody["traceId"] = "dc2adc95-b656-4894-a296-f0a73409aedb"
-
-		responseBodydata, _ := json.Marshal(responseBody)
+		responseBodydata, _ := json.Marshal(tempTestApiEngineResponseWithResponseValueAsString)
 
 		fmt.Fprintf(w, string(responseBodydata))
 
+		return
+
 	}
+
+	/*
+
+	   {
+
+	     "testStepExecutionStatus": {
+
+	       "statusCode": 4,
+
+	       "statusText": "FETSE_FINISHED_OK"
+
+	     },
+
+	     "details": "",
+
+	     "responseValue": "{\r\n  \"TestInstructionExecutionUuid\": \"ae344db4-2d34-474e-bd91-1b24ac408b75\",\r\n  \"TestInstructionExecutionVersion\": \"1\",\r\n  \"TestInstructionExecutionStatus\": \"TIE_FINISHED_OK\",\r\n  \"TestInstructionExecutionStartTimeStamp\": \"2024-03-04T11:44:23Z\",\r\n  \"TestInstructionExecutionEndTimeStamp\": \"2024-03-04T11:44:25Z\",\r\n  \"ResponseVariables\": [\r\n    {\r\n      \"ResponseVariableUuid\": \"24fa2f84-827a-4c01-a86c-da42d888c295\",\r\n      \"ResponseVariableName\": \":20C::SEME//\",\r\n      \"ResponseVariableValueAsString\": \"2403041244-1259\"\r\n    }\r\n  ],\r\n  \"LogPosts\": [\r\n    {\r\n      \"LogPostTimeStamp\": \"2024-03-04T11:44:25Z\",\r\n      \"LogPostStatus\": \"INFO\",\r\n      \"LogPostText\": \"Message Sent on MQ\",\r\n      \"FoundVersusExpectedValue\": []\r\n    }\r\n  ]\r\n}",
+
+	     "executionTimeStamp": "2024-03-04T11:44:26.1659211Z"
+
+	   }
+
+	*/
+
+	// Depending on 'testStepActionMethod', create correct response extra incoming parameters
+	switch testStepActionMethod {
+
+	case "SendMT540_v1_0", "SendMT542_v1_0", "VerifyMT544_v1_0", "VerifyMT546_v1_0", "VerifyMT548_v1_0":
+
+		// Create correct Response Variable
+		var resoponseVariables ResponseVariableStruct
+		switch testStepActionMethod {
+
+		case "SendMT540_v1_0":
+			resoponseVariables = ResponseVariableStruct{
+				TestInstructionVersion:        "v1.0",
+				ResponseVariableUUID:          "24fa2f84-827a-4c01-a86c-da42d888c295",
+				ResponseVariableName:          ":20C::SEME",
+				ResponseVariableTypeUuid:      "0f6e945e-1556-4cb0-80e5-e021ebc5d8c1",
+				ResponseVariableTypeName:      "54x_:20C::SEME type",
+				ResponseVariableValueAsString: "MT540_" + uuid.NewString()[:8],
+			}
+
+		case "SendMT542_v1_0":
+			resoponseVariables = ResponseVariableStruct{
+				TestInstructionVersion:        "v1.0",
+				ResponseVariableUUID:          "9dd57f25-75e0-4024-862b-e0728c066604",
+				ResponseVariableName:          ":20C::SEME",
+				ResponseVariableTypeUuid:      "0f6e945e-1556-4cb0-80e5-e021ebc5d8c1",
+				ResponseVariableTypeName:      "54x_:20C::SEME type",
+				ResponseVariableValueAsString: "MT542_" + uuid.NewString()[:8],
+			}
+
+		case "VerifyMT544_v1_0":
+			resoponseVariables = ResponseVariableStruct{
+				TestInstructionVersion:        "v1.0",
+				ResponseVariableUUID:          "39818ba1-676d-42d0-87da-e1080e9d5ffd",
+				ResponseVariableName:          ":20C::SEME",
+				ResponseVariableTypeUuid:      "0f6e945e-1556-4cb0-80e5-e021ebc5d8c1",
+				ResponseVariableTypeName:      "54x_:20C::SEME type",
+				ResponseVariableValueAsString: "MT544_" + uuid.NewString()[:8],
+			}
+
+		case "VerifyMT546_v1_0":
+			resoponseVariables = ResponseVariableStruct{
+				TestInstructionVersion:        "v1.0",
+				ResponseVariableUUID:          "5dfd7890-a0b4-4528-804a-451a77f542ad",
+				ResponseVariableName:          ":20C::SEME",
+				ResponseVariableTypeUuid:      "0f6e945e-1556-4cb0-80e5-e021ebc5d8c1",
+				ResponseVariableTypeName:      "54x_:20C::SEME type",
+				ResponseVariableValueAsString: "MT546_" + uuid.NewString()[:8],
+			}
+		case "VerifyMT548_v1_0":
+			resoponseVariables = ResponseVariableStruct{
+				TestInstructionVersion:        testInstructionVersion,
+				ResponseVariableUUID:          "8ed1ead9-741b-4115-9f78-f8a7db1d6274",
+				ResponseVariableName:          ":20C::SEME",
+				ResponseVariableTypeUuid:      "0f6e945e-1556-4cb0-80e5-e021ebc5d8c1",
+				ResponseVariableTypeName:      "54x_:20C::SEME type",
+				ResponseVariableValueAsString: "MT548_" + uuid.NewString()[:8],
+			}
+
+		default:
+			sharedCode.Logger.WithFields(logrus.Fields{
+				"id": "0ade709b-4b34-408c-a2e3-4eb653efbf39",
+			}).Fatalln(fmt.Sprintf("Unhandeled 'testStepActionMethod'='%s'. Exiting...", testStepActionMethod))
+		}
+
+		// Create the Response from the "Fenix-code"
+		var tempTestApiEngineFinalTestInstructionExecutionResult TestApiEngineFinalTestInstructionExecutionResultStruct
+		tempTestApiEngineFinalTestInstructionExecutionResult = TestApiEngineFinalTestInstructionExecutionResultStruct{
+			TestInstructionExecutionUUID:           testInstructionExecutionUuid,
+			TestInstructionExecutionVersion:        strconv.Itoa(testInstructionExecutionVersion),
+			TestInstructionExecutionStatus:         fenixExecutionWorkerGrpcApi.TestInstructionExecutionStatusEnum_name[int32(fenixExecutionWorkerGrpcApi.TestInstructionExecutionStatusEnum_TIE_FINISHED_NOT_OK)],
+			TestInstructionExecutionStartTimeStamp: tempTestInstructionExecutionStartTimeStamp.String(),
+			TestInstructionExecutionEndTimeStamp:   time.Now().String(),
+			ResponseVariables: []ResponseVariableStruct{
+				resoponseVariables,
+			},
+			LogPosts: []LogPostStruct{
+				{
+					LogPostTimeStamp:                     time.Now().String(),
+					LogPostStatus:                        fenixExecutionWorkerGrpcApi.LogPostStatusEnum_name[int32(fenixExecutionWorkerGrpcApi.LogPostStatusEnum_EXECUTION_OK)],
+					LogPostText:                          fmt.Sprintf("Execution of '%s' was a success", testStepActionMethod),
+					FoundVersusExpectedValueForVariables: nil,
+				},
+			},
+		}
+
+		var jsonBytes []byte
+		jsonBytes, err = json.Marshal(tempTestApiEngineFinalTestInstructionExecutionResult)
+		if err != nil {
+			sharedCode.Logger.WithFields(logrus.Fields{
+				"id":  "099e199d-2dd5-4c6d-bc46-c0deee0e11e3",
+				"err": err,
+				"tempTestApiEngineFinalTestInstructionExecutionResult": tempTestApiEngineFinalTestInstructionExecutionResult,
+			}).Fatalln("Couldn't convert 'tempTestApiEngineFinalTestInstructionExecutionResult' into json. Exiting...")
+		}
+
+		// Convert '"' into '\"'
+		var jsonAsString string
+		jsonAsString = strings.ReplaceAll(string(jsonBytes), `"`, `\"`)
+
+		// Create the Final Response
+		var tempTestApiEngineResponseWithResponseValueAsString TestApiEngineResponseWithResponseValueAsStringStruct
+		tempTestApiEngineResponseWithResponseValueAsString = TestApiEngineResponseWithResponseValueAsStringStruct{
+			TestStepExecutionStatus: TestStepExecutionStatusStruct{
+				StatusCode: 4,
+				StatusText: "FETSE_FINISHED_OK",
+			},
+			Details:            "",
+			ResponseValue:      jsonAsString,
+			ExecutionTimeStamp: time.Now().String(),
+		}
+
+		// Create Header
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK) //TODO Fang must change this
+
+		// Create Response message
+		responseBodydata, _ := json.Marshal(tempTestApiEngineResponseWithResponseValueAsString)
+
+		fmt.Fprintf(w, string(responseBodydata))
+
+		return
+
+	default:
+		// Unhandled 'testStepActionMethod'
+
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id": "0ade709b-4b34-408c-a2e3-4eb653efbf39",
+		}).Fatalln(fmt.Sprintf("Unhandeled 'testStepActionMethod'='%s'. Exiting...", testStepActionMethod))
+
+		var tempTestApiEngineFinalTestInstructionExecutionResult TestApiEngineFinalTestInstructionExecutionResultStruct
+		tempTestApiEngineFinalTestInstructionExecutionResult = TestApiEngineFinalTestInstructionExecutionResultStruct{
+			TestInstructionExecutionUUID:           testInstructionExecutionUuid,
+			TestInstructionExecutionVersion:        strconv.Itoa(testInstructionExecutionVersion),
+			TestInstructionExecutionStatus:         fenixExecutionWorkerGrpcApi.TestInstructionExecutionStatusEnum_name[int32(fenixExecutionWorkerGrpcApi.TestInstructionExecutionStatusEnum_TIE_FINISHED_NOT_OK)],
+			TestInstructionExecutionStartTimeStamp: tempTestInstructionExecutionStartTimeStamp.String(),
+			TestInstructionExecutionEndTimeStamp:   time.Now().String(),
+			ResponseVariables:                      nil,
+			LogPosts: []LogPostStruct{
+				{
+					LogPostTimeStamp:                     time.Now().String(),
+					LogPostStatus:                        fenixExecutionWorkerGrpcApi.LogPostStatusEnum_name[int32(fenixExecutionWorkerGrpcApi.LogPostStatusEnum_EXECUTION_ERROR)],
+					LogPostText:                          fmt.Sprintf("Unhandeled 'testStepActionMethod'='%s'", testStepActionMethod),
+					FoundVersusExpectedValueForVariables: nil,
+				},
+			},
+		}
+
+		var jsonBytes []byte
+		jsonBytes, err = json.Marshal(tempTestApiEngineFinalTestInstructionExecutionResult)
+		if err != nil {
+			sharedCode.Logger.WithFields(logrus.Fields{
+				"id":  "099e199d-2dd5-4c6d-bc46-c0deee0e11e3",
+				"err": err,
+				"tempTestApiEngineFinalTestInstructionExecutionResult": tempTestApiEngineFinalTestInstructionExecutionResult,
+			}).Fatalln("Couldn't convert 'tempTestApiEngineFinalTestInstructionExecutionResult' into json. Exiting...")
+		}
+
+		// Convert '"' into '\"'
+		var jsonAsString string
+		jsonAsString = strings.ReplaceAll(string(jsonBytes), `"`, `\"`)
+
+		// Create the Final Response
+		var tempTestApiEngineResponseWithResponseValueAsString TestApiEngineResponseWithResponseValueAsStringStruct
+		tempTestApiEngineResponseWithResponseValueAsString = TestApiEngineResponseWithResponseValueAsStringStruct{
+			TestStepExecutionStatus: TestStepExecutionStatusStruct{
+				StatusCode: 4,
+				StatusText: "FETSE_FINISHED_OK",
+			},
+			Details:            "",
+			ResponseValue:      jsonAsString,
+			ExecutionTimeStamp: time.Now().String(),
+		}
+
+		// Create Header
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK) //TODO Fang must change this
+
+		// Create Response message
+		responseBodydata, _ := json.Marshal(tempTestApiEngineResponseWithResponseValueAsString)
+
+		fmt.Fprintf(w, string(responseBodydata))
+
+		return
+
+	}
+
 }
 
 func extractAndValidateJsonBody(responseWriterPointer *http.ResponseWriter, httpRequest *http.Request, myInputTypeVariable interface{}) (err error) {
