@@ -347,12 +347,12 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 	)
 
 	var (
-		expectedToBePassed              bool
-		testCaseExecutionUuid           string
-		testInstructionExecutionUuid    string
-		testInstructionExecutionVersion int
-		testInstructionVersion          string
-		relatedReference_54x_20CRELA    string
+		expectedToBePassedAsString              string
+		testCaseExecutionUuid                   string
+		testInstructionExecutionUuid            string
+		testInstructionExecutionVersionAsString string
+		testInstructionVersion                  string
+		relatedReference_54x_20CRELA            string
 	)
 
 	var existInMap bool
@@ -360,14 +360,10 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 	var canCastTempMapVariableToCorrectVariableType bool
 	var variableName string
 	var variableType string
-	var traceId1 string
-	var traceId2 string
 
 	// *** Extract TestStepClassName ****
 	variableName = "testStepClassName"
 	variableType = "string"
-	traceId1 = "ffd7ca86-96d7-448d-ad5f-c66d6a6ef3b4"
-	traceId2 = "f029338f-3be8-43d2-9a0f-87bb388f381f"
 
 	// Verify that Variable exist in json-map and extract variable
 	tempMapVariable, existInMap = jsonMap[variableName]
@@ -394,8 +390,6 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 	// *** Extract TestStepActionMethod ****
 	variableName = "testStepActionMethod"
 	variableType = "string"
-	traceId1 = "fda068b8-a07b-4ced-81c4-93bc379e27f3"
-	traceId2 = "3e7fd612-b40b-4c47-8aa1-4871df297e8b"
 
 	// Verify that Variable exist in json-map and extract variable
 	tempMapVariable, existInMap = jsonMap[variableName]
@@ -423,8 +417,6 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 	// *** Extract testDataParameterType ****
 	variableName = "testDataParameterType"
 	variableType = "string"
-	traceId1 = "b8bca44a-6967-478e-ac81-023487dc7a4e"
-	traceId2 = "713a1566-852d-4dbf-88ce-beac6e28fca8"
 
 	// Verify that Variable exist in json-map and extract variable
 	tempMapVariable, existInMap = jsonMap[variableName]
@@ -459,10 +451,8 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 	}
 
 	// *** Extract expectedToBePassedTestApiLevel ****
-	variableName = "expectedToBePassedTestApiLevel"
+	variableName = "expectedToBePassed"
 	variableType = "boolean"
-	traceId1 = "d652f755-c308-42a7-82af-fb38564c4a18"
-	traceId2 = "8a35de26-18b0-40a1-b5b4-19183354c307"
 
 	// Verify that Variable exist in json-map and extract variable
 	tempMapVariable, existInMap = jsonMap[variableName]
@@ -496,10 +486,8 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 	}
 
 	// *** Extract methodParameter ****
-	variableName = "methodParameter"
+	variableName = "methodParameters"
 	variableType = "map[string]interface{}"
-	traceId1 = "beec0936-f9fa-449e-ab54-318eaf5ed6ff"
-	traceId2 = "9f3930a6-5225-4347-92a7-fd604e02201a"
 
 	// Verify that Variable exist in json-map and extract variable
 	tempMapVariable, existInMap = jsonMap[variableName]
@@ -525,9 +513,7 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 
 	// *** Extract ExpectedToBePassed ****
 	variableName = "ExpectedToBePassed"
-	variableType = "boolean"
-	traceId1 = "12651252-8969-4cd9-8899-d4de57b853a1"
-	traceId2 = "52b0367c-3e0a-4bc1-922b-305a1cbafea3"
+	variableType = "string"
 
 	// Verify that Variable exist in json-map and extract variable
 	tempMapVariable, existInMap = methodParameter[variableName]
@@ -540,7 +526,7 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 	}
 
 	// Transform variable into correct type
-	expectedToBePassed, canCastTempMapVariableToCorrectVariableType = tempMapVariable.(bool)
+	expectedToBePassedAsString, canCastTempMapVariableToCorrectVariableType = tempMapVariable.(string)
 	if canCastTempMapVariableToCorrectVariableType == false {
 
 		sharedCode.Logger.WithFields(logrus.Fields{
@@ -551,11 +537,19 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 
 	}
 
+	// Validate that value is a boolean
+	if expectedToBePassedAsString != "true" && expectedToBePassedAsString != "false" {
+
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id": "138d84de-e1aa-4ab7-9300-4d30b7d3debf",
+		}).Fatalln(fmt.Sprintf("parameter '%s' is not any of 'true' or 'false'. The value is '%s'",
+			variableName, expectedToBePassedAsString))
+
+	}
+
 	// *** Extract TestCaseExecutionUuid ****
 	variableName = "TestCaseExecutionUuid"
 	variableType = "string"
-	traceId1 = "154799d1-85f9-41a6-97e8-1f1a53e486e8"
-	traceId2 = "e4212c0b-7270-4676-bc43-af16b27bc7f2"
 
 	// Verify that Variable exist in json-map and extract variable
 	tempMapVariable, existInMap = methodParameter[variableName]
@@ -581,8 +575,6 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 	// *** Extract TestInstructionExecutionUuid ****
 	variableName = "TestInstructionExecutionUuid"
 	variableType = "string"
-	traceId1 = "2f1c5086-0fb0-47fe-97f1-31374439ac51"
-	traceId2 = "8fbf4f5f-22ce-4c05-bccd-96ca62ad9e90"
 
 	// Verify that Variable exist in json-map and extract variable
 	tempMapVariable, existInMap = methodParameter[variableName]
@@ -609,8 +601,6 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 	// *** Extract TestInstructionExecutionVersion ****
 	variableName = "TestInstructionExecutionVersion"
 	variableType = "Integer"
-	traceId1 = "318eb50a-8d79-4d3c-a0be-35f623d3bb65"
-	traceId2 = "00acb4bf-2643-4274-8720-6d8a25df0deb"
 
 	// Verify that Variable exist in json-map and extract variable
 	tempMapVariable, existInMap = methodParameter[variableName]
@@ -623,7 +613,7 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 	}
 
 	// Transform variable into correct type
-	testInstructionExecutionVersion, canCastTempMapVariableToCorrectVariableType = tempMapVariable.(int)
+	testInstructionExecutionVersionAsString, canCastTempMapVariableToCorrectVariableType = tempMapVariable.(string)
 	if canCastTempMapVariableToCorrectVariableType == false {
 
 		sharedCode.Logger.WithFields(logrus.Fields{
@@ -634,11 +624,22 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 
 	}
 
+	// Validate that value is an integer
+	_, err = strconv.Atoi(testInstructionExecutionVersionAsString)
+	if err != nil {
+
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id":  "d627108c-55de-42b9-a291-a6c28efd1e5c",
+			"err": err,
+			"testInstructionExecutionVersionAsString": testInstructionExecutionVersionAsString,
+		}).Fatalln(fmt.Sprintf("Couldn't convert 'testInstructionExecutionVersionAsString' into an integer",
+			variableName, expectedToBePassedAsString))
+
+	}
+
 	// *** Extract TestInstructionVersion ****
 	variableName = "TestInstructionVersion"
 	variableType = "String"
-	traceId1 = "c067c31b-3c8b-44fd-857a-345b58a8229a"
-	traceId2 = "2e3509cc-3e51-4f7e-b511-db18ff3f29f2"
 
 	// Verify that Variable exist in json-map and extract variable
 	tempMapVariable, existInMap = methodParameter[variableName]
@@ -674,49 +675,27 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 		// *** Extract RelatedReference_54x_20CRELA ****
 		variableName = "RelatedReference_54x_20CRELA"
 		variableType = "String"
-		traceId1 = "40c4e102-894e-4b13-96c4-229f3aa4f23d"
-		traceId2 = "8daf0525-56d3-4b87-9899-eaccbf70fa31"
 
 		// Verify that Variable exist in json-map and extract variable
 		tempMapVariable, existInMap = methodParameter[variableName]
 		if existInMap == false {
-			// Create Header
-			w.Header().Set("Content-Type", "application/json")
-			w.WriteHeader(http.StatusBadRequest)
 
-			// Create Response message
-			responseBody["title"] = "Error - Bad Request"
-			responseBody["status"] = "400"
-			responseBody["detail"] = fmt.Sprintf("Missing parameter '%s'", variableName)
-			responseBody["traceId"] = traceId1
+			sharedCode.Logger.WithFields(logrus.Fields{
+				"id": "923321b9-a04d-46b5-8621-07c2f4e9a91a",
+			}).Fatalln(fmt.Sprintf("Missing parameter '%s'", variableName))
 
-			responseBodydata, _ := json.Marshal(responseBody)
-
-			fmt.Fprintf(w, string(responseBodydata))
-
-			return
 		}
 
 		// Transform variable into correct type
 		relatedReference_54x_20CRELA, canCastTempMapVariableToCorrectVariableType = tempMapVariable.(string)
 		if canCastTempMapVariableToCorrectVariableType == false {
-			// Create Header
-			w.Header().Set("Content-Type", "application/json")
-			w.WriteHeader(http.StatusBadRequest)
 
-			// Create Response message
-			responseBody["title"] = "Error - Bad Request"
-			responseBody["status"] = "400"
-			responseBody["detail"] = fmt.Sprintf(" Parameter '%s' couldn't be transformed into a '%s'",
+			sharedCode.Logger.WithFields(logrus.Fields{
+				"id": "87c1a80c-f5da-47a1-8d25-2c232ee7f770",
+			}).Fatalln(fmt.Sprintf(" Parameter '%s' couldn't be transformed into a '%s'",
 				variableName,
-				variableType)
-			responseBody["traceId"] = traceId2
+				variableType))
 
-			responseBodydata, _ := json.Marshal(responseBody)
-
-			fmt.Fprintf(w, string(responseBodydata))
-
-			return
 		}
 
 		sharedCode.Logger.WithFields(logrus.Fields{
@@ -739,10 +718,10 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 		"testDataParameterType":           testDataParameterType,
 		"expectedToBePassedTestApiLevel":  expectedToBePassedTestApiLevel,
 		"methodParameter":                 methodParameter,
-		"expectedToBePassed":              expectedToBePassed,
+		"expectedToBePassed":              expectedToBePassedAsString,
 		"testCaseExecutionUuid":           testCaseExecutionUuid,
 		"testInstructionExecutionUuid":    testInstructionExecutionUuid,
-		"testInstructionExecutionVersion": testInstructionExecutionVersion,
+		"testInstructionExecutionVersion": testInstructionExecutionVersionAsString,
 		"testInstructionVersion":          testInstructionVersion,
 		"relatedReference_54x_20CRELA":    relatedReference_54x_20CRELA,
 	}).Info(fmt.Sprintf("Got these parameters as input"))
@@ -751,20 +730,21 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 
 	// If this TestStep is not expected to be passed then respond her
 	// 'expectedToBePassed' is 'false' - Will always go in here
-	if expectedToBePassed == false {
+	if expectedToBePassedAsString == "false" {
 
 		// Create the Response from the "Fenix-code"
 		var tempTestApiEngineFinalTestInstructionExecutionResult TestApiEngineFinalTestInstructionExecutionResultStruct
 		tempTestApiEngineFinalTestInstructionExecutionResult = TestApiEngineFinalTestInstructionExecutionResultStruct{
+			TestApiEngineResponseJsonSchemaVersion: "v1.0",
 			TestInstructionExecutionUUID:           testInstructionExecutionUuid,
-			TestInstructionExecutionVersion:        strconv.Itoa(testInstructionExecutionVersion),
+			TestInstructionExecutionVersion:        testInstructionExecutionVersionAsString,
 			TestInstructionExecutionStatus:         fenixExecutionWorkerGrpcApi.TestInstructionExecutionStatusEnum_name[int32(fenixExecutionWorkerGrpcApi.TestInstructionExecutionStatusEnum_TIE_FINISHED_NOT_OK)],
-			TestInstructionExecutionStartTimeStamp: tempTestInstructionExecutionStartTimeStamp.String(),
-			TestInstructionExecutionEndTimeStamp:   time.Now().String(),
+			TestInstructionExecutionStartTimeStamp: tempTestInstructionExecutionStartTimeStamp.Format(time.RFC3339),
+			TestInstructionExecutionEndTimeStamp:   time.Now().Format(time.RFC3339),
 			ResponseVariables:                      nil,
 			LogPosts: []LogPostStruct{
 				{
-					LogPostTimeStamp:                     time.Now().String(),
+					LogPostTimeStamp:                     time.Now().Format(time.RFC3339),
 					LogPostStatus:                        fenixExecutionWorkerGrpcApi.LogPostStatusEnum_name[int32(fenixExecutionWorkerGrpcApi.LogPostStatusEnum_EXECUTION_ERROR)],
 					LogPostText:                          "Variable 'expectedToBePassed' is 'false' and in the mocked version then the TestInstructionExecution fails!",
 					FoundVersusExpectedValueForVariables: nil,
@@ -783,10 +763,10 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 		}
 
 		// Convert '"' into '\"'
-		var jsonAsString string
-		jsonAsString = strings.ReplaceAll(string(jsonBytes), `"`, `\"`)
+		//var jsonAsString string
+		//jsonAsString = strings.ReplaceAll(string(jsonBytes), `"`, `\"`)
 
-		// Create the Final Response
+		// Create the TestApiEngine Response
 		var tempTestApiEngineResponseWithResponseValueAsString TestApiEngineResponseWithResponseValueAsStringStruct
 		tempTestApiEngineResponseWithResponseValueAsString = TestApiEngineResponseWithResponseValueAsStringStruct{
 			TestStepExecutionStatus: TestStepExecutionStatusStruct{
@@ -794,8 +774,8 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 				StatusText: "FETSE_FINISHED_OK",
 			},
 			Details:            "",
-			ResponseValue:      jsonAsString,
-			ExecutionTimeStamp: time.Now().String(),
+			ResponseValue:      string(jsonBytes),
+			ExecutionTimeStamp: time.Now().Format(time.RFC3339),
 		}
 
 		// Create Header
@@ -810,28 +790,6 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 		return
 
 	}
-
-	/*
-
-	   {
-
-	     "testStepExecutionStatus": {
-
-	       "statusCode": 4,
-
-	       "statusText": "FETSE_FINISHED_OK"
-
-	     },
-
-	     "details": "",
-
-	     "responseValue": "{\r\n  \"TestInstructionExecutionUuid\": \"ae344db4-2d34-474e-bd91-1b24ac408b75\",\r\n  \"TestInstructionExecutionVersion\": \"1\",\r\n  \"TestInstructionExecutionStatus\": \"TIE_FINISHED_OK\",\r\n  \"TestInstructionExecutionStartTimeStamp\": \"2024-03-04T11:44:23Z\",\r\n  \"TestInstructionExecutionEndTimeStamp\": \"2024-03-04T11:44:25Z\",\r\n  \"ResponseVariables\": [\r\n    {\r\n      \"ResponseVariableUuid\": \"24fa2f84-827a-4c01-a86c-da42d888c295\",\r\n      \"ResponseVariableName\": \":20C::SEME//\",\r\n      \"ResponseVariableValueAsString\": \"2403041244-1259\"\r\n    }\r\n  ],\r\n  \"LogPosts\": [\r\n    {\r\n      \"LogPostTimeStamp\": \"2024-03-04T11:44:25Z\",\r\n      \"LogPostStatus\": \"INFO\",\r\n      \"LogPostText\": \"Message Sent on MQ\",\r\n      \"FoundVersusExpectedValue\": []\r\n    }\r\n  ]\r\n}",
-
-	     "executionTimeStamp": "2024-03-04T11:44:26.1659211Z"
-
-	   }
-
-	*/
 
 	// Depending on 'testStepActionMethod', create correct response extra incoming parameters
 	switch testStepActionMethod {
@@ -900,17 +858,18 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 		// Create the Response from the "Fenix-code"
 		var tempTestApiEngineFinalTestInstructionExecutionResult TestApiEngineFinalTestInstructionExecutionResultStruct
 		tempTestApiEngineFinalTestInstructionExecutionResult = TestApiEngineFinalTestInstructionExecutionResultStruct{
+			TestApiEngineResponseJsonSchemaVersion: "v1.0",
 			TestInstructionExecutionUUID:           testInstructionExecutionUuid,
-			TestInstructionExecutionVersion:        strconv.Itoa(testInstructionExecutionVersion),
+			TestInstructionExecutionVersion:        testInstructionExecutionVersionAsString,
 			TestInstructionExecutionStatus:         fenixExecutionWorkerGrpcApi.TestInstructionExecutionStatusEnum_name[int32(fenixExecutionWorkerGrpcApi.TestInstructionExecutionStatusEnum_TIE_FINISHED_NOT_OK)],
-			TestInstructionExecutionStartTimeStamp: tempTestInstructionExecutionStartTimeStamp.String(),
-			TestInstructionExecutionEndTimeStamp:   time.Now().String(),
+			TestInstructionExecutionStartTimeStamp: tempTestInstructionExecutionStartTimeStamp.Format(time.RFC3339),
+			TestInstructionExecutionEndTimeStamp:   time.Now().Format(time.RFC3339),
 			ResponseVariables: []ResponseVariableStruct{
 				resoponseVariables,
 			},
 			LogPosts: []LogPostStruct{
 				{
-					LogPostTimeStamp:                     time.Now().String(),
+					LogPostTimeStamp:                     time.Now().Format(time.RFC3339),
 					LogPostStatus:                        fenixExecutionWorkerGrpcApi.LogPostStatusEnum_name[int32(fenixExecutionWorkerGrpcApi.LogPostStatusEnum_EXECUTION_OK)],
 					LogPostText:                          fmt.Sprintf("Execution of '%s' was a success", testStepActionMethod),
 					FoundVersusExpectedValueForVariables: nil,
@@ -929,8 +888,8 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 		}
 
 		// Convert '"' into '\"'
-		var jsonAsString string
-		jsonAsString = strings.ReplaceAll(string(jsonBytes), `"`, `\"`)
+		//var jsonAsString string
+		//jsonAsString = strings.ReplaceAll(string(jsonBytes), `"`, `\"`)
 
 		// Create the Final Response
 		var tempTestApiEngineResponseWithResponseValueAsString TestApiEngineResponseWithResponseValueAsStringStruct
@@ -940,8 +899,8 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 				StatusText: "FETSE_FINISHED_OK",
 			},
 			Details:            "",
-			ResponseValue:      jsonAsString,
-			ExecutionTimeStamp: time.Now().String(),
+			ResponseValue:      string(jsonBytes),
+			ExecutionTimeStamp: time.Now().Format(time.RFC3339),
 		}
 
 		// Create Header
@@ -964,15 +923,16 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 
 		var tempTestApiEngineFinalTestInstructionExecutionResult TestApiEngineFinalTestInstructionExecutionResultStruct
 		tempTestApiEngineFinalTestInstructionExecutionResult = TestApiEngineFinalTestInstructionExecutionResultStruct{
+			TestApiEngineResponseJsonSchemaVersion: "v1.0",
 			TestInstructionExecutionUUID:           testInstructionExecutionUuid,
-			TestInstructionExecutionVersion:        strconv.Itoa(testInstructionExecutionVersion),
+			TestInstructionExecutionVersion:        testInstructionExecutionVersionAsString,
 			TestInstructionExecutionStatus:         fenixExecutionWorkerGrpcApi.TestInstructionExecutionStatusEnum_name[int32(fenixExecutionWorkerGrpcApi.TestInstructionExecutionStatusEnum_TIE_FINISHED_NOT_OK)],
-			TestInstructionExecutionStartTimeStamp: tempTestInstructionExecutionStartTimeStamp.String(),
-			TestInstructionExecutionEndTimeStamp:   time.Now().String(),
+			TestInstructionExecutionStartTimeStamp: tempTestInstructionExecutionStartTimeStamp.Format(time.RFC3339),
+			TestInstructionExecutionEndTimeStamp:   time.Now().Format(time.RFC3339),
 			ResponseVariables:                      nil,
 			LogPosts: []LogPostStruct{
 				{
-					LogPostTimeStamp:                     time.Now().String(),
+					LogPostTimeStamp:                     time.Now().Format(time.RFC3339),
 					LogPostStatus:                        fenixExecutionWorkerGrpcApi.LogPostStatusEnum_name[int32(fenixExecutionWorkerGrpcApi.LogPostStatusEnum_EXECUTION_ERROR)],
 					LogPostText:                          fmt.Sprintf("Unhandeled 'testStepActionMethod'='%s'", testStepActionMethod),
 					FoundVersusExpectedValueForVariables: nil,
@@ -991,8 +951,8 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 		}
 
 		// Convert '"' into '\"'
-		var jsonAsString string
-		jsonAsString = strings.ReplaceAll(string(jsonBytes), `"`, `\"`)
+		//var jsonAsString string
+		//jsonAsString = strings.ReplaceAll(string(jsonBytes), `"`, `\"`)
 
 		// Create the Final Response
 		var tempTestApiEngineResponseWithResponseValueAsString TestApiEngineResponseWithResponseValueAsStringStruct
@@ -1002,8 +962,8 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 				StatusText: "FETSE_FINISHED_OK",
 			},
 			Details:            "",
-			ResponseValue:      jsonAsString,
-			ExecutionTimeStamp: time.Now().String(),
+			ResponseValue:      string(jsonBytes),
+			ExecutionTimeStamp: time.Now().Format(time.RFC3339),
 		}
 
 		// Create Header

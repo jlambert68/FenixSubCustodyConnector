@@ -11,6 +11,7 @@ import (
 func GenerateTimeStampParserLayout(timeStampAsString string) (parserLayout string, err error) {
 	// "2006-01-02 15:04:05.999999999 -0700 MST"
 	// "2006-01-02T15:04:05Z"
+	// "2006-01-02T15:04:05Z07:00"
 
 	var timeStampParts []string
 	var dateVersion int
@@ -24,7 +25,7 @@ func GenerateTimeStampParserLayout(timeStampAsString string) (parserLayout strin
 	dateVersion = 1
 	if len(timeStampParts[0]) != 10 {
 
-		// Check TimeStamp version 2, "2006-01-02T15:04:05Z"
+		// Check TimeStamp version 2, "2006-01-02T15:04:05Z" or "2006-01-02T15:04:05Z07:00"
 		timeStampParts = strings.Split(timeStampAsString, "T")
 		if len(timeStampParts[0]) != 10 {
 
@@ -39,6 +40,7 @@ func GenerateTimeStampParserLayout(timeStampAsString string) (parserLayout strin
 			return "", err
 
 		} else {
+
 			dateVersion = 2
 		}
 	}
@@ -71,7 +73,24 @@ func GenerateTimeStampParserLayout(timeStampAsString string) (parserLayout strin
 		}
 
 	case 2:
-		parserLayout = parserLayout + "T15:04:05Z"
+		// Decide "T15:04:05Z" or "T15:04:05Z07:00"
+		switch len(timeStampParts[1]) {
+
+		case 10:
+			parserLayout = parserLayout + "T15:04:05Z"
+
+		case 14:
+			parserLayout = parserLayout + "T15:04:05-07:00"
+
+		default:
+			Logger.WithFields(logrus.Fields{
+				"Id":                "47013eb0-37b9-400c-924a-e6f144cf7a4f",
+				"timeStampAsString": timeStampAsString,
+				"timeStampParts":    timeStampParts,
+			}).Error("Unhandled length of 'timeStampParts'")
+
+			return "", err
+		}
 
 		// More parts shouldn't exist
 		if len(timeStampParts) > 2 {

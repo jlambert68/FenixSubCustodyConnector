@@ -140,10 +140,21 @@
         "ResponseVariableMessage": {
             "type": "object",
             "properties": {
-                "ResponseVariableUuid": {
+                "TestInstructionVersion": {
                     "type": "string"
                 },
+                "ResponseVariableUuid": {
+                    "type": "string",
+                    "format": "uuid"
+                },
                 "ResponseVariableName": {
+                    "type": "string"
+                },
+                "ResponseVariableTypeUuid": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "ResponseVariableTypeName": {
                     "type": "string"
                 },
                 "ResponseVariableValueAsString": {
@@ -151,8 +162,11 @@
                 }
             },
             "required": [
+                "TestInstructionVersion",
                 "ResponseVariableUuid",
                 "ResponseVariableName",
+                "ResponseVariableTypeUuid",
+                "ResponseVariableTypeName",
                 "ResponseVariableValueAsString"
             ],
             "additionalProperties": false

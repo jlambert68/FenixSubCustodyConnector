@@ -33,30 +33,31 @@ type TestInstructionAttributesUuidAndValueStruct struct {
 // Specify the structure that the Json-response, from TestApiEngine, will be 'converted into
 // This is the response from TestApiEngine
 type TestApiEngineResponseWithResponseValueAsStringStruct struct {
-	TestStepExecutionStatus TestStepExecutionStatusStruct `json:"TestStepExecutionStatus"`
-	Details                 string                        `json:"Details"`
-	ResponseValue           string                        `json:"ResponseValue"`
-	ExecutionTimeStamp      string                        `json:"ExecutionTimeStamp"`
+	TestStepExecutionStatus TestStepExecutionStatusStruct `json:"testStepExecutionStatus"`
+	Details                 string                        `json:"details"`
+	ResponseValue           string                        `json:"responseValue"`
+	ExecutionTimeStamp      string                        `json:"executionTimeStamp"`
 }
 
 type TestApiEngineResponseWithResponseValueAsTestApiEngineFinalTestInstructionExecutionResultStruct struct {
-	TestStepExecutionStatus TestStepExecutionStatusStruct                          `json:"TestStepExecutionStatus"`
-	Details                 string                                                 `json:"Details"`
-	ResponseValue           TestApiEngineFinalTestInstructionExecutionResultStruct `json:"ResponseValue"`
-	ExecutionTimeStamp      string                                                 `json:"ExecutionTimeStamp"`
+	TestStepExecutionStatus TestStepExecutionStatusStruct                          `json:"testStepExecutionStatus"`
+	Details                 string                                                 `json:"details"`
+	ResponseValue           TestApiEngineFinalTestInstructionExecutionResultStruct `json:"responseValue"`
+	ExecutionTimeStamp      string                                                 `json:"executionTimeStamp"`
 }
 
 // TestStepExecutionStatusStruct
 // Holds Status code and Text for TestApiEngine response
 type TestStepExecutionStatusStruct struct {
-	StatusCode int    `json:"StatusCode"`
-	StatusText string `json:"StatusText"`
+	StatusCode int    `json:"statusCode"`
+	StatusText string `json:"statusText"`
 }
 
 // TestApiEngineFinalTestInstructionExecutionResultStruct
 // Specify the structure that the Json-response, from TestApiEngine, will be 'converted into
 // This is the unique Fenix-parts of the TestApiEngine-response, which exists as an inner json 'ResponseValue'
 type TestApiEngineFinalTestInstructionExecutionResultStruct struct {
+	TestApiEngineResponseJsonSchemaVersion string                   `json:"TestApiEngineResponseJsonSchemaVersion"`
 	TestInstructionExecutionUUID           string                   `json:"TestInstructionExecutionUuid"`
 	TestInstructionExecutionVersion        string                   `json:"TestInstructionExecutionVersion"`
 	TestInstructionExecutionStatus         string                   `json:"TestInstructionExecutionStatus"`
@@ -73,7 +74,7 @@ type LogPostStruct struct {
 	LogPostTimeStamp                     string                                      `json:"LogPostTimeStamp"`
 	LogPostStatus                        string                                      `json:"LogPostStatus"`
 	LogPostText                          string                                      `json:"LogPostText"`
-	FoundVersusExpectedValueForVariables []FoundVersusExpectedValueForVariableStruct `json:"FoundVersusExpectedValueForVariables"`
+	FoundVersusExpectedValueForVariables []FoundVersusExpectedValueForVariableStruct `json:"FoundVersusExpectedValue"`
 }
 
 // FoundVersusExpectedValueForVariableStruct within 'LogPostStruct'
