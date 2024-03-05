@@ -37,3 +37,19 @@ var validateMT544_v1_0_RequestMessageJsonSchemaAsByteArray []byte
 
 //go:embed json-schemas/ValidateMT544_v1_0_ResponseVariables.json-schema.json
 var validateMT544_v1_0_ResponseVariablesMessageJsonSchemaAsByteArray []byte
+
+// SendMT546
+//
+//go:embed json-schemas/ValidateMT546_v1_0_Request.json-schema.json
+var validateMT546_v1_0_RequestMessageJsonSchemaAsByteArray []byte
+
+//go:embed json-schemas/ValidateMT546_v1_0_ResponseVariables.json-schema.json
+var validateMT546_v1_0_ResponseVariablesMessageJsonSchemaAsByteArray []byte
+
+// SendMT548
+//
+//go:embed json-schemas/ValidateMT548_v1_0_Request.json-schema.json
+var validateMT548_v1_0_RequestMessageJsonSchemaAsByteArray []byte
+
+//go:embed json-schemas/ValidateMT548_v1_0_ResponseVariables.json-schema.json
+var validateMT548_v1_0_ResponseVariablesMessageJsonSchemaAsByteArray []byte

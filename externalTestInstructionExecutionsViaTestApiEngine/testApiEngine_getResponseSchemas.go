@@ -5,6 +5,8 @@ import (
 	"github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_SendOnMQTypeMT_SendMT540"
 	TestInstruction_SendOnMQTypeMT_SendMT542 "github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_SendOnMQTypeMT_SendMT542/version_1_0"
 	TestInstruction_ValidateMQTypeMT54x_ValidateMT544 "github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_ValidateMQTypeMT54x_ValidateMT544/version_1_0"
+	"github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_ValidateMQTypeMT54x_ValidateMT546"
+	"github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_ValidateMQTypeMT54x_ValidateMT548"
 	"github.com/jlambert68/FenixTestInstructionsAdminShared/TypeAndStructs"
 	"github.com/sirupsen/logrus"
 )
@@ -109,11 +111,63 @@ func GetResponseSchemasToUse(
 
 		}
 
+		// Validate a MT546
+	case TestInstruction_ValidateMQTypeMT54x_ValidateMT546.TestInstructionUUID_SubCustody_ValidateMT546:
+
+		// Extract json-schema depending on version
+		switch testInstructionVersion {
+		case "v1.0":
+
+			// Outgoing Request
+			var tempRequestMessageToTestApiEngineJsonSchema string
+			tempRequestMessageToTestApiEngineJsonSchema = string(validateMT546_v1_0_RequestMessageJsonSchemaAsByteArray)
+			requestMessageToTestApiEngineJsonSchema = &tempRequestMessageToTestApiEngineJsonSchema
+
+			// Incoming Response
+			var tempResponseVariablesJsonSchema string
+			tempResponseVariablesJsonSchema = string(validateMT546_v1_0_ResponseVariablesMessageJsonSchemaAsByteArray)
+			responseVariablesJsonSchema = &tempResponseVariablesJsonSchema
+
+		default:
+			sharedCode.Logger.WithFields(logrus.Fields{
+				"id":                     "17aebeeb-2eeb-499a-bb38-a94e87c16914",
+				"testInstructionUUID":    testInstructionUUID,
+				"testInstructionVersion": testInstructionVersion,
+			}).Fatal("Unhandled version for 'TestInstructionUUID_SubCustody_ValidateMT546'")
+
+		}
+
+		// Validate a MT548
+	case TestInstruction_ValidateMQTypeMT54x_ValidateMT548.TestInstructionUUID_SubCustody_ValidateMT548:
+
+		// Extract json-schema depending on version
+		switch testInstructionVersion {
+		case "v1.0":
+
+			// Outgoing Request
+			var tempRequestMessageToTestApiEngineJsonSchema string
+			tempRequestMessageToTestApiEngineJsonSchema = string(validateMT548_v1_0_RequestMessageJsonSchemaAsByteArray)
+			requestMessageToTestApiEngineJsonSchema = &tempRequestMessageToTestApiEngineJsonSchema
+
+			// Incoming Response
+			var tempResponseVariablesJsonSchema string
+			tempResponseVariablesJsonSchema = string(validateMT548_v1_0_ResponseVariablesMessageJsonSchemaAsByteArray)
+			responseVariablesJsonSchema = &tempResponseVariablesJsonSchema
+
+		default:
+			sharedCode.Logger.WithFields(logrus.Fields{
+				"id":                     "2a652365-3109-4501-aeee-02702f4ca1b3",
+				"testInstructionUUID":    testInstructionUUID,
+				"testInstructionVersion": testInstructionVersion,
+			}).Fatal("Unhandled version for 'TestInstructionUUID_SubCustody_ValidateMT548'")
+
+		}
+
 	default:
 		sharedCode.Logger.WithFields(logrus.Fields{
 			"id":                  "bca82e83-53bf-4803-9196-31e78966920e",
 			"testInstructionUUID": testInstructionUUID,
-		}).Fatal("Unknown TestInstruction Uuid")
+		}).Fatal("Unhandled TestInstruction Uuid when getting correct json-schemas")
 
 	}
 

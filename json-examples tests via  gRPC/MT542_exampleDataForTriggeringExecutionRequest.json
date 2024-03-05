@@ -1,0 +1,27 @@
+{
+  "DomainIdentificationAnfProtoFileVersionUsedByClient": {
+    "DomainUuid": "7edf2269-a8d3-472c-aed6-8cdcc4a8b6ae",
+    "ExecutionDomainUuid": "7edf2269-a8d3-472c-aed6-8cdcc4a8b6ae",
+    "ProtoFileVersionUsedByClient": "VERSION_0_4"
+  },
+  "TestInstruction": {
+    "TestInstructionAttributes": [
+      {
+        "TestInstructionAttributeType": "TEXTBOX",
+        "TestInstructionAttributeUuid": "11b48728-0228-43cc-8674-af2c72b2dfbf",
+        "TestInstructionAttributeName": "ExpectedToBePassed",
+        "AttributeValueAsString": "true",
+        "AttributeValueUuid": "42f5daf8-499c-42cc-b671-2439096c7ee1",
+        "TestInstructionAttributeTypeUuid": "TestInstructionAttributeTypeUuid",
+        "TestInstructionAttributeTypeName": "TestInstructionAttributeTypeName"
+      }
+    ],
+    "TestInstructionUuid": "e19b32c6-4526-414e-b26b-ae8f8feef72b",
+    "TestInstructionExecutionVersion": 1,
+    "TestInstructionName": "SendMT542",
+    "MajorVersionNumber": 1,
+    "MinorVersionNumber": 0,
+    "TestInstructionExecutionUuid": "ae344db4-2d34-474e-bd91-1b24ac408b75"
+  },
+  "TestCaseExecutionUuid": "a0161997-4323-45a8-93fa-8ff7d64d1b7a"
+}

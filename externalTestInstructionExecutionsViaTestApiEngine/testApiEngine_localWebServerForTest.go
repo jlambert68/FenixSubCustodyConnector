@@ -669,7 +669,7 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 	case "SendMT540_v1_0", "SendMT542_v1_0":
 		// No extra parameters
 
-	case "ValidateMT544_v1_0", "VerifyMT546_v1_0", "VerifyMT548_v1_0":
+	case "ValidateMT544_v1_0", "ValidateMT546_v1_0", "ValidateMT548_v1_0":
 		// Extract 'RelatedReference_54x_20CRELA'
 
 		// *** Extract RelatedReference_54x_20CRELA ****
@@ -706,7 +706,8 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 	default:
 		// Unhandled Extra parameters
 		sharedCode.Logger.WithFields(logrus.Fields{
-			"id": "6b85e2f1-3faa-4880-b89f-b50741ccca72",
+			"id":                   "6b85e2f1-3faa-4880-b89f-b50741ccca72",
+			"testStepActionMethod": testStepActionMethod,
 		}).Fatalln(fmt.Sprintf("Couldn't find 'relatedReference_54x_20CRELA' as input. Exiting..."))
 	}
 
