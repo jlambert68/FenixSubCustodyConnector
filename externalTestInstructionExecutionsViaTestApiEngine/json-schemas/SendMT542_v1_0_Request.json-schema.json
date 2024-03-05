@@ -30,9 +30,7 @@
     },
     "methodParameters": {
       "type": "object",
-      "items": {
-        "$ref": "#/definitions/MethodParameters"
-      }
+      "$ref": "#/definitions/MethodParameters"
     }
   },
   "required": [
@@ -71,6 +69,10 @@
             "true",
             "false"
           ]
+        },
+        "TimeoutTimeInSeconds": {
+          "type": "string",
+          "pattern": "^[0-9]+$"
         }
       },
       "required": [
@@ -78,7 +80,8 @@
         "TestCaseExecutionUuid",
         "TestInstructionExecutionUuid",
         "TestInstructionExecutionVersion",
-        "ExpectedToBePassed"
+        "ExpectedToBePassed",
+        "TimeoutTimeInSeconds"
       ],
       "additionalProperties": false
     }

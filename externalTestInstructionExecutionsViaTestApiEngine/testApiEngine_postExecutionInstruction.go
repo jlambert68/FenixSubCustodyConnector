@@ -47,13 +47,15 @@ func PostTestInstructionUsingRestCall(
 		MethodParameters      map[string]string `json:"methodParameters"`
 	}
 
-	// Add TestCaseExecutionUuid, TestInstructionExecutionUuid, TestInstructionExecutionVersion and TestInstructionVersion
+	// Add TestCaseExecutionUuid, TestInstructionExecutionUuid, TestInstructionExecutionVersion,
+	// TestInstructionVersion and TimeoutTimeInSeconds
 	attributesMap["TestInstructionVersion"] = testInstructionVersion
 	attributesMap["TestCaseExecutionUuid"] = testApiEngineRestApiMessageValues.TestCaseExecutionUuid
 	attributesMap["TestInstructionExecutionUuid"] = testApiEngineRestApiMessageValues.TestInstructionExecutionUuid
 	attributesMap["TestInstructionExecutionVersion"] = strconv.Itoa(int(testApiEngineRestApiMessageValues.
 		TestInstructionExecutionVersion))
 	attributesMap["ExpectedToBePassed"] = string(testApiEngineRestApiMessageValues.TestApiEngineExpectedToBePassedValue)
+	attributesMap["TimeoutTimeInSeconds"] = strconv.Itoa(int(testApiEngineRestApiMessageValues.MaximumExecutionDurationInSeconds))
 
 	// Request to be sent to TestApiEngine
 	var tempTestApiEngineRequest testApiEngineRequestStruct

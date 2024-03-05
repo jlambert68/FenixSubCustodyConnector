@@ -16,6 +16,7 @@ type TestApiEngineRestApiMessageStruct struct {
 	TestApiEngineExpectedToBePassedValue TypeAndStructs.AttributeValueAsStringType
 	TestInstructionAttribute             []TestInstructionAttributesUuidAndValueStruct
 	TestApiEngineAttributes              map[TypeAndStructs.TestInstructionAttributeUUIDType]*testApiEngineClassesAndMethods.TestApiEngineAttributesStruct
+	MaximumExecutionDurationInSeconds    int64
 
 	//Title     string `json:"title"`
 	//Completed bool   `json:"completed"`

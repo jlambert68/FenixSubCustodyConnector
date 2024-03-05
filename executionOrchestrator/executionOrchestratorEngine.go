@@ -9,16 +9,18 @@ import (
 	fenixConnectorAdminShared_sharedCode "github.com/jlambert68/FenixConnectorAdminShared/common_config"
 	"github.com/jlambert68/FenixConnectorAdminShared/fenixConnectorAdminShared"
 	fenixExecutionWorkerGrpcApi "github.com/jlambert68/FenixGrpcApi/FenixExecutionServer/fenixExecutionWorkerGrpcApi/go_grpc_api"
+	"github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/LocalExecutionMethods"
 	"github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers"
 	TestInstruction_SendOnMQTypeMT_SendMT540 "github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_SendOnMQTypeMT_SendMT540/version_1_0"
 	TestInstruction_SendOnMQTypeMT_SendMT542 "github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_SendOnMQTypeMT_SendMT542/version_1_0"
 	TestInstruction_ValidateMQTypeMT54x_ValidateMT544 "github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_ValidateMQTypeMT54x_ValidateMT544/version_1_0"
-	"github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_ValidateMQTypeMT54x_ValidateMT546"
-	"github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_ValidateMQTypeMT54x_ValidateMT548"
+	TestInstruction_ValidateMQTypeMT54x_ValidateMT546 "github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_ValidateMQTypeMT54x_ValidateMT546/version_1_0"
+	TestInstruction_ValidateMQTypeMT54x_ValidateMT548 "github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_ValidateMQTypeMT54x_ValidateMT548/version_1_0"
 	"github.com/jlambert68/FenixTestInstructionsAdminShared/TestInstructionAndTestInstuctionContainerTypes"
 	"github.com/jlambert68/FenixTestInstructionsAdminShared/TypeAndStructs"
 	"github.com/sirupsen/logrus"
 	"google.golang.org/protobuf/types/known/timestamppb"
+	"log"
 	"strconv"
 	"time"
 )
@@ -79,6 +81,17 @@ func getMaxExpectedFinishedTimeStamp(testInstructionExecutionPubSubRequest *feni
 
 
 		*/
+		var methodsForLocalExecutions *LocalExecutionMethods.MethodsForLocalExecutionsStruct
+
+		var methodsForLocalExecutionsAsInterface interface{}
+		var ok bool
+		methodsForLocalExecutionsAsInterface = TestInstruction_SendOnMQTypeMT_SendMT540.TestInstruction_SubCustody_SendMT540.LocalExecutionMethods.Value
+		methodsForLocalExecutions, ok = methodsForLocalExecutionsAsInterface.(*LocalExecutionMethods.MethodsForLocalExecutionsStruct)
+		if ok != true {
+			log.Fatalln("NEJ")
+		}
+		fmt.Println(methodsForLocalExecutions)
+
 		expectedExecutionDuration = 2 * time.Minute
 		maxExpectedFinishedTimeStamp = time.Now().Add(expectedExecutionDuration)
 
@@ -151,6 +164,49 @@ func processTestInstructionExecutionRequest(
 		TestInstruction_ValidateMQTypeMT54x_ValidateMT546.TestInstructionUUID_SubCustody_ValidateMT546,
 		TestInstruction_ValidateMQTypeMT54x_ValidateMT548.TestInstructionUUID_SubCustody_ValidateMT548:
 
+		// Extract maximum timeout time from TestInstruction
+		var methodsForLocalExecutionsAsInterface interface{}
+		switch TypeAndStructs.OriginalElementUUIDType(testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionUuid) {
+		case TestInstruction_SendOnMQTypeMT_SendMT540.TestInstructionUUID_SubCustody_SendMT540:
+			methodsForLocalExecutionsAsInterface = TestInstruction_SendOnMQTypeMT_SendMT540.TestInstruction_SubCustody_SendMT540.LocalExecutionMethods.Value
+
+		case TestInstruction_SendOnMQTypeMT_SendMT542.TestInstructionUUID_SubCustody_SendMT542:
+			methodsForLocalExecutionsAsInterface = TestInstruction_SendOnMQTypeMT_SendMT542.TestInstruction_SubCustody_SendMT542.LocalExecutionMethods.Value
+
+		case TestInstruction_ValidateMQTypeMT54x_ValidateMT544.TestInstructionUUID_SubCustody_ValidateMT544:
+			methodsForLocalExecutionsAsInterface = TestInstruction_ValidateMQTypeMT54x_ValidateMT544.TestInstruction_SubCustody_ValidateMT544.LocalExecutionMethods.Value
+
+		case TestInstruction_ValidateMQTypeMT54x_ValidateMT546.TestInstructionUUID_SubCustody_ValidateMT546:
+			methodsForLocalExecutionsAsInterface = TestInstruction_ValidateMQTypeMT54x_ValidateMT546.TestInstruction_SubCustody_ValidateMT546.LocalExecutionMethods.Value
+
+		case TestInstruction_ValidateMQTypeMT54x_ValidateMT548.TestInstructionUUID_SubCustody_ValidateMT548:
+			methodsForLocalExecutionsAsInterface = TestInstruction_ValidateMQTypeMT54x_ValidateMT548.TestInstruction_SubCustody_ValidateMT548.LocalExecutionMethods.Value
+
+		default:
+			sharedCode.Logger.WithFields(logrus.Fields{
+				"id":                                    "cb71e52e-d27c-4c59-a12f-cebcf577ba0e",
+				"testInstructionExecutionPubSubRequest": testInstructionExecutionPubSubRequest,
+				"TestInstructionUuid":                   TypeAndStructs.OriginalElementUUIDType(testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionUuid),
+			}).Fatalln("Unhandled 'TestInstructionUuid' when extracting Timeout-time to be used towards TestApiEngine")
+		}
+
+		// Convert from interface onto correct typ
+		var methodsForLocalExecutions *LocalExecutionMethods.MethodsForLocalExecutionsStruct
+		var couldBeConverted bool
+
+		methodsForLocalExecutions, couldBeConverted = methodsForLocalExecutionsAsInterface.(*LocalExecutionMethods.MethodsForLocalExecutionsStruct)
+		if couldBeConverted != true {
+			sharedCode.Logger.WithFields(logrus.Fields{
+				"id":                                    "5a4fd568-7858-4e3b-825e-339663c7ac02",
+				"testInstructionExecutionPubSubRequest": testInstructionExecutionPubSubRequest,
+				"TestInstructionUuid":                   TypeAndStructs.OriginalElementUUIDType(testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionUuid),
+			}).Fatalln("Couldn't convert 'interface-type into correct type")
+		}
+
+		// Extract the maximum allowed time before timeout occurs
+		var maximumExecutionDurationInSeconds int64
+		maximumExecutionDurationInSeconds = methodsForLocalExecutions.LocalParametersUsedInRunTime.ExpectedTestInstructionExecutionDurationInSeconds
+
 		// Create version number to be used in attributes request
 		// Also use version number when getting correct json-schemas
 		var testInstructionVersion string
@@ -161,7 +217,10 @@ func processTestInstructionExecutionRequest(
 		// Convert message into message that can be used when sending to TestApiEngine
 		var testApiEngineRestApiMessageValues *executeTestInstructionUsingTestApiEngine.TestApiEngineRestApiMessageStruct
 		testApiEngineRestApiMessageValues, err = executeTestInstructionUsingTestApiEngine.
-			ConvertTestInstructionExecutionIntoTestApiEngineRestCallMessage(testInstructionExecutionPubSubRequest)
+			ConvertTestInstructionExecutionIntoTestApiEngineRestCallMessage(
+				testInstructionExecutionPubSubRequest,
+				maximumExecutionDurationInSeconds)
+
 		if err != nil {
 			// Something wrong when converting the 'TestInstructionExecutionPubSubRequest' into TestApiEngine-structure
 			sharedCode.Logger.WithFields(logrus.Fields{

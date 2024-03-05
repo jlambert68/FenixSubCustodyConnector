@@ -17,7 +17,8 @@ import (
 // ConvertTestInstructionExecutionIntoTestApiEngineRestCallMessage
 // Converts an 'processTestInstructionExecutionPubSubRequest' into message to be sent to TestApiEngine
 func ConvertTestInstructionExecutionIntoTestApiEngineRestCallMessage(
-	processTestInstructionExecutionPubSubRequest *fenixExecutionWorkerGrpcApi.ProcessTestInstructionExecutionPubSubRequest) (
+	processTestInstructionExecutionPubSubRequest *fenixExecutionWorkerGrpcApi.ProcessTestInstructionExecutionPubSubRequest,
+	maximumExecutionDurationInSeconds int64) ( //timeoutTimeInSeconds int
 	TestApiEngineRestApiMessageValues *TestApiEngineRestApiMessageStruct,
 	err error) {
 
@@ -95,6 +96,7 @@ func ConvertTestInstructionExecutionIntoTestApiEngineRestCallMessage(
 		TestApiEngineExpectedToBePassedValue: "",
 		TestInstructionAttribute:             nil,
 		TestApiEngineAttributes:              make(map[TypeAndStructs.TestInstructionAttributeUUIDType]*testApiEngineClassesAndMethods.TestApiEngineAttributesStruct),
+		MaximumExecutionDurationInSeconds:    maximumExecutionDurationInSeconds,
 	}
 
 	// Loop all Attributes and populate message to be used for RestCall to TestApiEngine
