@@ -40,11 +40,22 @@
     "additionalProperties": false,
     "oneOf": [
       {
+        "type": "null"
+      },
+      {
         "properties": {
-          "ResponseVariableUuid": {"const": "8ed1ead9-741b-4115-9f78-f8a7db1d6274"},
-          "ResponseVariableName": {"const": ":20C::SEME//"},
-          "ResponseVariableTypeUuid": {"const": "0f6e945e-1556-4cb0-80e5-e021ebc5d8c1"},
-          "ResponseVariableTypeName": {"const": "54x_:20C::SEME type"}
+          "ResponseVariableUuid": {
+            "const": "8ed1ead9-741b-4115-9f78-f8a7db1d6274"
+          },
+          "ResponseVariableName": {
+            "const": ":20C::SEME//"
+          },
+          "ResponseVariableTypeUuid": {
+            "const": "0f6e945e-1556-4cb0-80e5-e021ebc5d8c1"
+          },
+          "ResponseVariableTypeName": {
+            "const": "54x_:20C::SEME type"
+          }
         }
       }
     ]

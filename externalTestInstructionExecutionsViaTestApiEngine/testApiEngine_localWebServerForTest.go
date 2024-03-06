@@ -352,6 +352,8 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 		testInstructionExecutionUuid            string
 		testInstructionExecutionVersionAsString string
 		testInstructionVersion                  string
+		timeoutTimeInSecondsAsString            string
+		timeoutTimeInSeconds                    int
 		relatedReference_54x_20CRELA            string
 	)
 
@@ -663,6 +665,43 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 
 	}
 
+	// *** Extract TimeoutTimeInSeconds ****
+	variableName = "TimeoutTimeInSeconds"
+	variableType = "String"
+
+	// Verify that Variable exist in json-map and extract variable
+	tempMapVariable, existInMap = methodParameter[variableName]
+	if existInMap == false {
+
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id": "6f6d8909-f7bf-4174-be87-f8a030fbfd59",
+		}).Fatalln(fmt.Sprintf("Missing parameter '%s'", variableName))
+
+	}
+
+	// Transform variable into correct type
+	timeoutTimeInSecondsAsString, canCastTempMapVariableToCorrectVariableType = tempMapVariable.(string)
+	if canCastTempMapVariableToCorrectVariableType == false {
+
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id": "4148e257-16a2-4dfa-931f-cc295275909d",
+		}).Fatalln(fmt.Sprintf(" Parameter '%s' couldn't be transformed into an '%s'",
+			variableName,
+			variableType))
+
+	}
+
+	// Transform 'String' into 'Int
+	timeoutTimeInSeconds, err = strconv.Atoi(timeoutTimeInSecondsAsString)
+	if err != nil {
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id": "4ff0ad02-0f61-4b8f-8e40-8434a4d7bacd",
+		}).Fatalln(fmt.Sprintf(" Parameter '%s' with value '%s' couldn't be converted from 'String' into an 'Integer'",
+			variableName,
+			timeoutTimeInSecondsAsString))
+
+	}
+
 	// Depending on 'testStepActionMethod', extract extra incoming parameters
 	switch testStepActionMethod {
 
@@ -731,7 +770,9 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 
 	// If this TestStep is not expected to be passed then respond her
 	// 'expectedToBePassed' is 'false' - Will always go in here
-	if expectedToBePassedAsString == "false" {
+	// There are special rules for 'SendMT540_v1_0' and 'SendMT542_v1_0', see below
+	if expectedToBePassedAsString == "false" &&
+		testStepActionMethod != "SendMT540_v1_0" && testStepActionMethod != "SendMT542_v1_0" {
 
 		// Create the Response from the "Fenix-code"
 		var tempTestApiEngineFinalTestInstructionExecutionResult TestApiEngineFinalTestInstructionExecutionResultStruct
@@ -744,7 +785,7 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 				TestInstructionExecutionStatusEnum_TIE_FINISHED_NOT_OK)],
 			TestInstructionExecutionStartTimeStamp: tempTestInstructionExecutionStartTimeStamp.Format(time.RFC3339),
 			TestInstructionExecutionEndTimeStamp:   time.Now().Format(time.RFC3339),
-			ResponseVariables:                      nil,
+			ResponseVariables:                      []ResponseVariableStruct{},
 			LogPosts: []LogPostStruct{
 				{
 					LogPostTimeStamp:                     time.Now().Format(time.RFC3339),
@@ -760,6 +801,158 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 		if err != nil {
 			sharedCode.Logger.WithFields(logrus.Fields{
 				"id":  "90b567d0-be45-4819-b1a6-fb8c74541034",
+				"err": err,
+				"tempTestApiEngineFinalTestInstructionExecutionResult": tempTestApiEngineFinalTestInstructionExecutionResult,
+			}).Fatalln("Couldn't convert 'tempTestApiEngineFinalTestInstructionExecutionResult' into json. Exiting...")
+		}
+
+		// Convert '"' into '\"'
+		//var jsonAsString string
+		//jsonAsString = strings.ReplaceAll(string(jsonBytes), `"`, `\"`)
+
+		// Create the TestApiEngine Response
+		var tempTestApiEngineResponseWithResponseValueAsString TestApiEngineResponseWithResponseValueAsStringStruct
+		tempTestApiEngineResponseWithResponseValueAsString = TestApiEngineResponseWithResponseValueAsStringStruct{
+			TestStepExecutionStatus: TestStepExecutionStatusStruct{
+				StatusCode: 4,
+				StatusText: "FETSE_FINISHED_OK",
+			},
+			Details:            "",
+			ResponseValue:      string(jsonBytes),
+			ExecutionTimeStamp: time.Now().Format(time.RFC3339),
+		}
+
+		// Create Header
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK) //TODO Fang must change this
+
+		// Create Response message
+		responseBodydata, _ := json.Marshal(tempTestApiEngineResponseWithResponseValueAsString)
+
+		fmt.Fprintf(w, string(responseBodydata))
+
+		return
+
+	}
+
+	// If this TestStep is not expected to be passed then respond her
+	// 'expectedToBePassed' is 'false' and special rules for 'SendMT540_v1_0'
+	// Here are the special rules for 'SendMT540_v1_0'
+	// 'SendMT540_v1_0' will time out on MaxTimeOutWaitTime
+	if expectedToBePassedAsString == "false" &&
+		testStepActionMethod == "SendMT540_v1_0" {
+
+		// Sleep the maximum expected time
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id": "a552b97c-a438-4338-84ed-75e515bb79c9",
+		}).Info(fmt.Sprintf("...Sleeping for 'MaxTimeOutWaitTime' = '%s' seconds", timeoutTimeInSecondsAsString))
+		time.Sleep(time.Duration(timeoutTimeInSeconds) * time.Second)
+
+		// Create the Response from the "Fenix-code"
+		var tempTestApiEngineFinalTestInstructionExecutionResult TestApiEngineFinalTestInstructionExecutionResultStruct
+		tempTestApiEngineFinalTestInstructionExecutionResult = TestApiEngineFinalTestInstructionExecutionResultStruct{
+			TestApiEngineResponseJsonSchemaVersion: "v1.0",
+			TestInstructionExecutionUUID:           testInstructionExecutionUuid,
+			TestInstructionExecutionVersion:        testInstructionExecutionVersionAsString,
+			TestInstructionExecutionStatus: fenixExecutionWorkerGrpcApi.
+				TestInstructionExecutionStatusEnum_name[int32(fenixExecutionWorkerGrpcApi.
+				TestInstructionExecutionStatusEnum_TIE_TIMEOUT_INTERRUPTION)],
+			TestInstructionExecutionStartTimeStamp: tempTestInstructionExecutionStartTimeStamp.Format(time.RFC3339),
+			TestInstructionExecutionEndTimeStamp:   time.Now().Format(time.RFC3339),
+			ResponseVariables:                      []ResponseVariableStruct{},
+			LogPosts: []LogPostStruct{
+				{
+					LogPostTimeStamp: time.Now().Format(time.RFC3339),
+					LogPostStatus:    fenixExecutionWorkerGrpcApi.LogPostStatusEnum_name[int32(fenixExecutionWorkerGrpcApi.LogPostStatusEnum_EXECUTION_ERROR)],
+					LogPostText: "Variable 'expectedToBePassed' is 'false' and in the mocked " +
+						"version then 'SendMT540_v1_0' will timeout on MaxTimeOutWaitTime",
+					FoundVersusExpectedValueForVariables: nil,
+				},
+			},
+		}
+
+		var jsonBytes []byte
+		jsonBytes, err = json.Marshal(tempTestApiEngineFinalTestInstructionExecutionResult)
+		if err != nil {
+			sharedCode.Logger.WithFields(logrus.Fields{
+				"id":  "607701a4-d33d-48d2-9c60-eea7fdc7da64",
+				"err": err,
+				"tempTestApiEngineFinalTestInstructionExecutionResult": tempTestApiEngineFinalTestInstructionExecutionResult,
+			}).Fatalln("Couldn't convert 'tempTestApiEngineFinalTestInstructionExecutionResult' into json. Exiting...")
+		}
+
+		// Convert '"' into '\"'
+		//var jsonAsString string
+		//jsonAsString = strings.ReplaceAll(string(jsonBytes), `"`, `\"`)
+
+		// Create the TestApiEngine Response
+		var tempTestApiEngineResponseWithResponseValueAsString TestApiEngineResponseWithResponseValueAsStringStruct
+		tempTestApiEngineResponseWithResponseValueAsString = TestApiEngineResponseWithResponseValueAsStringStruct{
+			TestStepExecutionStatus: TestStepExecutionStatusStruct{
+				StatusCode: 4,
+				StatusText: "FETSE_FINISHED_OK",
+			},
+			Details:            "",
+			ResponseValue:      string(jsonBytes),
+			ExecutionTimeStamp: time.Now().Format(time.RFC3339),
+		}
+
+		// Create Header
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK) //TODO Fang must change this
+
+		// Create Response message
+		responseBodydata, _ := json.Marshal(tempTestApiEngineResponseWithResponseValueAsString)
+
+		fmt.Fprintf(w, string(responseBodydata))
+
+		return
+
+	}
+
+	// If this TestStep is not expected to be passed then respond her
+	// 'expectedToBePassed' is 'false' and special rules for 'SendMT542_v1_0'
+	// Here are the special rules for 'SendMT542_v1_0'
+	// 'SendMT542_v1_0' will time out after MaxTimeOutWaitTime
+	if expectedToBePassedAsString == "false" &&
+		testStepActionMethod == "SendMT542_v1_0" {
+
+		// Sleep the maximum expected time + 3 minutes
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id": "67ba63cd-18d0-45ce-966d-a9db3bf95f5b",
+		}).Info(fmt.Sprintf("...Sleeping for 'MaxTimeOutWaitTime' = '%s' seconds + 3 minutes", timeoutTimeInSecondsAsString))
+
+		time.Sleep(time.Duration(timeoutTimeInSeconds+3*60) * time.Second)
+
+		// Create the Response from the "Fenix-code"
+		var tempTestApiEngineFinalTestInstructionExecutionResult TestApiEngineFinalTestInstructionExecutionResultStruct
+		tempTestApiEngineFinalTestInstructionExecutionResult = TestApiEngineFinalTestInstructionExecutionResultStruct{
+			TestApiEngineResponseJsonSchemaVersion: "v1.0",
+			TestInstructionExecutionUUID:           testInstructionExecutionUuid,
+			TestInstructionExecutionVersion:        testInstructionExecutionVersionAsString,
+			TestInstructionExecutionStatus: fenixExecutionWorkerGrpcApi.
+				TestInstructionExecutionStatusEnum_name[int32(fenixExecutionWorkerGrpcApi.
+				TestInstructionExecutionStatusEnum_TIE_TIMEOUT_INTERRUPTION)],
+			TestInstructionExecutionStartTimeStamp: tempTestInstructionExecutionStartTimeStamp.Format(time.RFC3339),
+			TestInstructionExecutionEndTimeStamp:   time.Now().Format(time.RFC3339),
+			ResponseVariables:                      []ResponseVariableStruct{},
+			LogPosts: []LogPostStruct{
+				{
+					LogPostTimeStamp: time.Now().Format(time.RFC3339),
+					LogPostStatus: fenixExecutionWorkerGrpcApi.LogPostStatusEnum_name[int32(
+						fenixExecutionWorkerGrpcApi.LogPostStatusEnum_EXECUTION_ERROR)],
+					LogPostText: "Variable 'expectedToBePassed' is 'false' and in the mocked " +
+						"version then 'SendMT542_v1_0' will timeout after MaxTimeOutWaitTime",
+					FoundVersusExpectedValueForVariables: nil,
+				},
+			},
+		}
+
+		var jsonBytes []byte
+		jsonBytes, err = json.Marshal(tempTestApiEngineFinalTestInstructionExecutionResult)
+		if err != nil {
+			sharedCode.Logger.WithFields(logrus.Fields{
+				"id":  "68526630-d788-4db6-853a-55a00102928d",
 				"err": err,
 				"tempTestApiEngineFinalTestInstructionExecutionResult": tempTestApiEngineFinalTestInstructionExecutionResult,
 			}).Fatalln("Couldn't convert 'tempTestApiEngineFinalTestInstructionExecutionResult' into json. Exiting...")
@@ -936,7 +1129,7 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 				TestInstructionExecutionStatusEnum_TIE_FINISHED_NOT_OK)],
 			TestInstructionExecutionStartTimeStamp: tempTestInstructionExecutionStartTimeStamp.Format(time.RFC3339),
 			TestInstructionExecutionEndTimeStamp:   time.Now().Format(time.RFC3339),
-			ResponseVariables:                      nil,
+			ResponseVariables:                      []ResponseVariableStruct{},
 			LogPosts: []LogPostStruct{
 				{
 					LogPostTimeStamp:                     time.Now().Format(time.RFC3339),
