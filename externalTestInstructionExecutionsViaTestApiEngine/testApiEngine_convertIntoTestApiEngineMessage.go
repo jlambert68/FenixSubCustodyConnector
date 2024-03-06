@@ -29,7 +29,7 @@ func ConvertTestInstructionExecutionIntoTestApiEngineRestCallMessage(
 		testInstructionExecutionUuid    string
 		testInstructionExecutionVersion uint32
 	)
-	testInstructionUuid = processTestInstructionExecutionPubSubRequest.GetTestInstruction().GetTestInstructionUuid()
+	testInstructionUuid = processTestInstructionExecutionPubSubRequest.GetTestInstruction().GetTestInstructionOriginalUuid()
 	testCaseExecutionUuid = processTestInstructionExecutionPubSubRequest.GetTestCaseExecutionUuid()
 	testInstructionExecutionUuid = processTestInstructionExecutionPubSubRequest.GetTestInstruction().GetTestInstructionExecutionUuid()
 	testInstructionExecutionVersion = processTestInstructionExecutionPubSubRequest.GetTestInstruction().GetTestInstructionExecutionVersion()

@@ -52,7 +52,7 @@ func getMaxExpectedFinishedTimeStamp(testInstructionExecutionPubSubRequest *feni
 	var expectedExecutionDuration time.Duration
 
 	// Depending on TestInstruction calculate or set 'MaxExpectedFinishedTimeStamp'
-	switch TypeAndStructs.OriginalElementUUIDType(testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionUuid) {
+	switch TypeAndStructs.OriginalElementUUIDType(testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionOriginalUuid) {
 
 	case TestInstruction_SendOnMQTypeMT_SendMT540.TestInstructionUUID_SubCustody_SendMT540:
 		/*
@@ -71,7 +71,7 @@ func getMaxExpectedFinishedTimeStamp(testInstructionExecutionPubSubRequest *feni
 			default:
 				sharedCode.Logger.WithFields(logrus.Fields{
 					"id": "ff8e9a06-cdca-45bc-bb19-24eb290a8502",
-					"testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionUuid": testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionUuid,
+					"testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionOriginalUuid": testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionOriginalUuid,
 					"version": version,
 				}).Error("Unhandled version")
 
@@ -106,12 +106,12 @@ func getMaxExpectedFinishedTimeStamp(testInstructionExecutionPubSubRequest *feni
 	default:
 		sharedCode.Logger.WithFields(logrus.Fields{
 			"id": "5e2fda4c-e5fe-4c6d-88db-0fadcae1d5ca",
-			"testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionUuid": testInstructionExecutionPubSubRequest.
-				TestInstruction.TestInstructionUuid,
+			"testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionOriginalUuid": testInstructionExecutionPubSubRequest.
+				TestInstruction.TestInstructionOriginalUuid,
 		}).Error("Unknown TestInstruction Uuid")
 
 		err = errors.New(fmt.Sprintf("Unknown TestInstruction Uuid: %s",
-			testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionUuid))
+			testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionOriginalUuid))
 
 		expectedExecutionDuration = 0 * time.Minute
 		maxExpectedFinishedTimeStamp = time.Now().Add(expectedExecutionDuration)
@@ -155,7 +155,7 @@ func processTestInstructionExecutionRequest(
 	tempTestInstructionExecutionStartTimeStamp = timestamppb.Now()
 
 	// Depending on TestInstruction then choose how to execution the TestInstruction
-	switch TypeAndStructs.OriginalElementUUIDType(testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionUuid) {
+	switch TypeAndStructs.OriginalElementUUIDType(testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionOriginalUuid) {
 
 	// Send a MT54x on MQ or Validate MT54x
 	case TestInstruction_SendOnMQTypeMT_SendMT540.TestInstructionUUID_SubCustody_SendMT540,
@@ -166,7 +166,7 @@ func processTestInstructionExecutionRequest(
 
 		// Extract maximum timeout time from TestInstruction
 		var methodsForLocalExecutionsAsInterface interface{}
-		switch TypeAndStructs.OriginalElementUUIDType(testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionUuid) {
+		switch TypeAndStructs.OriginalElementUUIDType(testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionOriginalUuid) {
 		case TestInstruction_SendOnMQTypeMT_SendMT540.TestInstructionUUID_SubCustody_SendMT540:
 			methodsForLocalExecutionsAsInterface = TestInstruction_SendOnMQTypeMT_SendMT540.TestInstruction_SubCustody_SendMT540.LocalExecutionMethods.Value
 
@@ -186,7 +186,7 @@ func processTestInstructionExecutionRequest(
 			sharedCode.Logger.WithFields(logrus.Fields{
 				"id":                                    "cb71e52e-d27c-4c59-a12f-cebcf577ba0e",
 				"testInstructionExecutionPubSubRequest": testInstructionExecutionPubSubRequest,
-				"TestInstructionUuid":                   TypeAndStructs.OriginalElementUUIDType(testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionUuid),
+				"TestInstructionUuid":                   TypeAndStructs.OriginalElementUUIDType(testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionOriginalUuid),
 			}).Fatalln("Unhandled 'TestInstructionUuid' when extracting Timeout-time to be used towards TestApiEngine")
 		}
 
@@ -199,7 +199,7 @@ func processTestInstructionExecutionRequest(
 			sharedCode.Logger.WithFields(logrus.Fields{
 				"id":                                    "5a4fd568-7858-4e3b-825e-339663c7ac02",
 				"testInstructionExecutionPubSubRequest": testInstructionExecutionPubSubRequest,
-				"TestInstructionUuid":                   TypeAndStructs.OriginalElementUUIDType(testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionUuid),
+				"TestInstructionUuid":                   TypeAndStructs.OriginalElementUUIDType(testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionOriginalUuid),
 			}).Fatalln("Couldn't convert 'interface-type into correct type")
 		}
 
@@ -236,11 +236,11 @@ func processTestInstructionExecutionRequest(
 				"TestApiEngine-structure in Connector. "+
 				"TestCaseExecutionUuid='%s', "+
 				"testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionExecutionUuid='%s', "+
-				"TestInstructionExecutionVersion='%s'. "+
+				"TestInstructionExecutionVersion='%d'. "+
 				"Errror='%s'",
 				testInstructionExecutionPubSubRequest.TestCaseExecutionUuid,
 				testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionExecutionUuid,
-				"1",
+				testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionExecutionVersion,
 				err.Error())
 
 			// Generate new LogPostUuid
@@ -285,7 +285,7 @@ func processTestInstructionExecutionRequest(
 		var responseVariablesJsonSchema *string
 
 		// Get correct Response Schema depending on message type
-		switch TypeAndStructs.OriginalElementUUIDType(testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionUuid) {
+		switch TypeAndStructs.OriginalElementUUIDType(testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionOriginalUuid) {
 
 		// Send a MT540 on MQ
 		case TestInstruction_SendOnMQTypeMT_SendMT540.TestInstructionUUID_SubCustody_SendMT540:
@@ -338,7 +338,7 @@ func processTestInstructionExecutionRequest(
 
 			sharedCode.Logger.WithFields(logrus.Fields{
 				"id": "6f559867-9061-4985-8b01-38b01e5aacd6",
-				"TypeAndStructs.OriginalElementUUIDType(testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionUuid)": TypeAndStructs.OriginalElementUUIDType(testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionUuid),
+				"TypeAndStructs.OriginalElementUUIDType(testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionOriginalUuid)": TypeAndStructs.OriginalElementUUIDType(testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionOriginalUuid),
 			}).Fatalln("Unhandled message when getting json-schema for Response message. Hard exit")
 
 			break
@@ -391,7 +391,7 @@ func processTestInstructionExecutionRequest(
 	default:
 		sharedCode.Logger.WithFields(logrus.Fields{
 			"id": "ba4e0810-a870-4ab0-b2b1-2f5fc02c2bf7",
-			"testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionUuid": testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionUuid,
+			"testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionOriginalUuid": testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionOriginalUuid,
 		}).Fatal("Unknown TestInstruction Uuid")
 	}
 
@@ -413,7 +413,9 @@ func validateAndConvertTestApiEngineResponse(
 	// Validate that outgoing in incoming TestInstructionExecution is the same
 	if testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionExecutionUuid !=
 		testApiEngineFinalTestInstructionExecutionResult.TestInstructionExecutionUUID ||
-		"1" != testApiEngineFinalTestInstructionExecutionResult.TestInstructionExecutionVersion {
+		strconv.Itoa(int(testInstructionExecutionPubSubRequest.TestInstruction.
+			TestInstructionExecutionVersion)) != testApiEngineFinalTestInstructionExecutionResult.
+			TestInstructionExecutionVersion {
 
 		sharedCode.Logger.WithFields(logrus.Fields{
 			"id":                                    "c033b03e-88e1-4d0a-8b92-e1603ccc13c8",
@@ -427,11 +429,11 @@ func validateAndConvertTestApiEngineResponse(
 			"TestCaseExecutionUuid='%s', "+
 			"testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionExecutionUuid='%s' <> "+
 			"testApiEngineFinalTestInstructionExecutionResult.TestInstructionExecutionUUID='%s', "+
-			"TestInstructionExecutionVersion='%s' <> testApiEngineFinalTestInstructionExecutionResult.TestInstructionExecutionVersion='%s'",
+			"TestInstructionExecutionVersion='%d' <> testApiEngineFinalTestInstructionExecutionResult.TestInstructionExecutionVersion='%s'",
 			testInstructionExecutionPubSubRequest.TestCaseExecutionUuid,
 			testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionExecutionUuid,
 			testApiEngineFinalTestInstructionExecutionResult.TestInstructionExecutionUUID,
-			"1",
+			testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionExecutionVersion,
 			testApiEngineFinalTestInstructionExecutionResult.TestInstructionExecutionVersion)
 
 		// Generate new LogPostUuid
@@ -487,12 +489,12 @@ func validateAndConvertTestApiEngineResponse(
 		logPostText = fmt.Sprintf("Couldn't generate parser layout from 'TestInstructionExecutionStartTimeStamp'. "+
 			"TestCaseExecutionUuid='%s', "+
 			"testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionExecutionUuid='%s', "+
-			"TestInstructionExecutionVersion='%s'. "+
+			"TestInstructionExecutionVersion='%d'. "+
 			"testApiEngineFinalTestInstructionExecutionResult.TestInstructionExecutionStartTimeStamp='%s"+
 			"Errror='%s'",
 			testInstructionExecutionPubSubRequest.TestCaseExecutionUuid,
 			testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionExecutionUuid,
-			"1",
+			testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionExecutionVersion,
 			testApiEngineFinalTestInstructionExecutionResult.TestInstructionExecutionStartTimeStamp,
 			err.Error())
 
@@ -550,12 +552,12 @@ func validateAndConvertTestApiEngineResponse(
 				"'testApiEngineFinalTestInstructionExecutionResult'. "+
 				"TestCaseExecutionUuid='%s', "+
 				"testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionExecutionUuid='%s', "+
-				"TestInstructionExecutionVersion='%s'. "+
+				"TestInstructionExecutionVersion='%d'. "+
 				"testApiEngineFinalTestInstructionExecutionResult.TestInstructionExecutionStartTimeStamp='%s"+
 				"Errror='%s'",
 				testInstructionExecutionPubSubRequest.TestCaseExecutionUuid,
 				testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionExecutionUuid,
-				"1",
+				testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionExecutionVersion,
 				testApiEngineFinalTestInstructionExecutionResult.TestInstructionExecutionStartTimeStamp,
 				err.Error())
 
@@ -613,12 +615,12 @@ func validateAndConvertTestApiEngineResponse(
 		logPostText = fmt.Sprintf("Couldn't generate parser layout from 'TestInstructionExecutionEndTimeStamp'. "+
 			"TestCaseExecutionUuid='%s', "+
 			"testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionExecutionUuid='%s', "+
-			"TestInstructionExecutionVersion='%s'. "+
+			"TestInstructionExecutionVersion='%d'. "+
 			"testApiEngineFinalTestInstructionExecutionResult.TestInstructionExecutionEndTimeStamp='%s"+
 			"Errror='%s'",
 			testInstructionExecutionPubSubRequest.TestCaseExecutionUuid,
 			testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionExecutionUuid,
-			"1",
+			testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionExecutionVersion,
 			testApiEngineFinalTestInstructionExecutionResult.TestInstructionExecutionEndTimeStamp,
 			err.Error())
 
@@ -676,12 +678,12 @@ func validateAndConvertTestApiEngineResponse(
 				"'testApiEngineFinalTestInstructionExecutionResult'. "+
 				"TestCaseExecutionUuid='%s', "+
 				"testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionExecutionUuid='%s', "+
-				"TestInstructionExecutionVersion='%s'. "+
+				"TestInstructionExecutionVersion='%d'. "+
 				"testApiEngineFinalTestInstructionExecutionResult.TestInstructionExecutionEndTimeStamp='%s"+
 				"Errror='%s'",
 				testInstructionExecutionPubSubRequest.TestCaseExecutionUuid,
 				testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionExecutionUuid,
-				"1",
+				testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionExecutionVersion,
 				testApiEngineFinalTestInstructionExecutionResult.TestInstructionExecutionEndTimeStamp,
 				err.Error())
 
@@ -742,12 +744,12 @@ func validateAndConvertTestApiEngineResponse(
 			"TestCaseExecutionUuid='%s', "+
 			"testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionExecutionUuid='%s' <> "+
 			"testApiEngineFinalTestInstructionExecutionResult.TestInstructionExecutionUUID='%s', "+
-			"TestInstructionExecutionVersion='%s' <> testApiEngineFinalTestInstructionExecutionResult.TestInstructionExecutionVersion='%s', "+
+			"TestInstructionExecutionVersion='%d' <> testApiEngineFinalTestInstructionExecutionResult.TestInstructionExecutionVersion='%s', "+
 			"testApiEngineFinalTestInstructionExecutionResult.TestInstructionExecutionStatus='%s'",
 			testInstructionExecutionPubSubRequest.TestCaseExecutionUuid,
 			testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionExecutionUuid,
 			testApiEngineFinalTestInstructionExecutionResult.TestInstructionExecutionUUID,
-			"1",
+			testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionExecutionVersion,
 			testApiEngineFinalTestInstructionExecutionResult.TestInstructionExecutionVersion,
 			testApiEngineFinalTestInstructionExecutionResult.TestInstructionExecutionStatus)
 
@@ -853,12 +855,12 @@ func validateAndConvertTestApiEngineResponse(
 				"TestCaseExecutionUuid='%s', "+
 				"testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionExecutionUuid='%s' <> "+
 				"testApiEngineFinalTestInstructionExecutionResult.TestInstructionExecutionUUID='%s', "+
-				"TestInstructionExecutionVersion='%s' <> testApiEngineFinalTestInstructionExecutionResult.TestInstructionExecutionVersion='%s', "+
+				"TestInstructionExecutionVersion='%d' <> testApiEngineFinalTestInstructionExecutionResult.TestInstructionExecutionVersion='%s', "+
 				"tempLogPost.LogPostStatus='%s'",
 				testInstructionExecutionPubSubRequest.TestCaseExecutionUuid,
 				testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionExecutionUuid,
 				testApiEngineFinalTestInstructionExecutionResult.TestInstructionExecutionUUID,
-				"1",
+				testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionExecutionVersion,
 				testApiEngineFinalTestInstructionExecutionResult.TestInstructionExecutionVersion,
 				tempLogPost.LogPostStatus)
 
@@ -914,12 +916,12 @@ func validateAndConvertTestApiEngineResponse(
 			logPostText = fmt.Sprintf("Couldn't generate parser layout from 'LogPostTimeStamp'. "+
 				"TestCaseExecutionUuid='%s', "+
 				"testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionExecutionUuid='%s', "+
-				"TestInstructionExecutionVersion='%s'. "+
+				"TestInstructionExecutionVersion='%d'. "+
 				"tempLogPost.LogPostTimeStamp='%s"+
 				"Errror='%s'",
 				testInstructionExecutionPubSubRequest.TestCaseExecutionUuid,
 				testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionExecutionUuid,
-				"1",
+				testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionExecutionVersion,
 				tempLogPost.LogPostTimeStamp,
 				err.Error())
 
@@ -976,12 +978,12 @@ func validateAndConvertTestApiEngineResponse(
 					"'testApiEngineFinalTestInstructionExecutionResult'. "+
 					"TestCaseExecutionUuid='%s', "+
 					"testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionExecutionUuid='%s', "+
-					"TestInstructionExecutionVersion='%s'. "+
+					"TestInstructionExecutionVersion='%d'. "+
 					"tempLogPost.LogPostTimeStamp='%s"+
 					"Errror='%s'",
 					testInstructionExecutionPubSubRequest.TestCaseExecutionUuid,
 					testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionExecutionUuid,
-					"1",
+					testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionExecutionVersion,
 					tempLogPost.LogPostTimeStamp,
 					err.Error())
 
@@ -1055,7 +1057,10 @@ func validateAndConvertTestApiEngineResponse(
 		ClientSystemIdentification: nil,
 		TestInstructionExecutionUuid: testInstructionExecutionPubSubRequest.GetTestInstruction().
 			GetTestInstructionExecutionUuid(),
-		TestInstructionExecutionVersion: 1,
+		TestInstructionExecutionVersion: int32(testInstructionExecutionPubSubRequest.GetTestInstruction().
+			GetTestInstructionExecutionVersion()),
+		MatureTestInstructionUuid: testInstructionExecutionPubSubRequest.GetTestInstruction().
+			GetMatureTestInstructionUuid(),
 		TestInstructionExecutionStatus: fenixExecutionWorkerGrpcApi.TestInstructionExecutionStatusEnum(
 			testInstructionExecutionStatus),
 		TestInstructionExecutionStartTimeStamp: timestamppb.New(testInstructionExecutionStartTimeStamp),
