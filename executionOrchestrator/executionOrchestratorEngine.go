@@ -3,7 +3,6 @@ package executionOrchestrator
 import (
 	executeTestInstructionUsingTestApiEngine "FenixSubCustodyConnector/externalTestInstructionExecutionsViaTestApiEngine"
 	"FenixSubCustodyConnector/sharedCode"
-	"errors"
 	"fmt"
 	"github.com/google/uuid"
 	fenixConnectorAdminShared_sharedCode "github.com/jlambert68/FenixConnectorAdminShared/common_config"
@@ -20,7 +19,6 @@ import (
 	"github.com/jlambert68/FenixTestInstructionsAdminShared/TypeAndStructs"
 	"github.com/sirupsen/logrus"
 	"google.golang.org/protobuf/types/known/timestamppb"
-	"log"
 	"strconv"
 	"time"
 )
@@ -49,72 +47,238 @@ func getMaxExpectedFinishedTimeStamp(testInstructionExecutionPubSubRequest *feni
 	maxExpectedFinishedTimeStamp time.Time,
 	err error) {
 
-	var expectedExecutionDuration time.Duration
+	// expectedExecutionDurationInSeconds is extracted from TestInstruction-data
+	var expectedExecutionDurationInSeconds int64
+
+	// reference to where expectedExecutionDurationInSeconds can be found
+	var methodsForLocalExecutions *LocalExecutionMethods.MethodsForLocalExecutionsStruct
+
+	// Create Version for TestInstruction
+	var version string
+	version = fmt.Sprintf("v%s.%s",
+		strconv.Itoa(int(testInstructionExecutionPubSubRequest.TestInstruction.GetMajorVersionNumber())),
+		strconv.Itoa(int(testInstructionExecutionPubSubRequest.TestInstruction.GetMinorVersionNumber())))
 
 	// Depending on TestInstruction calculate or set 'MaxExpectedFinishedTimeStamp'
 	switch TypeAndStructs.OriginalElementUUIDType(testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionOriginalUuid) {
 
 	case TestInstruction_SendOnMQTypeMT_SendMT540.TestInstructionUUID_SubCustody_SendMT540:
-		/*
-			var version string
-			version = string(testInstructionExecutionPubSubRequest.TestInstruction.GetMajorVersionNumber()) +
-				"_" +
-				string(testInstructionExecutionPubSubRequest.TestInstruction.GetMinorVersionNumber())
 
-			// Extract execution duration depending on version
-			switch version {
-			case "1_0":
-				TestInstruction_GeneralSetupTearDown_TestCaseSetUp_version_1_0..LocalExecutionMethods
+		// Extract execution duration based on TestInstruction version
+		switch version {
+		case "v1.0":
 
-			case "1_1":
-
-			default:
+			var methodsForLocalExecutionsAsInterface interface{}
+			var ok bool
+			methodsForLocalExecutionsAsInterface = TestInstruction_SendOnMQTypeMT_SendMT540.TestInstruction_SubCustody_SendMT540.LocalExecutionMethods.Value
+			methodsForLocalExecutions, ok = methodsForLocalExecutionsAsInterface.(*LocalExecutionMethods.MethodsForLocalExecutionsStruct)
+			if ok != true {
 				sharedCode.Logger.WithFields(logrus.Fields{
-					"id": "ff8e9a06-cdca-45bc-bb19-24eb290a8502",
-					"testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionOriginalUuid": testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionOriginalUuid,
+					"id": "f8febbf5-0844-47d7-8a9e-9e639ecfabe6",
+					"TestInstructionOriginalUuid": testInstructionExecutionPubSubRequest.TestInstruction.
+						TestInstructionOriginalUuid,
+					"TestInstructionName": testInstructionExecutionPubSubRequest.TestInstruction.
+						TestInstructionName,
 					"version": version,
-				}).Error("Unhandled version")
-
-				expectedExecutionDuration = 2 * time.Minute
-				maxExpectedFinishedTimeStamp = time.Now().Add(expectedExecutionDuration)
+				}).Fatalln("Couldn't extract 'methodsForLocalExecutions', will exit")
 			}
 
+			// Extract duration
+			expectedExecutionDurationInSeconds = methodsForLocalExecutions.LocalParametersUsedInRunTime.
+				ExpectedTestInstructionExecutionDurationInSeconds
 
-		*/
-		var methodsForLocalExecutions *LocalExecutionMethods.MethodsForLocalExecutionsStruct
+			// Create Max Finished TimeStamp
+			maxExpectedFinishedTimeStamp = time.Now().Add(time.Duration(expectedExecutionDurationInSeconds) * time.Second)
 
-		var methodsForLocalExecutionsAsInterface interface{}
-		var ok bool
-		methodsForLocalExecutionsAsInterface = TestInstruction_SendOnMQTypeMT_SendMT540.TestInstruction_SubCustody_SendMT540.LocalExecutionMethods.Value
-		methodsForLocalExecutions, ok = methodsForLocalExecutionsAsInterface.(*LocalExecutionMethods.MethodsForLocalExecutionsStruct)
-		if ok != true {
-			log.Fatalln("NEJ")
+		default:
+			sharedCode.Logger.WithFields(logrus.Fields{
+				"id": "86af1deb-795c-4a0a-b4ac-766ff5ab4668",
+				"TestInstructionOriginalUuid": testInstructionExecutionPubSubRequest.TestInstruction.
+					TestInstructionOriginalUuid,
+				"TestInstructionName": testInstructionExecutionPubSubRequest.TestInstruction.
+					TestInstructionName,
+				"version": version,
+			}).Fatalln("Unhandled version, will exit")
+
 		}
-		fmt.Println(methodsForLocalExecutions)
-
-		expectedExecutionDuration = 2 * time.Minute
-		maxExpectedFinishedTimeStamp = time.Now().Add(expectedExecutionDuration)
 
 	case TestInstruction_SendOnMQTypeMT_SendMT542.TestInstructionUUID_SubCustody_SendMT542:
-		expectedExecutionDuration = 2 * time.Minute
-		maxExpectedFinishedTimeStamp = time.Now().Add(expectedExecutionDuration)
+
+		// Extract execution duration based on TestInstruction version
+		switch version {
+		case "v1.0":
+
+			var methodsForLocalExecutionsAsInterface interface{}
+			var ok bool
+			methodsForLocalExecutionsAsInterface = TestInstruction_SendOnMQTypeMT_SendMT542.
+				TestInstruction_SubCustody_SendMT542.LocalExecutionMethods.Value
+			methodsForLocalExecutions, ok = methodsForLocalExecutionsAsInterface.(*LocalExecutionMethods.
+				MethodsForLocalExecutionsStruct)
+			if ok != true {
+				sharedCode.Logger.WithFields(logrus.Fields{
+					"id": "3a8f0e31-7c58-45c5-a3e6-f00dccfe2c2f",
+					"TestInstructionOriginalUuid": testInstructionExecutionPubSubRequest.TestInstruction.
+						TestInstructionOriginalUuid,
+					"TestInstructionName": testInstructionExecutionPubSubRequest.TestInstruction.
+						TestInstructionName,
+					"version": version,
+				}).Fatalln("Couldn't extract 'methodsForLocalExecutions', will exit")
+			}
+
+			// Extract duration
+			expectedExecutionDurationInSeconds = methodsForLocalExecutions.LocalParametersUsedInRunTime.
+				ExpectedTestInstructionExecutionDurationInSeconds
+
+			// Create Max Finished TimeStamp
+			maxExpectedFinishedTimeStamp = time.Now().Add(time.Duration(expectedExecutionDurationInSeconds) * time.Second)
+
+		default:
+			sharedCode.Logger.WithFields(logrus.Fields{
+				"id": "c2b0d15d-6259-4a7c-9503-022d33ffa4a3",
+				"TestInstructionOriginalUuid": testInstructionExecutionPubSubRequest.TestInstruction.
+					TestInstructionOriginalUuid,
+				"TestInstructionName": testInstructionExecutionPubSubRequest.TestInstruction.
+					TestInstructionName,
+				"version": version,
+			}).Fatalln("Unhandled version, will exit")
+
+		}
 
 	case TestInstruction_ValidateMQTypeMT54x_ValidateMT544.TestInstructionUUID_SubCustody_ValidateMT544:
-		expectedExecutionDuration = 2 * time.Minute
-		maxExpectedFinishedTimeStamp = time.Now().Add(expectedExecutionDuration)
+
+		// Extract execution duration based on TestInstruction version
+		switch version {
+
+		case "v1.0":
+			var methodsForLocalExecutionsAsInterface interface{}
+			var ok bool
+			methodsForLocalExecutionsAsInterface = TestInstruction_ValidateMQTypeMT54x_ValidateMT544.
+				TestInstruction_SubCustody_ValidateMT544.LocalExecutionMethods.Value
+			methodsForLocalExecutions, ok = methodsForLocalExecutionsAsInterface.(*LocalExecutionMethods.
+				MethodsForLocalExecutionsStruct)
+			if ok != true {
+				sharedCode.Logger.WithFields(logrus.Fields{
+					"id": "21780b6f-c4d2-4bde-b037-82708cf807fd",
+					"TestInstructionOriginalUuid": testInstructionExecutionPubSubRequest.TestInstruction.
+						TestInstructionOriginalUuid,
+					"TestInstructionName": testInstructionExecutionPubSubRequest.TestInstruction.
+						TestInstructionName,
+					"version": version,
+				}).Fatalln("Couldn't extract 'methodsForLocalExecutions', will exit")
+			}
+
+			// Extract duration
+			expectedExecutionDurationInSeconds = methodsForLocalExecutions.LocalParametersUsedInRunTime.
+				ExpectedTestInstructionExecutionDurationInSeconds
+
+			// Create Max Finished TimeStamp
+			maxExpectedFinishedTimeStamp = time.Now().Add(time.Duration(expectedExecutionDurationInSeconds) * time.Second)
+
+		default:
+			sharedCode.Logger.WithFields(logrus.Fields{
+				"id": "86af1deb-795c-4a0a-b4ac-766ff5ab4668",
+				"TestInstructionOriginalUuid": testInstructionExecutionPubSubRequest.TestInstruction.
+					TestInstructionOriginalUuid,
+				"TestInstructionName": testInstructionExecutionPubSubRequest.TestInstruction.
+					TestInstructionName,
+				"version": version,
+			}).Fatalln("Unhandled version, will exit")
+
+		}
+
+	case TestInstruction_ValidateMQTypeMT54x_ValidateMT546.TestInstructionUUID_SubCustody_ValidateMT546:
+
+		// Extract execution duration based on TestInstruction version
+		switch version {
+
+		case "v1.0":
+			var methodsForLocalExecutionsAsInterface interface{}
+			var ok bool
+			methodsForLocalExecutionsAsInterface = TestInstruction_ValidateMQTypeMT54x_ValidateMT546.
+				TestInstruction_SubCustody_ValidateMT546.LocalExecutionMethods.Value
+			methodsForLocalExecutions, ok = methodsForLocalExecutionsAsInterface.(*LocalExecutionMethods.
+				MethodsForLocalExecutionsStruct)
+			if ok != true {
+				sharedCode.Logger.WithFields(logrus.Fields{
+					"id": "b1cbc0b9-2339-4ad2-9e35-01b843fa8b19",
+					"TestInstructionOriginalUuid": testInstructionExecutionPubSubRequest.TestInstruction.
+						TestInstructionOriginalUuid,
+					"TestInstructionName": testInstructionExecutionPubSubRequest.TestInstruction.
+						TestInstructionName,
+					"version": version,
+				}).Fatalln("Couldn't extract 'methodsForLocalExecutions', will exit")
+			}
+
+			// Extract duration
+			expectedExecutionDurationInSeconds = methodsForLocalExecutions.LocalParametersUsedInRunTime.
+				ExpectedTestInstructionExecutionDurationInSeconds
+
+			// Create Max Finished TimeStamp
+			maxExpectedFinishedTimeStamp = time.Now().Add(time.Duration(expectedExecutionDurationInSeconds) * time.Second)
+
+		default:
+			sharedCode.Logger.WithFields(logrus.Fields{
+				"id": "b4361d83-baf8-4681-947f-d2a8148223a7",
+				"TestInstructionOriginalUuid": testInstructionExecutionPubSubRequest.TestInstruction.
+					TestInstructionOriginalUuid,
+				"TestInstructionName": testInstructionExecutionPubSubRequest.TestInstruction.
+					TestInstructionName,
+				"version": version,
+			}).Fatalln("Unhandled version, will exit")
+
+		}
+
+	case TestInstruction_ValidateMQTypeMT54x_ValidateMT548.TestInstructionUUID_SubCustody_ValidateMT548:
+
+		// Extract execution duration based on TestInstruction version
+		switch version {
+
+		case "v1.0":
+			var methodsForLocalExecutionsAsInterface interface{}
+			var ok bool
+			methodsForLocalExecutionsAsInterface = TestInstruction_ValidateMQTypeMT54x_ValidateMT548.
+				TestInstruction_SubCustody_ValidateMT548.LocalExecutionMethods.Value
+			methodsForLocalExecutions, ok = methodsForLocalExecutionsAsInterface.(*LocalExecutionMethods.
+				MethodsForLocalExecutionsStruct)
+			if ok != true {
+				sharedCode.Logger.WithFields(logrus.Fields{
+					"id": "a2058734-f8eb-4eec-a8f2-f37b89a16620",
+					"TestInstructionOriginalUuid": testInstructionExecutionPubSubRequest.TestInstruction.
+						TestInstructionOriginalUuid,
+					"TestInstructionName": testInstructionExecutionPubSubRequest.TestInstruction.
+						TestInstructionName,
+					"version": version,
+				}).Fatalln("Couldn't extract 'methodsForLocalExecutions', will exit")
+			}
+
+			// Extract duration
+			expectedExecutionDurationInSeconds = methodsForLocalExecutions.LocalParametersUsedInRunTime.
+				ExpectedTestInstructionExecutionDurationInSeconds
+
+			// Create Max Finished TimeStamp
+			maxExpectedFinishedTimeStamp = time.Now().Add(time.Duration(expectedExecutionDurationInSeconds) * time.Second)
+
+		default:
+			sharedCode.Logger.WithFields(logrus.Fields{
+				"id": "e01ce31f-f2f9-494d-9824-a66032210c5a",
+				"TestInstructionOriginalUuid": testInstructionExecutionPubSubRequest.TestInstruction.
+					TestInstructionOriginalUuid,
+				"TestInstructionName": testInstructionExecutionPubSubRequest.TestInstruction.
+					TestInstructionName,
+				"version": version,
+			}).Fatalln("Unhandled version, will exit")
+
+		}
 
 	default:
 		sharedCode.Logger.WithFields(logrus.Fields{
-			"id": "5e2fda4c-e5fe-4c6d-88db-0fadcae1d5ca",
-			"testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionOriginalUuid": testInstructionExecutionPubSubRequest.
+			"id": "4363d5dc-8901-437e-913a-3aae332f859c",
+			"TestInstructionOriginalUuid": testInstructionExecutionPubSubRequest.
 				TestInstruction.TestInstructionOriginalUuid,
-		}).Error("Unknown TestInstruction Uuid")
+			"TestInstructionName": testInstructionExecutionPubSubRequest.
+				TestInstruction.TestInstructionName,
+		}).Fatalln("Unknown TestInstruction Uuid, will Exit")
 
-		err = errors.New(fmt.Sprintf("Unknown TestInstruction Uuid: %s",
-			testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionOriginalUuid))
-
-		expectedExecutionDuration = 0 * time.Minute
-		maxExpectedFinishedTimeStamp = time.Now().Add(expectedExecutionDuration)
 	}
 
 	return maxExpectedFinishedTimeStamp, err
