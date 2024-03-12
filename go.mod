@@ -5,11 +5,11 @@ go 1.21
 require (
 	github.com/google/uuid v1.6.0
 	github.com/gorilla/mux v1.8.1
-	github.com/jlambert68/FenixConnectorAdminShared v0.0.0-20240306143612-faf7447bc36c
+	github.com/jlambert68/FenixConnectorAdminShared v0.0.0-20240312182053-af2c2886036f
 	github.com/jlambert68/FenixGrpcApi v0.0.0-20240306175605-aff905beac2d
-	github.com/jlambert68/FenixSubCustodyTestInstructionAdmin v0.0.0-20240306095827-aebe620917a4
+	github.com/jlambert68/FenixSubCustodyTestInstructionAdmin v0.0.0-20240311193716-dc033a20a26e
 	github.com/jlambert68/FenixSyncShared v0.0.0-20240215140904-db0840b5d70a
-	github.com/jlambert68/FenixTestInstructionsAdminShared v0.0.0-20240219141728-8af453f0932d
+	github.com/jlambert68/FenixTestInstructionsAdminShared v0.0.0-20240312181725-d712a9d80efe
 	github.com/santhosh-tekuri/jsonschema/v5 v5.3.1
 	github.com/sirupsen/logrus v1.9.3
 	google.golang.org/protobuf v1.33.0
@@ -20,7 +20,7 @@ require (
 	cloud.google.com/go/compute v1.25.0 // indirect
 	cloud.google.com/go/compute/metadata v0.2.3 // indirect
 	cloud.google.com/go/iam v1.1.6 // indirect
-	cloud.google.com/go/pubsub v1.36.2 // indirect
+	cloud.google.com/go/pubsub v1.37.0 // indirect
 	github.com/felixge/httpsnoop v1.0.4 // indirect
 	github.com/go-gota/gota v0.12.0 // indirect
 	github.com/go-logr/logr v1.4.1 // indirect
@@ -58,10 +58,10 @@ require (
 	golang.org/x/text v0.14.0 // indirect
 	golang.org/x/time v0.5.0 // indirect
 	gonum.org/v1/gonum v0.14.0 // indirect
-	google.golang.org/api v0.168.0 // indirect
+	google.golang.org/api v0.169.0 // indirect
 	google.golang.org/appengine v1.6.8 // indirect
-	google.golang.org/genproto v0.0.0-20240304212257-790db918fca8 // indirect
-	google.golang.org/genproto/googleapis/api v0.0.0-20240304212257-790db918fca8 // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20240304212257-790db918fca8 // indirect
+	google.golang.org/genproto v0.0.0-20240311173647-c811ad7063a7 // indirect
+	google.golang.org/genproto/googleapis/api v0.0.0-20240311173647-c811ad7063a7 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20240311173647-c811ad7063a7 // indirect
 	google.golang.org/grpc v1.62.1 // indirect
 )
