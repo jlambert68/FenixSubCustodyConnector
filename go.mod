@@ -5,7 +5,7 @@ go 1.21
 require (
 	github.com/google/uuid v1.6.0
 	github.com/gorilla/mux v1.8.1
-	github.com/jlambert68/FenixConnectorAdminShared v0.0.0-20240312182053-af2c2886036f
+	github.com/jlambert68/FenixConnectorAdminShared v0.0.0-20240313132902-55d760adc374
 	github.com/jlambert68/FenixGrpcApi v0.0.0-20240306175605-aff905beac2d
 	github.com/jlambert68/FenixSubCustodyTestInstructionAdmin v0.0.0-20240311193716-dc033a20a26e
 	github.com/jlambert68/FenixSyncShared v0.0.0-20240215140904-db0840b5d70a
