@@ -76,6 +76,9 @@ func GenerateTimeStampParserLayout(timeStampAsString string) (parserLayout strin
 		// Decide "T15:04:05Z" or "T15:04:05Z07:00"
 		switch len(timeStampParts[1]) {
 
+		case 9:
+			parserLayout = parserLayout + "T15:04:05Z"
+
 		case 10:
 			parserLayout = parserLayout + "T15:04:05Z"
 
