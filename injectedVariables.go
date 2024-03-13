@@ -35,6 +35,8 @@ var (
 	injectedUseNativeGcpPubSubClientLibrary                                                       string
 	injectedUsePubSubToReceiveMessagesFromWorker                                                  string
 	injectedUseServiceAccount                                                                     string
+	injectedShouldProxyServerBeUsed                                                               string
+	injectedProxyServerURL                                                                        string
 )
 
 // Used for hard coding if Injected or real Environment Variables are expected
@@ -74,4 +76,6 @@ var injectedVariablesMap = map[string]*string{
 	"Injected_UseNativeGcpPubSubClientLibrary":                          &injectedUseNativeGcpPubSubClientLibrary,
 	"Injected_UsePubSubToReceiveMessagesFromWorker":                     &injectedUsePubSubToReceiveMessagesFromWorker,
 	"Injected_UseServiceAccount":                                        &injectedUseServiceAccount,
+	"Injected_ShouldProxyServerBeUsed":                                  &injectedShouldProxyServerBeUsed,
+	"Injected_ProxyServerURL":                                           &injectedProxyServerURL,
 }
