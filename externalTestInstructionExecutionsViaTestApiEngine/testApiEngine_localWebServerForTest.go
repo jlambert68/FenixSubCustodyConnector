@@ -7,7 +7,8 @@ import (
 	"fmt"
 	"github.com/google/uuid"
 	fenixExecutionWorkerGrpcApi "github.com/jlambert68/FenixGrpcApi/FenixExecutionServer/fenixExecutionWorkerGrpcApi/go_grpc_api"
-	"math/rand/v2"
+	//"math/rand/v2"
+	"math/rand"
 	"strconv"
 	"time"
 	//"github.com/golang/gddo/httputil/header"
@@ -304,7 +305,7 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 
 	// Generate a random number between 5 and 10
 	var numbeOfSecondsToSleep int32
-	numbeOfSecondsToSleep = rand.Int32N(6) + 5 // rand.Intn(6) gives a number from 0 to 5, adding 5 makes it 5 to 10
+	numbeOfSecondsToSleep = rand.Int31n(6) + 5 // rand.Intn(6) gives a number from 0 to 5, adding 5 makes it 5 to 10
 
 	// Add a short sleep before continue to have a more realistic flow
 	time.Sleep(time.Duration(numbeOfSecondsToSleep) * time.Second)

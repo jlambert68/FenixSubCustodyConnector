@@ -25,9 +25,10 @@
         "TestInstructionAttributeTypeName": "TestInstructionAttributeTypeName"
       }
     ],
-    "TestInstructionUuid": "7d71bf55-d89a-4449-b644-efc84868919f",
+    "TestInstructionOriginalUuid": "7d71bf55-d89a-4449-b644-efc84868919f",
     "TestInstructionExecutionVersion": 1,
     "TestInstructionName": "VerifyMT546",
+    "MatureTestInstructionUuid": "85bcef3b-fbba-4d92-822c-7e180e3e3b7b",
     "MajorVersionNumber": 1,
     "MinorVersionNumber": 0,
     "TestInstructionExecutionUuid": "ae344db4-2d34-474e-bd91-1b24ac408b75"
