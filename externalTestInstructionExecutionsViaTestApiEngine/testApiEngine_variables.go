@@ -103,3 +103,7 @@ type ResponseVariableStruct struct {
 	ResponseVariableTypeName      string `json:"ResponseVariableTypeName"`
 	ResponseVariableValueAsString string `json:"ResponseVariableValueAsString"`
 }
+
+// TestApiEngineClassesAndMethodsAndAttributesMapPtr
+// Holds the information about the Classes and Methods for TestApiEngine for each TestInstruction and TestInstruction-version
+var TestApiEngineClassesAndMethodsAndAttributesMapPtr *testApiEngineClassesAndMethods.TestInstructionsMapType

@@ -211,20 +211,15 @@ func initiateLogger(logger *logrus.Logger) {
 }
 
 // Generates the 'SupportedTestInstructionsAndTestInstructionContainersAndAllowedUsers' that will be sent via gRPC to Worker
-func generateSupportedTestInstructionsAndTestInstructionContainersAndAllowedUsers() (
-	supportedTestInstructionsAndTestInstructionContainersAndAllowedUsers *TestInstructionAndTestInstuctionContainerTypes.
-		TestInstructionsAndTestInstructionsContainersStruct) {
+func generateSupportedTestInstructionsAndTestInstructionContainersAndAllowedUsers() *TestInstructionAndTestInstuctionContainerTypes.
+	TestInstructionsAndTestInstructionsContainersStruct {
 
 	// Generate the full structure for supported TestInstructions, TestInstructionContainers and Allowed Users
-	TestInstructionsAndTesInstructionContainersAndAllowedUsers.
+	SupportedTestInstructionsAndTestInstructionContainersAndAllowedUsers,
+		executeTestInstructionUsingTestApiEngine.TestApiEngineClassesAndMethodsAndAttributesMapPtr = TestInstructionsAndTesInstructionContainersAndAllowedUsers.
 		GenerateTestInstructionsAndTestInstructionContainersAndAllowedUsers_SubCustody(allowedUsers)
 
-	// Get the full structure for supported TestInstructions, TestInstructionContainers and Allowed Users
-	supportedTestInstructionsAndTestInstructionContainersAndAllowedUsers =
-		TestInstructionsAndTesInstructionContainersAndAllowedUsers.
-			TestInstructionsAndTestInstructionContainersAndAllowedUsers_SubCustody
-
-	return supportedTestInstructionsAndTestInstructionContainersAndAllowedUsers
+	return SupportedTestInstructionsAndTestInstructionContainersAndAllowedUsers
 
 }
 

@@ -1,0 +1,11 @@
+package executionOrchestrator
+
+import (
+	"github.com/jlambert68/FenixTestInstructionsAdminShared/TestInstructionAndTestInstuctionContainerTypes"
+)
+
+// SupportedTestInstructionsAndTestInstructionContainersAndAllowedUsers
+// Holds the structure of TestInstructions, TestInstructionContainers and Users which are published to
+// TestCaseBuilder-Server at start
+var SupportedTestInstructionsAndTestInstructionContainersAndAllowedUsers *TestInstructionAndTestInstuctionContainerTypes.
+	TestInstructionsAndTestInstructionsContainersStruct

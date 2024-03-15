@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	fenixExecutionWorkerGrpcApi "github.com/jlambert68/FenixGrpcApi/FenixExecutionServer/fenixExecutionWorkerGrpcApi/go_grpc_api"
-	"github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/LocalExecutionMethods"
 	TestApiEngineClassesAndMethodsAndAttributes "github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/LocalExecutionMethods/TestApiEngineClassesAndMethods"
 	testApiEngineClassesAndMethods "github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/LocalExecutionMethods/TestApiEngineClassesAndMethods"
 	"github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions"
@@ -39,9 +38,13 @@ func ConvertTestInstructionExecutionIntoTestApiEngineRestCallMessage(
 	testInstructionAttributes = processTestInstructionExecutionPubSubRequest.GetTestInstruction().GetTestInstructionAttributes()
 
 	// Extract relevant testApiEngineData, from TestApiEngine-definitions to be used in mapping,
+	var TestApiEngineClassesAndMethodsAndAttributesMap TestApiEngineClassesAndMethodsAndAttributes.TestInstructionsMapType
 	var testApiEngineTestInstructionDataMapPtr *TestApiEngineClassesAndMethodsAndAttributes.TestApiEngineClassesMethodsAttributesVersionMapType
 	var existsInMap bool
-	testApiEngineTestInstructionDataMapPtr, existsInMap = LocalExecutionMethods.FullTestApiEngineClassesMethodsAttributesVersionMap[TypeAndStructs.OriginalElementUUIDType(testInstructionUuid)]
+
+	TestApiEngineClassesAndMethodsAndAttributesMap = *TestApiEngineClassesAndMethodsAndAttributesMapPtr
+	testApiEngineTestInstructionDataMapPtr, existsInMap =
+		TestApiEngineClassesAndMethodsAndAttributesMap[TypeAndStructs.OriginalElementUUIDType(testInstructionUuid)] //LocalExecutionMethods.FullTestApiEngineClassesMethodsAttributesVersionMap[TypeAndStructs.OriginalElementUUIDType(testInstructionUuid)]
 	if existsInMap != true {
 		// Must exist in map
 		sharedCode.Logger.WithFields(logrus.Fields{
