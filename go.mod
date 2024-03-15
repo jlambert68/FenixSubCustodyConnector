@@ -7,7 +7,7 @@ require (
 	github.com/gorilla/mux v1.8.1
 	github.com/jlambert68/FenixConnectorAdminShared v0.0.0-20240313132902-55d760adc374
 	github.com/jlambert68/FenixGrpcApi v0.0.0-20240306175605-aff905beac2d
-	github.com/jlambert68/FenixSubCustodyTestInstructionAdmin v0.0.0-20240311193716-dc033a20a26e
+	github.com/jlambert68/FenixSubCustodyTestInstructionAdmin v0.0.0-20240315084654-7e1d6c98a2f9
 	github.com/jlambert68/FenixSyncShared v0.0.0-20240215140904-db0840b5d70a
 	github.com/jlambert68/FenixTestInstructionsAdminShared v0.0.0-20240312181725-d712a9d80efe
 	github.com/santhosh-tekuri/jsonschema/v5 v5.3.1

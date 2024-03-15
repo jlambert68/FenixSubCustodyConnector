@@ -8,7 +8,6 @@ import (
 	fenixConnectorAdminShared_sharedCode "github.com/jlambert68/FenixConnectorAdminShared/common_config"
 	"github.com/jlambert68/FenixConnectorAdminShared/fenixConnectorAdminShared"
 	fenixExecutionWorkerGrpcApi "github.com/jlambert68/FenixGrpcApi/FenixExecutionServer/fenixExecutionWorkerGrpcApi/go_grpc_api"
-	"github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/LocalExecutionMethods"
 	"github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers"
 	TestInstruction_SendOnMQTypeMT_SendMT540 "github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_SendOnMQTypeMT_SendMT540"
 	TestInstruction_SendOnMQTypeMT_SendMT540_version1_0 "github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_SendOnMQTypeMT_SendMT540/version_1_0"
@@ -55,9 +54,6 @@ func getMaxExpectedFinishedTimeStamp(testInstructionExecutionPubSubRequest *feni
 	// expectedExecutionDurationInSeconds is extracted from TestInstruction-data
 	var expectedExecutionDurationInSeconds int64
 
-	// reference to where expectedExecutionDurationInSeconds can be found
-	var methodsForLocalExecutions *LocalExecutionMethods.MethodsForLocalExecutionsStruct
-
 	// Create Version for TestInstruction
 	var version string
 	version = fmt.Sprintf("v%s.%s",
@@ -73,25 +69,9 @@ func getMaxExpectedFinishedTimeStamp(testInstructionExecutionPubSubRequest *feni
 		switch version {
 		case "v1.0":
 
-			var methodsForLocalExecutionsAsInterface interface{}
-			var ok bool
-			methodsForLocalExecutionsAsInterface = TestInstruction_SendOnMQTypeMT_SendMT540_version1_0.
-				TestInstruction_SubCustody_SendMT540.LocalExecutionMethods.Value
-			methodsForLocalExecutions, ok = methodsForLocalExecutionsAsInterface.(*LocalExecutionMethods.MethodsForLocalExecutionsStruct)
-			if ok != true {
-				sharedCode.Logger.WithFields(logrus.Fields{
-					"id": "f8febbf5-0844-47d7-8a9e-9e639ecfabe6",
-					"TestInstructionOriginalUuid": testInstructionExecutionPubSubRequest.TestInstruction.
-						TestInstructionOriginalUuid,
-					"TestInstructionName": testInstructionExecutionPubSubRequest.TestInstruction.
-						TestInstructionName,
-					"version": version,
-				}).Fatalln("Couldn't extract 'methodsForLocalExecutions', will exit")
-			}
-
 			// Extract duration
-			expectedExecutionDurationInSeconds = methodsForLocalExecutions.LocalParametersUsedInRunTime.
-				ExpectedTestInstructionExecutionDurationInSeconds
+			expectedExecutionDurationInSeconds = TestInstruction_SendOnMQTypeMT_SendMT540_version1_0.
+				ExpectedMaxTestInstructionExecutionDurationInSeconds
 
 			// Create Max Finished TimeStamp
 			maxExpectedFinishedTimeStamp = time.Now().Add(time.Duration(expectedExecutionDurationInSeconds) * time.Second)
@@ -114,26 +94,9 @@ func getMaxExpectedFinishedTimeStamp(testInstructionExecutionPubSubRequest *feni
 		switch version {
 		case "v1.0":
 
-			var methodsForLocalExecutionsAsInterface interface{}
-			var ok bool
-			methodsForLocalExecutionsAsInterface = TestInstruction_SendOnMQTypeMT_SendMT542_version1_0.
-				TestInstruction_SubCustody_SendMT542.LocalExecutionMethods.Value
-			methodsForLocalExecutions, ok = methodsForLocalExecutionsAsInterface.(*LocalExecutionMethods.
-				MethodsForLocalExecutionsStruct)
-			if ok != true {
-				sharedCode.Logger.WithFields(logrus.Fields{
-					"id": "3a8f0e31-7c58-45c5-a3e6-f00dccfe2c2f",
-					"TestInstructionOriginalUuid": testInstructionExecutionPubSubRequest.TestInstruction.
-						TestInstructionOriginalUuid,
-					"TestInstructionName": testInstructionExecutionPubSubRequest.TestInstruction.
-						TestInstructionName,
-					"version": version,
-				}).Fatalln("Couldn't extract 'methodsForLocalExecutions', will exit")
-			}
-
 			// Extract duration
-			expectedExecutionDurationInSeconds = methodsForLocalExecutions.LocalParametersUsedInRunTime.
-				ExpectedTestInstructionExecutionDurationInSeconds
+			expectedExecutionDurationInSeconds = TestInstruction_SendOnMQTypeMT_SendMT542_version1_0.
+				ExpectedMaxTestInstructionExecutionDurationInSeconds
 
 			// Create Max Finished TimeStamp
 			maxExpectedFinishedTimeStamp = time.Now().Add(time.Duration(expectedExecutionDurationInSeconds) * time.Second)
@@ -156,26 +119,10 @@ func getMaxExpectedFinishedTimeStamp(testInstructionExecutionPubSubRequest *feni
 		switch version {
 
 		case "v1.0":
-			var methodsForLocalExecutionsAsInterface interface{}
-			var ok bool
-			methodsForLocalExecutionsAsInterface = TestInstruction_ValidateMQTypeMT54x_ValidateMT544_version1_0.
-				TestInstruction_SubCustody_ValidateMT544.LocalExecutionMethods.Value
-			methodsForLocalExecutions, ok = methodsForLocalExecutionsAsInterface.(*LocalExecutionMethods.
-				MethodsForLocalExecutionsStruct)
-			if ok != true {
-				sharedCode.Logger.WithFields(logrus.Fields{
-					"id": "21780b6f-c4d2-4bde-b037-82708cf807fd",
-					"TestInstructionOriginalUuid": testInstructionExecutionPubSubRequest.TestInstruction.
-						TestInstructionOriginalUuid,
-					"TestInstructionName": testInstructionExecutionPubSubRequest.TestInstruction.
-						TestInstructionName,
-					"version": version,
-				}).Fatalln("Couldn't extract 'methodsForLocalExecutions', will exit")
-			}
 
 			// Extract duration
-			expectedExecutionDurationInSeconds = methodsForLocalExecutions.LocalParametersUsedInRunTime.
-				ExpectedTestInstructionExecutionDurationInSeconds
+			expectedExecutionDurationInSeconds = TestInstruction_ValidateMQTypeMT54x_ValidateMT544_version1_0.
+				ExpectedMaxTestInstructionExecutionDurationInSeconds
 
 			// Create Max Finished TimeStamp
 			maxExpectedFinishedTimeStamp = time.Now().Add(time.Duration(expectedExecutionDurationInSeconds) * time.Second)
@@ -198,26 +145,10 @@ func getMaxExpectedFinishedTimeStamp(testInstructionExecutionPubSubRequest *feni
 		switch version {
 
 		case "v1.0":
-			var methodsForLocalExecutionsAsInterface interface{}
-			var ok bool
-			methodsForLocalExecutionsAsInterface = TestInstruction_ValidateMQTypeMT54x_ValidateMT546_version1_0.
-				TestInstruction_SubCustody_ValidateMT546.LocalExecutionMethods.Value
-			methodsForLocalExecutions, ok = methodsForLocalExecutionsAsInterface.(*LocalExecutionMethods.
-				MethodsForLocalExecutionsStruct)
-			if ok != true {
-				sharedCode.Logger.WithFields(logrus.Fields{
-					"id": "b1cbc0b9-2339-4ad2-9e35-01b843fa8b19",
-					"TestInstructionOriginalUuid": testInstructionExecutionPubSubRequest.TestInstruction.
-						TestInstructionOriginalUuid,
-					"TestInstructionName": testInstructionExecutionPubSubRequest.TestInstruction.
-						TestInstructionName,
-					"version": version,
-				}).Fatalln("Couldn't extract 'methodsForLocalExecutions', will exit")
-			}
 
 			// Extract duration
-			expectedExecutionDurationInSeconds = methodsForLocalExecutions.LocalParametersUsedInRunTime.
-				ExpectedTestInstructionExecutionDurationInSeconds
+			expectedExecutionDurationInSeconds = TestInstruction_ValidateMQTypeMT54x_ValidateMT546_version1_0.
+				ExpectedMaxTestInstructionExecutionDurationInSeconds
 
 			// Create Max Finished TimeStamp
 			maxExpectedFinishedTimeStamp = time.Now().Add(time.Duration(expectedExecutionDurationInSeconds) * time.Second)
@@ -240,26 +171,10 @@ func getMaxExpectedFinishedTimeStamp(testInstructionExecutionPubSubRequest *feni
 		switch version {
 
 		case "v1.0":
-			var methodsForLocalExecutionsAsInterface interface{}
-			var ok bool
-			methodsForLocalExecutionsAsInterface = TestInstruction_ValidateMQTypeMT54x_ValidateMT548_version1_0.
-				TestInstruction_SubCustody_ValidateMT548.LocalExecutionMethods.Value
-			methodsForLocalExecutions, ok = methodsForLocalExecutionsAsInterface.(*LocalExecutionMethods.
-				MethodsForLocalExecutionsStruct)
-			if ok != true {
-				sharedCode.Logger.WithFields(logrus.Fields{
-					"id": "a2058734-f8eb-4eec-a8f2-f37b89a16620",
-					"TestInstructionOriginalUuid": testInstructionExecutionPubSubRequest.TestInstruction.
-						TestInstructionOriginalUuid,
-					"TestInstructionName": testInstructionExecutionPubSubRequest.TestInstruction.
-						TestInstructionName,
-					"version": version,
-				}).Fatalln("Couldn't extract 'methodsForLocalExecutions', will exit")
-			}
 
 			// Extract duration
-			expectedExecutionDurationInSeconds = methodsForLocalExecutions.LocalParametersUsedInRunTime.
-				ExpectedTestInstructionExecutionDurationInSeconds
+			expectedExecutionDurationInSeconds = TestInstruction_ValidateMQTypeMT54x_ValidateMT548_version1_0.
+				ExpectedMaxTestInstructionExecutionDurationInSeconds
 
 			// Create Max Finished TimeStamp
 			maxExpectedFinishedTimeStamp = time.Now().Add(time.Duration(expectedExecutionDurationInSeconds) * time.Second)
@@ -334,23 +249,23 @@ func processTestInstructionExecutionRequest(
 		TestInstruction_ValidateMQTypeMT54x_ValidateMT546.TestInstructionUUID_SubCustody_ValidateMT546,
 		TestInstruction_ValidateMQTypeMT54x_ValidateMT548.TestInstructionUUID_SubCustody_ValidateMT548:
 
-		// Extract maximum timeout time from TestInstruction
-		var methodsForLocalExecutionsAsInterface interface{}
+		// Extract the maximum allowed time before timeout occurs
+		var maximumExecutionDurationInSeconds int64
 		switch TypeAndStructs.OriginalElementUUIDType(testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionOriginalUuid) {
 		case TestInstruction_SendOnMQTypeMT_SendMT540.TestInstructionUUID_SubCustody_SendMT540:
-			methodsForLocalExecutionsAsInterface = TestInstruction_SendOnMQTypeMT_SendMT540_version1_0.TestInstruction_SubCustody_SendMT540.LocalExecutionMethods.Value
+			maximumExecutionDurationInSeconds = TestInstruction_SendOnMQTypeMT_SendMT540_version1_0.ExpectedMaxTestInstructionExecutionDurationInSeconds
 
 		case TestInstruction_SendOnMQTypeMT_SendMT542.TestInstructionUUID_SubCustody_SendMT542:
-			methodsForLocalExecutionsAsInterface = TestInstruction_SendOnMQTypeMT_SendMT542_version1_0.TestInstruction_SubCustody_SendMT542.LocalExecutionMethods.Value
+			maximumExecutionDurationInSeconds = TestInstruction_SendOnMQTypeMT_SendMT542_version1_0.ExpectedMaxTestInstructionExecutionDurationInSeconds
 
 		case TestInstruction_ValidateMQTypeMT54x_ValidateMT544.TestInstructionUUID_SubCustody_ValidateMT544:
-			methodsForLocalExecutionsAsInterface = TestInstruction_ValidateMQTypeMT54x_ValidateMT544_version1_0.TestInstruction_SubCustody_ValidateMT544.LocalExecutionMethods.Value
+			maximumExecutionDurationInSeconds = TestInstruction_ValidateMQTypeMT54x_ValidateMT544_version1_0.ExpectedMaxTestInstructionExecutionDurationInSeconds
 
 		case TestInstruction_ValidateMQTypeMT54x_ValidateMT546.TestInstructionUUID_SubCustody_ValidateMT546:
-			methodsForLocalExecutionsAsInterface = TestInstruction_ValidateMQTypeMT54x_ValidateMT546_version1_0.TestInstruction_SubCustody_ValidateMT546.LocalExecutionMethods.Value
+			maximumExecutionDurationInSeconds = TestInstruction_ValidateMQTypeMT54x_ValidateMT546_version1_0.ExpectedMaxTestInstructionExecutionDurationInSeconds
 
 		case TestInstruction_ValidateMQTypeMT54x_ValidateMT548.TestInstructionUUID_SubCustody_ValidateMT548:
-			methodsForLocalExecutionsAsInterface = TestInstruction_ValidateMQTypeMT54x_ValidateMT548_version1_0.TestInstruction_SubCustody_ValidateMT548.LocalExecutionMethods.Value
+			maximumExecutionDurationInSeconds = TestInstruction_ValidateMQTypeMT54x_ValidateMT548_version1_0.ExpectedMaxTestInstructionExecutionDurationInSeconds
 
 		default:
 			sharedCode.Logger.WithFields(logrus.Fields{
@@ -359,23 +274,6 @@ func processTestInstructionExecutionRequest(
 				"TestInstructionUuid":                   TypeAndStructs.OriginalElementUUIDType(testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionOriginalUuid),
 			}).Fatalln("Unhandled 'TestInstructionUuid' when extracting Timeout-time to be used towards TestApiEngine")
 		}
-
-		// Convert from interface onto correct typ
-		var methodsForLocalExecutions *LocalExecutionMethods.MethodsForLocalExecutionsStruct
-		var couldBeConverted bool
-
-		methodsForLocalExecutions, couldBeConverted = methodsForLocalExecutionsAsInterface.(*LocalExecutionMethods.MethodsForLocalExecutionsStruct)
-		if couldBeConverted != true {
-			sharedCode.Logger.WithFields(logrus.Fields{
-				"id":                                    "5a4fd568-7858-4e3b-825e-339663c7ac02",
-				"testInstructionExecutionPubSubRequest": testInstructionExecutionPubSubRequest,
-				"TestInstructionUuid":                   TypeAndStructs.OriginalElementUUIDType(testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionOriginalUuid),
-			}).Fatalln("Couldn't convert 'interface-type into correct type")
-		}
-
-		// Extract the maximum allowed time before timeout occurs
-		var maximumExecutionDurationInSeconds int64
-		maximumExecutionDurationInSeconds = methodsForLocalExecutions.LocalParametersUsedInRunTime.ExpectedTestInstructionExecutionDurationInSeconds
 
 		// Create version number to be used in attributes request
 		// Also use version number when getting correct json-schemas
