@@ -45,43 +45,12 @@
     "MethodParameters": {
       "type": "object",
       "properties": {
-        "TestInstructionVersion": {
-          "type": "string",
-          "enum": [
-            "v1.0"
-          ]
-        },
-        "TestCaseExecutionUuid": {
-          "type": "string",
-          "format": "uuid"
-        },
-        "TestInstructionExecutionUuid": {
-          "type": "string",
-          "format": "uuid"
-        },
-        "TestInstructionExecutionVersion": {
-          "type": "string",
-          "pattern": "^[0-9]+$"
-        },
-        "ExpectedToBePassed": {
-          "type": "string",
-          "enum": [
-            "true",
-            "false"
-          ]
-        },
-        "TimeoutTimeInSeconds": {
-          "type": "string",
-          "pattern": "^[0-9]+$"
+        "MethodParametersJsonAsString": {
+          "type": "string"
         }
       },
       "required": [
-        "TestInstructionVersion",
-        "TestCaseExecutionUuid",
-        "TestInstructionExecutionUuid",
-        "TestInstructionExecutionVersion",
-        "ExpectedToBePassed",
-        "TimeoutTimeInSeconds"
+        "MethodParametersJsonAsString"
       ],
       "additionalProperties": false
     }

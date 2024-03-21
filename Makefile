@@ -36,24 +36,29 @@ Download-json-schemas:
 	echo "$(fullLocalFilePathOverAll)"
 	echo "$(fullRemoteFilePathOverAll)"
 	echo "......."
-	echo "$(fullLocalFilePathTestApiEngineResponse)"
-	echo "$(fullRemoteFilePathTestApiEngineResponse)"
+	echo "$(fullLocalFilePathValidateMT544RequestMethodParameters_v1_0)"
+	echo "$(fullRemoteFilePathValidateMT544RequestMethodParameters_v1_0)"
 
 	@curl -L -o $(fullLocalFilePathOverAll) "$(fullRemoteFilePathOverAll)"
 	@curl -L -o $(fullLocalFilePathTestApiEngineResponse) "$(fullRemoteFilePathTestApiEngineResponse)"
 
 	@curl -L -o $(fullLocalFilePathSendMT540Request_v1_0) "$(fullRemoteFilePathSendMT540Request_v1_0)"
+	@curl -L -o $(fullLocalFilePathSendMT540RequestMethodParameters_v1_0) "$(fullRemoteFilePathSendMT540RequestMethodParameters_v1_0)"
 	@curl -L -o $(fullLocalFilePathSendMT540_v1_0) "$(fullRemoteFilePathSendMT540Response_v1_0)"
 
 	@curl -L -o $(fullLocalFilePathSendMT542Request_v1_0) "$(fullRemoteFilePathSendMT542Request_v1_0)"
+	@curl -L -o $(fullLocalFilePathSendMT542RequestMethodParameters_v1_0) "$(fullRemoteFilePathSendMT542RequestMethodParameters_v1_0)"
 	@curl -L -o $(fullLocalFilePathSendMT542_v1_0) "$(fullRemoteFilePathSendMT542Response_v1_0)"
 
 	@curl -L -o $(fullLocalFilePathValidateMT544Request_v1_0) "$(fullRemoteFilePathValidateMT544Request_v1_0)"
+	@curl -L -o $(fullLocalFilePathValidateMT544RequestMethodParameters_v1_0) "$(fullRemoteFilePathValidateMT544RequestMethodParameters_v1_0)"
 	@curl -L -o $(fullLocalFilePathValidateMT544_v1_0) "$(fullRemoteFilePathValidateMT544_v1_0)"
 
 	@curl -L -o $(fullLocalFilePathValidateMT546Request_v1_0) "$(fullRemoteFilePathValidateMT546Request_v1_0)"
+	@curl -L -o $(fullLocalFilePathValidateMT546RequestMethodParameters_v1_0) "$(fullRemoteFilePathValidateMT546RequestMethodParameters_v1_0)"
 	@curl -L -o $(fullLocalFilePathValidateMT546_v1_0) "$(fullRemoteFilePathValidateMT546_v1_0)"
     	
 	@curl -L -o $(fullLocalFilePathValidateMT548Request_v1_0) "$(fullRemoteFilePathValidateMT548Request_v1_0)"
+	@curl -L -o $(fullLocalFilePathValidateMT548RequestMethodParameters_v1_0) "$(fullRemoteFilePathValidateMT548RequestMethodParameters_v1_0)"
 	@curl -L -o $(fullLocalFilePathValidateMT548_v1_0) "$(fullRemoteFilePathValidateMT548_v1_0)"
 #$(localJsonSchemaPath)/$(localJsonSchemaOverAllLName)

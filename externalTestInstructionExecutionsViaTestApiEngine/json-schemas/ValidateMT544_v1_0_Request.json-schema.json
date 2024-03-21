@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "ValidateMT544 Request, version 1.0",
+  "title": "ValidateMT542 Request, version 1.0",
   "type": "object",
   "properties": {
     "testStepClassName": {
@@ -45,47 +45,12 @@
     "MethodParameters": {
       "type": "object",
       "properties": {
-        "TestInstructionVersion": {
-          "type": "string",
-          "enum": [
-            "v1.0"
-          ]
-        },
-        "TestCaseExecutionUuid": {
-          "type": "string",
-          "format": "uuid"
-        },
-        "TestInstructionExecutionUuid": {
-          "type": "string",
-          "format": "uuid"
-        },
-        "TestInstructionExecutionVersion": {
-          "type": "string",
-          "pattern": "^[0-9]+$"
-        },
-        "ExpectedToBePassed": {
-          "type": "string",
-          "enum": [
-            "true",
-            "false"
-          ]
-        },
-        "TimeoutTimeInSeconds": {
-          "type": "string",
-          "pattern": "^[0-9]+$"
-        },
-        "RelatedReference_54x_20CRELA": {
+        "MethodParametersJsonAsString": {
           "type": "string"
         }
       },
       "required": [
-        "TestInstructionVersion",
-        "TestCaseExecutionUuid",
-        "TestInstructionExecutionUuid",
-        "TestInstructionExecutionVersion",
-        "ExpectedToBePassed",
-        "TimeoutTimeInSeconds",
-        "RelatedReference_54x_20CRELA"
+        "MethodParametersJsonAsString"
       ],
       "additionalProperties": false
     }

@@ -17,6 +17,7 @@ import (
 func PostTestInstructionUsingRestCall(
 	testApiEngineRestApiMessageValues *TestApiEngineRestApiMessageStruct,
 	requestMessageToTestApiEngineJsonSchema *string,
+	requestMethodParametersMessageToTestApiEngineJsonSchema *string,
 	testApiEngineResponseMessageJsonSchema *string,
 	finalTestInstructionExecutionResultJsonSchema *string,
 	responseVariablesJsonSchema *string,
@@ -82,7 +83,8 @@ func PostTestInstructionUsingRestCall(
 	// Validate rest-request and convert
 	err = validateRestRequest(
 		&attributesAsJson,
-		requestMessageToTestApiEngineJsonSchema)
+		requestMessageToTestApiEngineJsonSchema,
+		requestMethodParametersMessageToTestApiEngineJsonSchema)
 
 	if err != nil {
 		return TestApiEngineFinalTestInstructionExecutionResultStruct{}, err
@@ -178,13 +180,14 @@ func PostTestInstructionUsingRestCall(
 // Validation os done with supported json-schemas
 func validateRestRequest(
 	attributesAsJson *[]byte,
-	requestMessageToTestApiEngineJsonSchema *string) (
+	requestMessageToTestApiEngineJsonSchema *string,
+	requestMethodParametersMessageToTestApiEngineJsonSchema *string) (
 	err error) {
 
 	var tempJsonSchema string
 	var tempAttributesAsByteArray []byte
 
-	// 	// *** First Step ***
+	// 	// *** First Step - Validate the overall Request***
 	tempJsonSchema = *requestMessageToTestApiEngineJsonSchema
 
 	// Compile json-schema 'requestMessageToTestApiEngineJsonSchema'
@@ -215,6 +218,59 @@ func validateRestRequest(
 
 	// Thirds validate that the 'Request' is valid -'requestMessageToTestApiEngineJsonSchema'
 	err = jsonSchemaValidatorRequest.Validate(jsonObjectedToBeValidated)
+	if err != nil {
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id":                        "bb0ffb11-77e6-4739-8911-fcb70ff714f2",
+			"err":                       err,
+			"string(*attributesAsJson)": string(*attributesAsJson),
+		}).Error("'string(*attributesAsJson)' is not valid to json " +
+			"'requestMessageToTestApiEngineJsonSchema'")
+
+		return err
+
+	} else {
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id":                        "18c74f8c-3de2-4333-9ebb-618f5908adcd",
+			"string(*attributesAsJson)": string(*attributesAsJson),
+		}).Debug("'string(*attributesAsJson)' is valid to json-schema " +
+			"'requestMessageToTestApiEngineJsonSchema'")
+	}
+
+	// 	// *** Second Step - Validate the MethodParameters***
+
+	tempJsonSchema = *requestMethodParametersMessageToTestApiEngineJsonSchema
+
+	// Compile json-schema 'requestMessageToTestApiEngineJsonSchema'
+	var jsonSchemaValidatorMethodParametersRequest *jsonschema.Schema
+	jsonSchemaValidatorMethodParametersRequest, err = jsonschema.CompileString("schema.json", tempJsonSchema)
+	if err != nil {
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id":  "9bb4a754-7b3c-47f2-b881-81ce6e82e72e",
+			"err": err,
+			"requestMethodParametersMessageToTestApiEngineJsonSchema": *requestMethodParametersMessageToTestApiEngineJsonSchema,
+		}).Error("Couldn't compile the json-schema for 'requestMethodParametersMessageToTestApiEngineJsonSchema'")
+	}
+
+	// Extract the MethodParameters which is embedded as string and should be converted into a json
+	var
+
+	// Second convert to object that can be validated
+	tempAttributesAsByteArray = *attributesAsJson
+	var jsonObjectedToBeValidated interface{}
+	err = json.Unmarshal(tempAttributesAsByteArray, &jsonObjectedToBeValidated)
+
+	if err != nil {
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id":                        "e0c23da2-322c-477b-bcca-7aca9f39aa9b",
+			"err":                       err,
+			"string(*attributesAsJson)": string(*attributesAsJson),
+		}).Error("Couldn't Unmarshal the json, tempAttributesAsByteArray, into object that can be validated")
+
+		return err
+	}
+
+	// Thirds validate that the 'Request' is valid -'requestMessageToTestApiEngineJsonSchema'
+	err = jsonSchemaValidatorMethodParametersRequest.Validate(jsonObjectedToBeValidated)
 	if err != nil {
 		sharedCode.Logger.WithFields(logrus.Fields{
 			"id":                        "bb0ffb11-77e6-4739-8911-fcb70ff714f2",

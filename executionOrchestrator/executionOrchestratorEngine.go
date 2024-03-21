@@ -343,6 +343,7 @@ func processTestInstructionExecutionRequest(
 
 		// Get Json-schemas to use
 		var requestMessageToTestApiEngineJsonSchema *string
+		var requestMethodParametersMessageToTestApiEngineJsonSchema *string
 		var testApiEngineResponseMessageJsonSchema *string
 		var finalTestInstructionExecutionResultJsonSchema *string
 		var responseVariablesJsonSchema *string
@@ -352,36 +353,41 @@ func processTestInstructionExecutionRequest(
 
 		// Send a MT540 on MQ
 		case TestInstruction_SendOnMQTypeMT_SendMT540.TestInstructionUUID_SubCustody_SendMT540:
-			requestMessageToTestApiEngineJsonSchema, testApiEngineResponseMessageJsonSchema,
-				finalTestInstructionExecutionResultJsonSchema, responseVariablesJsonSchema =
+			requestMessageToTestApiEngineJsonSchema, requestMethodParametersMessageToTestApiEngineJsonSchema,
+				testApiEngineResponseMessageJsonSchema, finalTestInstructionExecutionResultJsonSchema,
+				responseVariablesJsonSchema =
 				executeTestInstructionUsingTestApiEngine.GetResponseSchemasToUse(
 					TestInstruction_SendOnMQTypeMT_SendMT540.TestInstructionUUID_SubCustody_SendMT540,
 					testInstructionVersion)
 
 		case TestInstruction_SendOnMQTypeMT_SendMT542.TestInstructionUUID_SubCustody_SendMT542:
-			requestMessageToTestApiEngineJsonSchema, testApiEngineResponseMessageJsonSchema,
-				finalTestInstructionExecutionResultJsonSchema, responseVariablesJsonSchema =
+			requestMessageToTestApiEngineJsonSchema, requestMethodParametersMessageToTestApiEngineJsonSchema,
+				testApiEngineResponseMessageJsonSchema, finalTestInstructionExecutionResultJsonSchema,
+				responseVariablesJsonSchema =
 				executeTestInstructionUsingTestApiEngine.GetResponseSchemasToUse(
 					TestInstruction_SendOnMQTypeMT_SendMT542.TestInstructionUUID_SubCustody_SendMT542,
 					testInstructionVersion)
 
 		case TestInstruction_ValidateMQTypeMT54x_ValidateMT544.TestInstructionUUID_SubCustody_ValidateMT544:
-			requestMessageToTestApiEngineJsonSchema, testApiEngineResponseMessageJsonSchema,
-				finalTestInstructionExecutionResultJsonSchema, responseVariablesJsonSchema =
+			requestMessageToTestApiEngineJsonSchema, requestMethodParametersMessageToTestApiEngineJsonSchema,
+				testApiEngineResponseMessageJsonSchema, finalTestInstructionExecutionResultJsonSchema,
+				responseVariablesJsonSchema =
 				executeTestInstructionUsingTestApiEngine.GetResponseSchemasToUse(
 					TestInstruction_ValidateMQTypeMT54x_ValidateMT544.TestInstructionUUID_SubCustody_ValidateMT544,
 					testInstructionVersion)
 
 		case TestInstruction_ValidateMQTypeMT54x_ValidateMT546.TestInstructionUUID_SubCustody_ValidateMT546:
-			requestMessageToTestApiEngineJsonSchema, testApiEngineResponseMessageJsonSchema,
-				finalTestInstructionExecutionResultJsonSchema, responseVariablesJsonSchema =
+			requestMessageToTestApiEngineJsonSchema, requestMethodParametersMessageToTestApiEngineJsonSchema,
+				testApiEngineResponseMessageJsonSchema, finalTestInstructionExecutionResultJsonSchema,
+				responseVariablesJsonSchema =
 				executeTestInstructionUsingTestApiEngine.GetResponseSchemasToUse(
 					TestInstruction_ValidateMQTypeMT54x_ValidateMT546.TestInstructionUUID_SubCustody_ValidateMT546,
 					testInstructionVersion)
 
 		case TestInstruction_ValidateMQTypeMT54x_ValidateMT548.TestInstructionUUID_SubCustody_ValidateMT548:
-			requestMessageToTestApiEngineJsonSchema, testApiEngineResponseMessageJsonSchema,
-				finalTestInstructionExecutionResultJsonSchema, responseVariablesJsonSchema =
+			requestMessageToTestApiEngineJsonSchema, requestMethodParametersMessageToTestApiEngineJsonSchema,
+				testApiEngineResponseMessageJsonSchema, finalTestInstructionExecutionResultJsonSchema,
+				responseVariablesJsonSchema =
 				executeTestInstructionUsingTestApiEngine.GetResponseSchemasToUse(
 					TestInstruction_ValidateMQTypeMT54x_ValidateMT548.TestInstructionUUID_SubCustody_ValidateMT548,
 					testInstructionVersion)
@@ -414,6 +420,7 @@ func processTestInstructionExecutionRequest(
 			PostTestInstructionUsingRestCall(
 				testApiEngineRestApiMessageValues,
 				requestMessageToTestApiEngineJsonSchema,
+				requestMethodParametersMessageToTestApiEngineJsonSchema,
 				testApiEngineResponseMessageJsonSchema,
 				finalTestInstructionExecutionResultJsonSchema,
 				responseVariablesJsonSchema,

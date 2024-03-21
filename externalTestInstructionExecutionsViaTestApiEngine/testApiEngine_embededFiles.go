@@ -19,6 +19,9 @@ var finalTestInstructionExecutionResultMessageJsonSchemaAsByteArray []byte
 //go:embed json-schemas/SendMT540_v1_0_Request.json-schema.json
 var sendMT540_v1_0_RequestMessageJsonSchemaAsByteArray []byte
 
+//go:embed json-schemas/Send540_v1_0_RequestMethodParameters.json-schema.json
+var sendMT540_v1_0_RequestMethodParametersMessageJsonSchemaAsByteArray []byte
+
 //go:embed json-schemas/SendMT540_v1_0_ResponseVariables.json-schema.json
 var sendMT540_v1_0_ResponseVariablesMessageJsonSchemaAsByteArray []byte
 
@@ -27,10 +30,17 @@ var sendMT540_v1_0_ResponseVariablesMessageJsonSchemaAsByteArray []byte
 //go:embed json-schemas/SendMT542_v1_0_Request.json-schema.json
 var sendMT542_v1_0_RequestMessageJsonSchemaAsByteArray []byte
 
+//go:embed json-schemas/Send542_v1_0_RequestMethodParameters.json-schema.json
+var sendMT542_v1_0_RequestMethodParametersMessageJsonSchemaAsByteArray []byte
+
 //go:embed json-schemas/SendMT542_v1_0_ResponseVariables.json-schema.json
 var sendMT542_v1_0_ResponseVariablesMessageJsonSchemaAsByteArray []byte
 
 // SendMT544
+//
+//go:embed json-schemas/ValidateMT544_v1_0_RequestMethodParameters.json-schema.json
+var validateMT544_v1_0_RequestMethodParametersMessageJsonSchemaAsByteArray []byte
+
 //
 //go:embed json-schemas/ValidateMT544_v1_0_Request.json-schema.json
 var validateMT544_v1_0_RequestMessageJsonSchemaAsByteArray []byte
@@ -43,6 +53,9 @@ var validateMT544_v1_0_ResponseVariablesMessageJsonSchemaAsByteArray []byte
 //go:embed json-schemas/ValidateMT546_v1_0_Request.json-schema.json
 var validateMT546_v1_0_RequestMessageJsonSchemaAsByteArray []byte
 
+//go:embed json-schemas/ValidateMT546_v1_0_RequestMethodParameters.json-schema.json
+var validateMT546_v1_0_RequestMethodParametersMessageJsonSchemaAsByteArray []byte
+
 //go:embed json-schemas/ValidateMT546_v1_0_ResponseVariables.json-schema.json
 var validateMT546_v1_0_ResponseVariablesMessageJsonSchemaAsByteArray []byte
 
@@ -50,6 +63,9 @@ var validateMT546_v1_0_ResponseVariablesMessageJsonSchemaAsByteArray []byte
 //
 //go:embed json-schemas/ValidateMT548_v1_0_Request.json-schema.json
 var validateMT548_v1_0_RequestMessageJsonSchemaAsByteArray []byte
+
+//go:embed json-schemas/ValidateMT548_v1_0_RequestMethodParameters.json-schema.json
+var validateMT548_v1_0_RequestMethodParametersMessageJsonSchemaAsByteArray []byte
 
 //go:embed json-schemas/ValidateMT548_v1_0_ResponseVariables.json-schema.json
 var validateMT548_v1_0_ResponseVariablesMessageJsonSchemaAsByteArray []byte

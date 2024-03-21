@@ -45,35 +45,42 @@ fullLocalFilePathTestApiEngineResponse := $(fullLocalPath)/$(localJsonSchemaFile
 # **** Remote Json-Schemas SendMT540 ****
 jsonSchemaPathSendMT540_v1_0 := TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_SendOnMQTypeMT_SendMT540/version_1_0/
 jsonSchemaFileNameSendMT540Request := Send540.json-schema.json
+jsonSchemaFileNameSendMT540RequestMethodParameters := Send540-MethodParameters.json-schema.json
 jsonSchemaFileNameSendMT540Response := SendMT540_ResponseVariables.json-schema.json
 
 # Full Remote Path and FilePath - SendMT540
 fullRemotePathSendMT540_v1_0 := $(remoteUrl)/$(githubUsername)/$(repositorySubCustody)/$(branchSpecific)/$(jsonSchemaPathSendMT540_v1_0)
 fullRemoteFilePathSendMT540Request_v1_0 := $(fullRemotePathSendMT540_v1_0)/$(jsonSchemaFileNameSendMT540Request)
+fullRemoteFilePathSendMT540RequestMethodParameters_v1_0 := $(fullRemotePathSendMT540_v1_0)/$(jsonSchemaFileNameSendMT540RequestMethodParameters)
 fullRemoteFilePathSendMT540Response_v1_0 := $(fullRemotePathSendMT540_v1_0)/$(jsonSchemaFileNameSendMT540Response)
 
 # Local - SendMT540
 localJsonSchemaFileNameSendMT540Request_v1_0 := SendMT540_v1_0_Request.json-schema.json
+localJsonSchemaFileNameSendMT540RequestMethodParameters_v1_0 := Send540_v1_0_RequestMethodParameters.json-schema.json
 localJsonSchemaFileNameSendMT540_v1_0 := SendMT540_v1_0_ResponseVariables.json-schema.json
 fullLocalFilePathSendMT540Request_v1_0 := $(fullLocalPath)/$(localJsonSchemaFileNameSendMT540Request_v1_0)
+fullLocalFilePathSendMT540RequestMethodParameters_v1_0 := $(fullLocalPath)/$(localJsonSchemaFileNameSendMT540RequestMethodParameters_v1_0)
 fullLocalFilePathSendMT540_v1_0 := $(fullLocalPath)/$(localJsonSchemaFileNameSendMT540_v1_0)
-
 
 
 # **** Remote Json-Schemas SendMT542 ****
 jsonSchemaPathSendMT542_v1_0 := TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_SendOnMQTypeMT_SendMT542/version_1_0/
 jsonSchemaFileNameSendMT542Request := Send542.json-schema.json
+jsonSchemaFileNameSendMT542RequestMethodParameters := Send542-MethodParameters.json-schema.json
 jsonSchemaFileNameSendMT542Response := SendMT542_ResponseVariables.json-schema.json
 
 # Full Remote Path and FilePath - SendMT542
 fullRemotePathSendMT542_v1_0 := $(remoteUrl)/$(githubUsername)/$(repositorySubCustody)/$(branchSpecific)/$(jsonSchemaPathSendMT542_v1_0)
 fullRemoteFilePathSendMT542Request_v1_0 := $(fullRemotePathSendMT542_v1_0)/$(jsonSchemaFileNameSendMT542Request)
+fullRemoteFilePathSendMT542RequestMethodParameters_v1_0 := $(fullRemotePathSendMT542_v1_0)/$(jsonSchemaFileNameSendMT542RequestMethodParameters)
 fullRemoteFilePathSendMT542Response_v1_0 := $(fullRemotePathSendMT542_v1_0)/$(jsonSchemaFileNameSendMT542Response)
 
 # Local - SendMT542
 localJsonSchemaFileNameSendMT542Request_v1_0 := SendMT542_v1_0_Request.json-schema.json
+localJsonSchemaFileNameSendMT542RequestMethodParameters_v1_0 := Send542_v1_0_RequestMethodParameters.json-schema.json
 localJsonSchemaFileNameSendMT542_v1_0 := SendMT542_v1_0_ResponseVariables.json-schema.json
 fullLocalFilePathSendMT542Request_v1_0 := $(fullLocalPath)/$(localJsonSchemaFileNameSendMT542Request_v1_0)
+fullLocalFilePathSendMT542RequestMethodParameters_v1_0 := $(fullLocalPath)/$(localJsonSchemaFileNameSendMT542RequestMethodParameters_v1_0)
 fullLocalFilePathSendMT542_v1_0 := $(fullLocalPath)/$(localJsonSchemaFileNameSendMT542_v1_0)
 
 
@@ -81,35 +88,21 @@ fullLocalFilePathSendMT542_v1_0 := $(fullLocalPath)/$(localJsonSchemaFileNameSen
 # **** Remote Json-Schemas ValidateMT544 ****
 jsonSchemaPathValidateMT544_v1_0 := TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_ValidateMQTypeMT54x_ValidateMT544/version_1_0/
 jsonSchemaFileNameValidateMT544Request := Validate544.json-schema.json
+jsonSchemaFileNameValidateMT544RequestMethodParameters := Validate544-MethodParameters.json-schema.json
 jsonSchemaFileNameValidateMT544Response := ValidateMT544_ResponseVariables.json-schema.json
 
 # Full Remote Path and FilePath - ValidateMT544
 fullRemotePathValidateMT544_v1_0 := $(remoteUrl)/$(githubUsername)/$(repositorySubCustody)/$(branchSpecific)/$(jsonSchemaPathValidateMT544_v1_0)
 fullRemoteFilePathValidateMT544Request_v1_0 := $(fullRemotePathValidateMT544_v1_0)/$(jsonSchemaFileNameValidateMT544Request)
+fullRemoteFilePathValidateMT544RequestMethodParameters_v1_0 := $(fullRemotePathValidateMT544_v1_0)/$(jsonSchemaFileNameValidateMT544RequestMethodParameters)
 fullRemoteFilePathValidateMT544_v1_0 := $(fullRemotePathValidateMT544_v1_0)/$(jsonSchemaFileNameValidateMT544Response)
 
 # Local - ValidateMT544
 localJsonSchemaFileNameValidateMT544Request_v1_0 := ValidateMT544_v1_0_Request.json-schema.json
+localJsonSchemaFileNameValidateMT544RequestMethodParameters_v1_0 := ValidateMT544_v1_0_RequestMethodParameters.json-schema.json
 localJsonSchemaFileNameValidateMT544_v1_0 := ValidateMT544_v1_0_ResponseVariables.json-schema.json
 fullLocalFilePathValidateMT544Request_v1_0 := $(fullLocalPath)/$(localJsonSchemaFileNameValidateMT544Request_v1_0)
-fullLocalFilePathValidateMT544_v1_0 := $(fullLocalPath)/$(localJsonSchemaFileNameValidateMT544_v1_0)
-
-
-
-# **** Remote Json-Schemas ValidateMT544 ****
-jsonSchemaPathValidateMT544_v1_0 := TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_ValidateMQTypeMT54x_ValidateMT544/version_1_0/
-jsonSchemaFileNameValidateMT544Request := Validate544.json-schema.json
-jsonSchemaFileNameValidateMT544Response := ValidateMT544_ResponseVariables.json-schema.json
-
-# Full Remote Path and FilePath - ValidateMT544
-fullRemotePathValidateMT544_v1_0 := $(remoteUrl)/$(githubUsername)/$(repositorySubCustody)/$(branchSpecific)/$(jsonSchemaPathValidateMT544_v1_0)
-fullRemoteFilePathValidateMT544Request_v1_0 := $(fullRemotePathValidateMT544_v1_0)/$(jsonSchemaFileNameValidateMT544Request)
-fullRemoteFilePathValidateMT544_v1_0 := $(fullRemotePathValidateMT544_v1_0)/$(jsonSchemaFileNameValidateMT544Response)
-
-# Local - ValidateMT544
-localJsonSchemaFileNameValidateMT544Request_v1_0 := ValidateMT544_v1_0_Request.json-schema.json
-localJsonSchemaFileNameValidateMT544_v1_0 := ValidateMT544_v1_0_ResponseVariables.json-schema.json
-fullLocalFilePathValidateMT544Request_v1_0 := $(fullLocalPath)/$(localJsonSchemaFileNameValidateMT544Request_v1_0)
+fullLocalFilePathValidateMT544RequestMethodParameters_v1_0 := $(fullLocalPath)/$(localJsonSchemaFileNameValidateMT544RequestMethodParameters_v1_0)
 fullLocalFilePathValidateMT544_v1_0 := $(fullLocalPath)/$(localJsonSchemaFileNameValidateMT544_v1_0)
 
 
@@ -117,17 +110,21 @@ fullLocalFilePathValidateMT544_v1_0 := $(fullLocalPath)/$(localJsonSchemaFileNam
 # **** Remote Json-Schemas ValidateMT546 ****
 jsonSchemaPathValidateMT546_v1_0 := TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_ValidateMQTypeMT54x_ValidateMT546/version_1_0/
 jsonSchemaFileNameValidateMT546Request := Validate546.json-schema.json
+jsonSchemaFileNameValidateMT546RequestMethodParameters := Validate546-MethodParameters.json-schema.json
 jsonSchemaFileNameValidateMT546Response := ValidateMT546_ResponseVariables.json-schema.json
 
 # Full Remote Path and FilePath - ValidateMT546
 fullRemotePathValidateMT546_v1_0 := $(remoteUrl)/$(githubUsername)/$(repositorySubCustody)/$(branchSpecific)/$(jsonSchemaPathValidateMT546_v1_0)
 fullRemoteFilePathValidateMT546Request_v1_0 := $(fullRemotePathValidateMT546_v1_0)/$(jsonSchemaFileNameValidateMT546Request)
+fullRemoteFilePathValidateMT546RequestMethodParameters_v1_0 := $(fullRemotePathValidateMT546_v1_0)/$(jsonSchemaFileNameValidateMT546RequestMethodParameters)
 fullRemoteFilePathValidateMT546_v1_0 := $(fullRemotePathValidateMT546_v1_0)/$(jsonSchemaFileNameValidateMT546Response)
 
 # Local - ValidateMT546
 localJsonSchemaFileNameValidateMT546Request_v1_0 := ValidateMT546_v1_0_Request.json-schema.json
+localJsonSchemaFileNameValidateMT546RequestMethodParameters_v1_0 := ValidateMT546_v1_0_RequestMethodParameters.json-schema.json
 localJsonSchemaFileNameValidateMT546_v1_0 := ValidateMT546_v1_0_ResponseVariables.json-schema.json
 fullLocalFilePathValidateMT546Request_v1_0 := $(fullLocalPath)/$(localJsonSchemaFileNameValidateMT546Request_v1_0)
+fullLocalFilePathValidateMT546RequestMethodParameters_v1_0 := $(fullLocalPath)/$(localJsonSchemaFileNameValidateMT546RequestMethodParameters_v1_0)
 fullLocalFilePathValidateMT546_v1_0 := $(fullLocalPath)/$(localJsonSchemaFileNameValidateMT546_v1_0)
 
 
@@ -135,15 +132,19 @@ fullLocalFilePathValidateMT546_v1_0 := $(fullLocalPath)/$(localJsonSchemaFileNam
 # **** Remote Json-Schemas ValidateMT548 ****
 jsonSchemaPathValidateMT548_v1_0 := TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_ValidateMQTypeMT54x_ValidateMT548/version_1_0/
 jsonSchemaFileNameValidateMT548Request := Validate548.json-schema.json
+jsonSchemaFileNameValidateMT548RequestMethodParameters := Validate548-MethodParameters.json-schema.json
 jsonSchemaFileNameValidateMT548Response := ValidateMT548_ResponseVariables.json-schema.json
 
 # Full Remote Path and FilePath - ValidateMT548
 fullRemotePathValidateMT548_v1_0 := $(remoteUrl)/$(githubUsername)/$(repositorySubCustody)/$(branchSpecific)/$(jsonSchemaPathValidateMT548_v1_0)
 fullRemoteFilePathValidateMT548Request_v1_0 := $(fullRemotePathValidateMT548_v1_0)/$(jsonSchemaFileNameValidateMT548Request)
+fullRemoteFilePathValidateMT548RequestMethodParameters_v1_0 := $(fullRemotePathValidateMT548_v1_0)/$(jsonSchemaFileNameValidateMT548RequestMethodParameters)
 fullRemoteFilePathValidateMT548_v1_0 := $(fullRemotePathValidateMT548_v1_0)/$(jsonSchemaFileNameValidateMT548Response)
 
 # Local - ValidateMT548
 localJsonSchemaFileNameValidateMT548Request_v1_0 := ValidateMT548_v1_0_Request.json-schema.json
+localJsonSchemaFileNameValidateMT548RequestMethodParameters_v1_0 := ValidateMT548_v1_0_RequestMethodParameters.json-schema.json
 localJsonSchemaFileNameValidateMT548_v1_0 := ValidateMT548_v1_0_ResponseVariables.json-schema.json
 fullLocalFilePathValidateMT548Request_v1_0 := $(fullLocalPath)/$(localJsonSchemaFileNameValidateMT548Request_v1_0)
+fullLocalFilePathValidateMT548RequestMethodParameters_v1_0 := $(fullLocalPath)/$(localJsonSchemaFileNameValidateMT548RequestMethodParameters_v1_0)
 fullLocalFilePathValidateMT548_v1_0 := $(fullLocalPath)/$(localJsonSchemaFileNameValidateMT548_v1_0)
