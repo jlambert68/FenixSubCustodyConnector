@@ -521,12 +521,65 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 
 	}
 
+	// Extract json as string, which should be the only map-key-value pare
+	var methodParametersJsonAsString string
+
+	variableName = "MethodParametersJsonAsString"
+	variableType = "string"
+
+	// Verify that Variable exist in json-map and extract variable
+	tempMapVariable, existInMap = methodParameter[variableName]
+	if existInMap == false {
+
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id": "0c655d9e-ef34-47dc-aef5-21576f77fdfd",
+		}).Fatalln(fmt.Sprintf("Missing parameter '%s'", variableName))
+
+	}
+
+	// Transform variable into correct type
+	methodParametersJsonAsString, canCastTempMapVariableToCorrectVariableType = tempMapVariable.(string)
+	if canCastTempMapVariableToCorrectVariableType == false {
+
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id": "24c341ba-c8d3-4a91-af7f-cfa757ae3582",
+		}).Fatalln(fmt.Sprintf(" Parameter '%s' couldn't be transformed into a '%s'",
+			variableName,
+			variableType))
+	}
+
+	// Secure that 'MethodParametersJsonAsString' is the only key in the map
+	if len(methodParameter) != 1 {
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id": "6c40b69b-e9c2-4ac8-ba57-1ba857d36840",
+		}).Fatalln(fmt.Sprintf(" There are more then 'MethodParametersJsonAsString' as key in 'methodParameter-map'. [%s] ",
+			methodParameter))
+	}
+
+	// Convert 'MethodParametersJsonAsString' into a json
+	var cleanedMethodParametersJsonAsString string
+	cleanedMethodParametersJsonAsString = strings.ReplaceAll(methodParametersJsonAsString, `\"`, `"`)
+
+	var cleanedMethodParameters map[string]interface{}
+
+	// Convert to object that can be validated
+	err = json.Unmarshal([]byte(cleanedMethodParametersJsonAsString), &cleanedMethodParameters)
+
+	if err != nil {
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id":                                  "5445035f-6dd3-4994-8661-ec29f1c3fbe3",
+			"err":                                 err,
+			"cleanedMethodParametersJsonAsString": cleanedMethodParametersJsonAsString,
+		}).Fatalln("Couldn't Unmarshal the json, cleanedMethodParametersJsonAsString, into object that can be validated")
+
+	}
+
 	// *** Extract ExpectedToBePassed ****
 	variableName = "ExpectedToBePassed"
 	variableType = "string"
 
 	// Verify that Variable exist in json-map and extract variable
-	tempMapVariable, existInMap = methodParameter[variableName]
+	tempMapVariable, existInMap = cleanedMethodParameters[variableName]
 	if existInMap == false {
 
 		sharedCode.Logger.WithFields(logrus.Fields{
@@ -562,11 +615,11 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 	variableType = "string"
 
 	// Verify that Variable exist in json-map and extract variable
-	tempMapVariable, existInMap = methodParameter[variableName]
+	tempMapVariable, existInMap = cleanedMethodParameters[variableName]
 	if existInMap == false {
 
 		sharedCode.Logger.WithFields(logrus.Fields{
-			"id": "0db1bff6-7583-4b3d-a9f3-6a498b4c65dc",
+			"id": "62cfe190-446c-4ab3-8868-d6c71795ee5c",
 		}).Fatalln(fmt.Sprintf("Missing parameter '%s'", variableName))
 
 	}
@@ -587,11 +640,11 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 	variableType = "string"
 
 	// Verify that Variable exist in json-map and extract variable
-	tempMapVariable, existInMap = methodParameter[variableName]
+	tempMapVariable, existInMap = cleanedMethodParameters[variableName]
 	if existInMap == false {
 
 		sharedCode.Logger.WithFields(logrus.Fields{
-			"id": "0db1bff6-7583-4b3d-a9f3-6a498b4c65dc",
+			"id": "006168f4-a418-4be0-a62b-61a76b9ae394",
 		}).Fatalln(fmt.Sprintf("Missing parameter '%s'", variableName))
 
 	}
@@ -613,7 +666,7 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 	variableType = "Integer"
 
 	// Verify that Variable exist in json-map and extract variable
-	tempMapVariable, existInMap = methodParameter[variableName]
+	tempMapVariable, existInMap = cleanedMethodParameters[variableName]
 	if existInMap == false {
 
 		sharedCode.Logger.WithFields(logrus.Fields{
@@ -652,7 +705,7 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 	variableType = "String"
 
 	// Verify that Variable exist in json-map and extract variable
-	tempMapVariable, existInMap = methodParameter[variableName]
+	tempMapVariable, existInMap = cleanedMethodParameters[variableName]
 	if existInMap == false {
 
 		sharedCode.Logger.WithFields(logrus.Fields{
@@ -678,7 +731,7 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 	variableType = "String"
 
 	// Verify that Variable exist in json-map and extract variable
-	tempMapVariable, existInMap = methodParameter[variableName]
+	tempMapVariable, existInMap = cleanedMethodParameters[variableName]
 	if existInMap == false {
 
 		sharedCode.Logger.WithFields(logrus.Fields{
@@ -724,7 +777,7 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 		variableType = "String"
 
 		// Verify that Variable exist in json-map and extract variable
-		tempMapVariable, existInMap = methodParameter[variableName]
+		tempMapVariable, existInMap = cleanedMethodParameters[variableName]
 		if existInMap == false {
 
 			sharedCode.Logger.WithFields(logrus.Fields{
@@ -766,6 +819,7 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 		"testDataParameterType":           testDataParameterType,
 		"expectedToBePassedTestApiLevel":  expectedToBePassedTestApiLevel,
 		"methodParameter":                 methodParameter,
+		"cleanedMethodParameters":         cleanedMethodParameters,
 		"expectedToBePassed":              expectedToBePassedAsString,
 		"testCaseExecutionUuid":           testCaseExecutionUuid,
 		"testInstructionExecutionUuid":    testInstructionExecutionUuid,

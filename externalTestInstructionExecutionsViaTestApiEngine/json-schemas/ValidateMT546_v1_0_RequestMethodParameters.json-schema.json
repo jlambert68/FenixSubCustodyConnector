@@ -31,6 +31,9 @@
     "TimeoutTimeInSeconds": {
       "type": "string",
       "pattern": "^[0-9]+$"
+    },
+    "RelatedReference_54x_20CRELA": {
+      "type": "string"
     }
   },
   "required": [
@@ -39,7 +42,8 @@
     "TestInstructionExecutionUuid",
     "TestInstructionExecutionVersion",
     "ExpectedToBePassed",
-    "TimeoutTimeInSeconds"
+    "TimeoutTimeInSeconds",
+    "RelatedReference_54x_20CRELA"
   ],
   "additionalProperties": false
 }
