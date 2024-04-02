@@ -49,7 +49,7 @@ func RestAPIServer() {
 
 	//specify endpoints
 	router.HandleFunc("/health-check", healthCheck).Methods("GET")
-	router.HandleFunc("/TestCaseExecution/ExecuteTestAction", testApiEngineClassTestApiEngineMethod).Methods("POST")
+	router.HandleFunc("/TestCaseExecution/ExecuteTestActionMethod", testApiEngineClassTestApiEngineMethod).Methods("POST")
 	router.NotFoundHandler = http.HandlerFunc(notFound)
 	//router.HandleFunc("/*", allOtherRoutes).Methods("POST")
 	/*
@@ -1060,6 +1060,7 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 
 		case "SendMT540_v1_0":
 			resoponseVariables = ResponseVariableStruct{
+				TestApiEngineMethodName:       "SendMT540_v1_0",
 				TestInstructionVersion:        "v1.0",
 				ResponseVariableUUID:          "24fa2f84-827a-4c01-a86c-da42d888c295",
 				ResponseVariableName:          ":20C::SEME//",
@@ -1070,6 +1071,7 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 
 		case "SendMT542_v1_0":
 			resoponseVariables = ResponseVariableStruct{
+				TestApiEngineMethodName:       "SendMT542_v1_0",
 				TestInstructionVersion:        "v1.0",
 				ResponseVariableUUID:          "9dd57f25-75e0-4024-862b-e0728c066604",
 				ResponseVariableName:          ":20C::SEME//",
@@ -1080,6 +1082,7 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 
 		case "ValidateMT544_v1_0":
 			resoponseVariables = ResponseVariableStruct{
+				TestApiEngineMethodName:       "ValidateMT544_v1_0",
 				TestInstructionVersion:        "v1.0",
 				ResponseVariableUUID:          "39818ba1-676d-42d0-87da-e1080e9d5ffd",
 				ResponseVariableName:          ":20C::SEME//",
@@ -1090,6 +1093,7 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 
 		case "ValidateMT546_v1_0":
 			resoponseVariables = ResponseVariableStruct{
+				TestApiEngineMethodName:       "ValidateMT546_v1_0",
 				TestInstructionVersion:        "v1.0",
 				ResponseVariableUUID:          "5dfd7890-a0b4-4528-804a-451a77f542ad",
 				ResponseVariableName:          ":20C::SEME//",
@@ -1097,9 +1101,11 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 				ResponseVariableTypeName:      "54x_:20C::SEME type",
 				ResponseVariableValueAsString: "MT546_" + uuid.NewString()[:8],
 			}
+
 		case "ValidateMT548_v1_0":
 			resoponseVariables = ResponseVariableStruct{
-				TestInstructionVersion:        testInstructionVersion,
+				TestApiEngineMethodName:       "ValidateMT548_v1_0",
+				TestInstructionVersion:        "v1.0",
 				ResponseVariableUUID:          "8ed1ead9-741b-4115-9f78-f8a7db1d6274",
 				ResponseVariableName:          ":20C::SEME//",
 				ResponseVariableTypeUuid:      "0f6e945e-1556-4cb0-80e5-e021ebc5d8c1",

@@ -36,6 +36,7 @@
       }
     },
     "required": [
+      "TestStepActionMethod",
       "TestInstructionVersion",
       "ResponseVariableUuid",
       "ResponseVariableName",

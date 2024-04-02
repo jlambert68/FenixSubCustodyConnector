@@ -140,6 +140,9 @@
         "ResponseVariableMessage": {
             "type": "object",
             "properties": {
+                "TestStepActionMethod": {
+                    "type": "string"
+                },
                 "TestInstructionVersion": {
                     "type": "string"
                 },
@@ -162,6 +165,7 @@
                 }
             },
             "required": [
+                "TestStepActionMethod",
                 "TestInstructionVersion",
                 "ResponseVariableUuid",
                 "ResponseVariableName",

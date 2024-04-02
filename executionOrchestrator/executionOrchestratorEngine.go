@@ -480,7 +480,7 @@ func validateAndConvertTestApiEngineResponse(
 	var foundError bool
 	var errLogPostsToAdd []*fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage_LogPostMessage
 
-	// Validate that outgoing in incoming TestInstructionExecution is the same
+	// Validate that outgoing and incoming TestInstructionExecution is the same
 	if testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionExecutionUuid !=
 		testApiEngineFinalTestInstructionExecutionResult.TestInstructionExecutionUUID ||
 		strconv.Itoa(int(testInstructionExecutionPubSubRequest.TestInstruction.

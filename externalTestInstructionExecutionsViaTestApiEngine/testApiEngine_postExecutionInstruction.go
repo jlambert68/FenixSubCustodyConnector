@@ -50,6 +50,7 @@ func PostTestInstructionUsingRestCall(
 
 	// Add TestCaseExecutionUuid, TestInstructionExecutionUuid, TestInstructionExecutionVersion,
 	// TestInstructionVersion and TimeoutTimeInSeconds
+	attributesMap["TestStepActionMethod"] = string(testApiEngineRestApiMessageValues.TestApiEngineMethodName)
 	attributesMap["TestInstructionVersion"] = testInstructionVersion
 	attributesMap["TestCaseExecutionUuid"] = testApiEngineRestApiMessageValues.TestCaseExecutionUuid
 	attributesMap["TestInstructionExecutionUuid"] = testApiEngineRestApiMessageValues.TestInstructionExecutionUuid
@@ -74,8 +75,8 @@ func PostTestInstructionUsingRestCall(
 	// Request to be sent to TestApiEngine
 	var tempTestApiEngineRequest testApiEngineRequestStruct
 	tempTestApiEngineRequest = testApiEngineRequestStruct{
-		TestStepClassName:     string(testApiEngineRestApiMessageValues.TestApiEngineClassNameNAME),
-		TestStepActionMethod:  string(testApiEngineRestApiMessageValues.TestApiEngineMethodNameNAME),
+		TestStepClassName:     string(testApiEngineRestApiMessageValues.TestApiEngineClassName),
+		TestStepActionMethod:  string(testApiEngineRestApiMessageValues.TestApiEngineMethodName),
 		TestDataParameterType: "FixedValue",
 		ExpectedToBePassed:    true,
 		MethodParameters:      map[string]string{"MethodParametersJsonAsString": string(attributesMapAsJson)},
@@ -366,7 +367,7 @@ func validateAndTransformRestResponse(
 
 	} else {
 		sharedCode.Logger.WithFields(logrus.Fields{
-			"id":                               "2a2cb32d-84d7-4a7f-aced-2b1466982513",
+			"id":                               "27ff673d-f311-4753-8ae8-ab922ce896c9",
 			"testApiEngineResponseMessageJson": *testApiEngineResponseMessageJson,
 		}).Debug("'testApiEngineResponseMessageJson' is valid to json-schema " +
 			"'testApiEngineResponseMessageJsonSchema'")

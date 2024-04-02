@@ -11,8 +11,8 @@ type TestApiEngineRestApiMessageStruct struct {
 	TestCaseExecutionUuid                string
 	TestInstructionExecutionUuid         string
 	TestInstructionExecutionVersion      uint32
-	TestApiEngineClassNameNAME           testApiEngineClassesAndMethods.TestApiEngine_ClassName_Name_SubCustody_Type
-	TestApiEngineMethodNameNAME          testApiEngineClassesAndMethods.TestApiEngine_MethodName_Name_SubCustody_Type
+	TestApiEngineClassName               testApiEngineClassesAndMethods.TestApiEngine_ClassName_Name_SubCustody_Type
+	TestApiEngineMethodName              testApiEngineClassesAndMethods.TestApiEngine_MethodName_Name_SubCustody_Type
 	TestApiEngineExpectedToBePassedValue TypeAndStructs.AttributeValueAsStringType
 	TestInstructionAttribute             []TestInstructionAttributesUuidAndValueStruct
 	TestApiEngineAttributes              map[TypeAndStructs.TestInstructionAttributeUUIDType]*testApiEngineClassesAndMethods.TestApiEngineAttributesStruct
@@ -96,6 +96,7 @@ type FoundVersusExpectedValueStruct struct {
 // ResponseVariableStruct within 'TestApiEngineFinalTestInstructionExecutionResultStruct'
 // Holds one response variable and its value
 type ResponseVariableStruct struct {
+	TestApiEngineMethodName       string `json:"TestStepActionMethod"`
 	TestInstructionVersion        string `json:"TestInstructionVersion"`
 	ResponseVariableUUID          string `json:"ResponseVariableUuid"`
 	ResponseVariableName          string `json:"ResponseVariableName"`

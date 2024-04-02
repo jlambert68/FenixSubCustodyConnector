@@ -43,6 +43,7 @@
     }
   },
   "required": [
+    "TestStepActionMethod",
     "TestInstructionVersion",
     "TestCaseExecutionUuid",
     "TestInstructionExecutionUuid",
