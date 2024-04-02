@@ -5,6 +5,12 @@
   "items": {
     "type": "object",
     "properties": {
+      "TestStepActionMethod": {
+        "type": "string",
+        "enum": [
+          "ValidateMT544_v1_0"
+        ]
+      },
       "TestInstructionVersion": {
         "type": "string",
         "enum": [

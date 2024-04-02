@@ -3,6 +3,12 @@
   "title": "SendMT542-MethodParameters in Request, version 1.0",
   "type": "object",
   "properties": {
+    "TestStepActionMethod": {
+      "type": "string",
+      "enum": [
+        "SendMT542_v1_0"
+      ]
+    },
     "TestInstructionVersion": {
       "type": "string",
       "enum": [

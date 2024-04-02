@@ -3,6 +3,12 @@
   "title": "ValidateMT544-MethodParameters in Request, version 1.0",
   "type": "object",
   "properties": {
+    "TestStepActionMethod": {
+      "type": "string",
+      "enum": [
+        "ValidateMT544_v1_0"
+      ]
+    },
     "TestInstructionVersion": {
       "type": "string",
       "enum": [
