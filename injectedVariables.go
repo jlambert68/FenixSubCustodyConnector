@@ -37,6 +37,7 @@ var (
 	injectedUseServiceAccount                                                                     string
 	injectedShouldProxyServerBeUsed                                                               string
 	injectedProxyServerURL                                                                        string
+	injectedShouldSpireServerBeUsedForGettingGcpToken                                             string
 )
 
 // Used for hard coding if Injected or real Environment Variables are expected
@@ -78,4 +79,5 @@ var injectedVariablesMap = map[string]*string{
 	"Injected_UseServiceAccount":                                        &injectedUseServiceAccount,
 	"Injected_ShouldProxyServerBeUsed":                                  &injectedShouldProxyServerBeUsed,
 	"Injected_ProxyServerURL":                                           &injectedProxyServerURL,
+	"Injected_ShouldSpireServerBeUsedForGettingGcpToken":                &injectedShouldSpireServerBeUsedForGettingGcpToken,
 }
