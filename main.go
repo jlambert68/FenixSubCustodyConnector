@@ -22,7 +22,9 @@ func main() {
 	executeTestInstructionUsingTestApiEngine.InitiateTestApiEngine()
 
 	// Initiate ExecutionOrchestratorEngine
-	executionOrchestrator.InitiateExecutionOrchestratorEngine(allowedUsers)
+	executionOrchestrator.InitiateExecutionOrchestratorEngine(
+		allowedUsers,
+		templateUrlParameters)
 
 	// Keep program running
 	var waitChannel chan bool
