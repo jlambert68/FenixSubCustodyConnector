@@ -1,6 +1,7 @@
 {
   "TemplatePaths": [
     {
+      "RepositoryApiUrlName": "Template Repository",
       "RepositoryApiUrl": "https://api.github.com/repos",
       "RepositoryOwner": "jlambert68",
       "RepositoryName":"FenixTesterGui",

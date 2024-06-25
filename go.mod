@@ -5,8 +5,8 @@ go 1.21
 require (
 	github.com/google/uuid v1.6.0
 	github.com/gorilla/mux v1.8.1
-	github.com/jlambert68/FenixConnectorAdminShared v0.0.0-20240625112058-972541eca1f6
-	github.com/jlambert68/FenixGrpcApi v0.0.0-20240625063049-78bc2fe079cd
+	github.com/jlambert68/FenixConnectorAdminShared v0.0.0-20240625131101-1bc329518f76
+	github.com/jlambert68/FenixGrpcApi v0.0.0-20240625130155-b04ecf198517
 	github.com/jlambert68/FenixSubCustodyTestInstructionAdmin v0.0.0-20240402172507-029db1f3976e
 	github.com/jlambert68/FenixSyncShared v0.0.0-20240215140904-db0840b5d70a
 	github.com/jlambert68/FenixTestInstructionsAdminShared v0.0.0-20240312181725-d712a9d80efe
@@ -34,7 +34,7 @@ require (
 	github.com/gorilla/context v1.1.2 // indirect
 	github.com/gorilla/pat v1.0.2 // indirect
 	github.com/gorilla/securecookie v1.1.2 // indirect
-	github.com/gorilla/sessions v1.2.2 // indirect
+	github.com/gorilla/sessions v1.3.0 // indirect
 	github.com/jackc/chunkreader/v2 v2.0.1 // indirect
 	github.com/jackc/pgconn v1.14.3 // indirect
 	github.com/jackc/pgio v1.0.0 // indirect
