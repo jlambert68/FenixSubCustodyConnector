@@ -6,6 +6,13 @@
       "RepositoryOwner": "jlambert68",
       "RepositoryName":"FenixTesterGui",
       "RepositoryPath" : ""
+    },
+    {
+      "RepositoryApiUrlName": "Extra Repository",
+      "RepositoryApiUrl": "https://api.github.com/repos",
+      "RepositoryOwner": "jlambert68",
+      "RepositoryName":"FenixGuiTestCaseBuilderServer",
+      "RepositoryPath" : ""
     }
   ]
 }

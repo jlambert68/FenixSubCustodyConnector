@@ -9,6 +9,7 @@ import (
 	fenixConnectorAdminShared_sharedCode "github.com/jlambert68/FenixConnectorAdminShared/common_config"
 	"github.com/jlambert68/FenixConnectorAdminShared/fenixConnectorAdminShared"
 	fenixExecutionWorkerGrpcApi "github.com/jlambert68/FenixGrpcApi/FenixExecutionServer/fenixExecutionWorkerGrpcApi/go_grpc_api"
+	"github.com/jlambert68/FenixScriptEngine/testDataEngine"
 	"github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers"
 	TestInstruction_SendOnMQTypeMT_SendMT540 "github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_SendOnMQTypeMT_SendMT540"
 	TestInstruction_SendOnMQTypeMT_SendMT540_version1_0 "github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_SendOnMQTypeMT_SendMT540/version_1_0"
@@ -20,6 +21,7 @@ import (
 	TestInstruction_ValidateMQTypeMT54x_ValidateMT546_version1_0 "github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_ValidateMQTypeMT54x_ValidateMT546/version_1_0"
 	TestInstruction_ValidateMQTypeMT54x_ValidateMT548 "github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_ValidateMQTypeMT54x_ValidateMT548"
 	TestInstruction_ValidateMQTypeMT54x_ValidateMT548_version1_0 "github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_ValidateMQTypeMT54x_ValidateMT548/version_1_0"
+	fenixSyncShared "github.com/jlambert68/FenixSyncShared"
 	"github.com/jlambert68/FenixTestInstructionsAdminShared/TestInstructionAndTestInstuctionContainerTypes"
 	"github.com/jlambert68/FenixTestInstructionsAdminShared/TypeAndStructs"
 	"github.com/sirupsen/logrus"
@@ -33,11 +35,16 @@ var connectorFunctionsToDoCallBackOn *fenixConnectorAdminShared_sharedCode.Conne
 
 var allowedUsers []byte
 var templateUrlParameters []byte
+var simpleTestDataFiles [][]byte
 
-func InitiateExecutionOrchestratorEngine(tempAllowedUsers []byte, tempTemplateUrlParameters []byte) {
+func InitiateExecutionOrchestratorEngine(
+	tempAllowedUsers []byte,
+	tempTemplateUrlParameters []byte,
+	tempSimpleTestDataFiles [][]byte) {
 
 	allowedUsers = tempAllowedUsers
 	templateUrlParameters = tempTemplateUrlParameters
+	simpleTestDataFiles = tempSimpleTestDataFiles
 
 	connectorFunctionsToDoCallBackOn = &fenixConnectorAdminShared_sharedCode.ConnectorCallBackFunctionsStruct{
 		GetMaxExpectedFinishedTimeStamp:        getMaxExpectedFinishedTimeStamp,
@@ -45,6 +52,7 @@ func InitiateExecutionOrchestratorEngine(tempAllowedUsers []byte, tempTemplateUr
 		InitiateLogger:                         initiateLogger,
 		GenerateSupportedTestInstructionsAndTestInstructionContainersAndAllowedUsers: generateSupportedTestInstructionsAndTestInstructionContainersAndAllowedUsers,
 		GenerateTemplateRepositoryConnectionParameters:                               generateTemplateRepositoryConnectionParameters,
+		GenerateSimpleTestData: generateSimpleTestData,
 	}
 	fenixConnectorAdminShared.InitiateFenixConnectorAdminShared(connectorFunctionsToDoCallBackOn)
 
@@ -246,6 +254,30 @@ func generateTemplateRepositoryConnectionParameters() *fenixConnectorAdminShared
 	// Loop
 
 	return allTemplateRepositoryConnectionParameters
+
+}
+
+// Generates the Simple" TestData that will be sent via gRPC to Worker
+// Should return 'nil' if there is no 'simple' TestData
+func generateSimpleTestData() []*testDataEngine.TestDataFromSimpleTestDataAreaStruct {
+
+	var testDataFiles []*testDataEngine.TestDataFromSimpleTestDataAreaStruct
+	var fileHash string
+
+	for _, testDataFile := range simpleTestDataFiles {
+
+		var simpleTestDataFile testDataEngine.TestDataFromSimpleTestDataAreaStruct
+		simpleTestDataFile = testDataEngine.ImportEmbeddedSimpleCsvTestDataFile(testDataFile, ';')
+
+		// Get file hash and add to data
+		fileHash = fenixSyncShared.HashSingleValue(string(testDataFile))
+		simpleTestDataFile.TestDataFileSha256Hash = fileHash
+
+		// Add TestData to slice of all TestData
+		testDataFiles = append(testDataFiles, &simpleTestDataFile)
+	}
+
+	return testDataFiles
 
 }
 

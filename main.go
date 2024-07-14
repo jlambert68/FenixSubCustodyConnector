@@ -24,7 +24,10 @@ func main() {
 	// Initiate ExecutionOrchestratorEngine
 	executionOrchestrator.InitiateExecutionOrchestratorEngine(
 		allowedUsers,
-		templateUrlParameters)
+		templateUrlParameters,
+		[][]byte{embeddedFile_SubCustody_MainTestDataArea,
+			embeddedFile_SubCustody_ExtraTestDataArea,
+			embeddedFile_CustodyCash_MainTestDataArea})
 
 	// Keep program running
 	var waitChannel chan bool

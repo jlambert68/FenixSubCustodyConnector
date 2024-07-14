@@ -1,12 +1,15 @@
 module FenixSubCustodyConnector
 
-go 1.21
+go 1.22
+
+toolchain go1.22.5
 
 require (
 	github.com/google/uuid v1.6.0
 	github.com/gorilla/mux v1.8.1
-	github.com/jlambert68/FenixConnectorAdminShared v0.0.0-20240625131101-1bc329518f76
-	github.com/jlambert68/FenixGrpcApi v0.0.0-20240625130155-b04ecf198517
+	github.com/jlambert68/FenixConnectorAdminShared v0.0.0-20240714192425-7ad60cda0aec
+	github.com/jlambert68/FenixGrpcApi v0.0.0-20240714144145-01c22e77a049
+	github.com/jlambert68/FenixScriptEngine v0.0.0-20240714194535-aa801b48871c
 	github.com/jlambert68/FenixSubCustodyTestInstructionAdmin v0.0.0-20240402172507-029db1f3976e
 	github.com/jlambert68/FenixSyncShared v0.0.0-20240215140904-db0840b5d70a
 	github.com/jlambert68/FenixTestInstructionsAdminShared v0.0.0-20240312181725-d712a9d80efe
