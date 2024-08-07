@@ -1,0 +1,20 @@
+package executionOrchestrator
+
+import (
+	executeTestInstructionUsingTestApiEngine "FenixSubCustodyConnector/externalTestInstructionExecutionsViaTestApiEngine"
+	"github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers"
+	"github.com/jlambert68/FenixTestInstructionsAdminShared/TestInstructionAndTestInstuctionContainerTypes"
+)
+
+// Generates the 'SupportedTestInstructionsAndTestInstructionContainersAndAllowedUsers' that will be sent via gRPC to Worker
+func generateSupportedTestInstructionsAndTestInstructionContainersAndAllowedUsers() *TestInstructionAndTestInstuctionContainerTypes.
+	TestInstructionsAndTestInstructionsContainersStruct {
+
+	// Generate the full structure for supported TestInstructions, TestInstructionContainers and Allowed Users
+	SupportedTestInstructionsAndTestInstructionContainersAndAllowedUsers,
+		executeTestInstructionUsingTestApiEngine.TestApiEngineClassesAndMethodsAndAttributesMapPtr = TestInstructionsAndTesInstructionContainersAndAllowedUsers.
+		GenerateTestInstructionsAndTestInstructionContainersAndAllowedUsers_SubCustody(allowedUsers)
+
+	return SupportedTestInstructionsAndTestInstructionContainersAndAllowedUsers
+
+}

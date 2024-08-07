@@ -7,12 +7,15 @@ toolchain go1.22.5
 require (
 	github.com/google/uuid v1.6.0
 	github.com/gorilla/mux v1.8.1
-	github.com/jlambert68/FenixConnectorAdminShared v0.0.0-20240714192425-7ad60cda0aec
-	github.com/jlambert68/FenixGrpcApi v0.0.0-20240714144145-01c22e77a049
-	github.com/jlambert68/FenixScriptEngine v0.0.0-20240714194535-aa801b48871c
+	github.com/gorilla/pat v1.0.2
+	github.com/gorilla/sessions v1.2.2 // v1.3.0 gives session error when trying to get token from GCP
+	github.com/jlambert68/FenixConnectorAdminShared v0.0.0-20240807081321-aa238039e734
+	github.com/jlambert68/FenixGrpcApi v0.0.0-20240727110216-c209b701e444
+	github.com/jlambert68/FenixScriptEngine v0.0.0-20240807140205-50acbdb65aab
 	github.com/jlambert68/FenixSubCustodyTestInstructionAdmin v0.0.0-20240402172507-029db1f3976e
 	github.com/jlambert68/FenixSyncShared v0.0.0-20240215140904-db0840b5d70a
 	github.com/jlambert68/FenixTestInstructionsAdminShared v0.0.0-20240312181725-d712a9d80efe
+	github.com/markbates/goth v1.80.0
 	github.com/santhosh-tekuri/jsonschema/v5 v5.3.1
 	github.com/sirupsen/logrus v1.9.3
 	google.golang.org/protobuf v1.34.2
@@ -35,9 +38,7 @@ require (
 	github.com/googleapis/enterprise-certificate-proxy v0.3.2 // indirect
 	github.com/googleapis/gax-go/v2 v2.12.5 // indirect
 	github.com/gorilla/context v1.1.2 // indirect
-	github.com/gorilla/pat v1.0.2 // indirect
 	github.com/gorilla/securecookie v1.1.2 // indirect
-	github.com/gorilla/sessions v1.3.0 // indirect
 	github.com/jackc/chunkreader/v2 v2.0.1 // indirect
 	github.com/jackc/pgconn v1.14.3 // indirect
 	github.com/jackc/pgio v1.0.0 // indirect
@@ -47,7 +48,6 @@ require (
 	github.com/jackc/pgtype v1.14.3 // indirect
 	github.com/jackc/pgx/v4 v4.18.2 // indirect
 	github.com/jackc/puddle v1.3.0 // indirect
-	github.com/markbates/goth v1.80.0 // indirect
 	go.opencensus.io v0.24.0 // indirect
 	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.52.0 // indirect
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.52.0 // indirect
