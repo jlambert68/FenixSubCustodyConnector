@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/google/uuid"
 	fenixExecutionWorkerGrpcApi "github.com/jlambert68/FenixGrpcApi/FenixExecutionServer/fenixExecutionWorkerGrpcApi/go_grpc_api"
+	testInstruction_SendTestDataToThisDomain_version_1_0 "github.com/jlambert68/FenixStandardTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_SendTestDataToThisDomain/version_1_0"
 	"github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_SendOnMQTypeMT_SendMT540"
 	TestInstruction_SendOnMQTypeMT_SendMT540_version1_0 "github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_SendOnMQTypeMT_SendMT540/version_1_0"
 	"github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_SendOnMQTypeMT_SendMT542"
@@ -35,6 +36,16 @@ func processTestInstructionExecutionRequest(
 
 	// Depending on TestInstruction then choose how to execution the TestInstruction
 	switch TypeAndStructs.OriginalElementUUIDType(testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionOriginalUuid) {
+
+	// General TestInstruction that can be forced to Connector by user
+	// TestInstruction holds the TestData that the TestCase is using
+	case testInstruction_SendTestDataToThisDomain_version_1_0.TestInstructionUUID_FenixSentToUsersDomain_SendTestDataToThisDomain:
+
+		// Just log out the Data
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id":                                    "865f4047-b11d-4a04-886c-5ee9a2cd800a",
+			"testInstructionExecutionPubSubRequest": testInstructionExecutionPubSubRequest,
+		}).Info("The TestInstruction for TestData was sent to Connector")
 
 	// Send a MT54x on MQ or Validate MT54x
 	case TestInstruction_SendOnMQTypeMT_SendMT540.TestInstructionUUID_SubCustody_SendMT540,

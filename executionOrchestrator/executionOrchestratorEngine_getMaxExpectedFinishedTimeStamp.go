@@ -4,6 +4,7 @@ import (
 	"FenixSubCustodyConnector/sharedCode"
 	"fmt"
 	fenixExecutionWorkerGrpcApi "github.com/jlambert68/FenixGrpcApi/FenixExecutionServer/fenixExecutionWorkerGrpcApi/go_grpc_api"
+	testInstruction_SendTestDataToThisDomain_version_1_0 "github.com/jlambert68/FenixStandardTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_SendTestDataToThisDomain/version_1_0"
 	"github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_SendOnMQTypeMT_SendMT540"
 	TestInstruction_SendOnMQTypeMT_SendMT540_version1_0 "github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_SendOnMQTypeMT_SendMT540/version_1_0"
 	"github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_SendOnMQTypeMT_SendMT542"
@@ -36,6 +37,31 @@ func getMaxExpectedFinishedTimeStamp(testInstructionExecutionPubSubRequest *feni
 
 	// Depending on TestInstruction calculate or set 'MaxExpectedFinishedTimeStamp'
 	switch TypeAndStructs.OriginalElementUUIDType(testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionOriginalUuid) {
+
+	// General TestInstruction that can be forced to Connector by user
+	// TestInstruction holds the TestData that the TestCase is using
+	case testInstruction_SendTestDataToThisDomain_version_1_0.TestInstructionUUID_FenixSentToUsersDomain_SendTestDataToThisDomain:
+		switch version {
+		case "v1.0":
+
+			// Extract duration
+			expectedExecutionDurationInSeconds = testInstruction_SendTestDataToThisDomain_version_1_0.
+				ExpectedMaxTestInstructionExecutionDurationInSeconds
+
+			// Create Max Finished TimeStamp
+			maxExpectedFinishedTimeStamp = time.Now().Add(time.Duration(expectedExecutionDurationInSeconds) * time.Second)
+
+		default:
+			sharedCode.Logger.WithFields(logrus.Fields{
+				"id": "a37c16ba-09b4-40c7-97a2-fe282a84071c",
+				"TestInstructionOriginalUuid": testInstructionExecutionPubSubRequest.TestInstruction.
+					TestInstructionOriginalUuid,
+				"TestInstructionName": testInstructionExecutionPubSubRequest.TestInstruction.
+					TestInstructionName,
+				"version": version,
+			}).Fatalln("Unhandled version, will exit")
+
+		}
 
 	case TestInstruction_SendOnMQTypeMT_SendMT540.TestInstructionUUID_SubCustody_SendMT540:
 
