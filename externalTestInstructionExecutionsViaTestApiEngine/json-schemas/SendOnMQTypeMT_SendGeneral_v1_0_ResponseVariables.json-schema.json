@@ -1,1 +1,70 @@
-404: Not Found
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Response Variables Schema for SendOnMQTypeMT_SendGeneral",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "TestStepActionMethod": {
+        "type": "string",
+        "enum": [
+          "SendMTGeneral_v1_0"
+        ]
+      },
+      "TestInstructionVersion": {
+        "type": "string",
+        "enum": [
+          "v1.0"
+        ]
+      },
+      "ResponseVariableUuid": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "ResponseVariableName": {
+        "type": "string"
+      },
+      "ResponseVariableTypeUuid": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "ResponseVariableTypeName": {
+        "type": "string"
+      },
+      "ResponseVariableValueAsString": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "TestStepActionMethod",
+      "TestInstructionVersion",
+      "ResponseVariableUuid",
+      "ResponseVariableName",
+      "ResponseVariableTypeUuid",
+      "ResponseVariableTypeName",
+      "ResponseVariableValueAsString"
+    ],
+    "additionalProperties": false,
+    "oneOf": [
+      {
+        "type": "null"
+      },
+      {
+        "properties": {
+          "ResponseVariableUuid": {
+            "const": "c002af12-114c-4e55-9574-05fae7cf674c"
+          },
+          "ResponseVariableName": {
+            "const": ":20C::SEME//"
+          },
+          "ResponseVariableTypeUuid": {
+            "const": "0f6e945e-1556-4cb0-80e5-e021ebc5d8c1"
+          },
+          "ResponseVariableTypeName": {
+            "const": "54x_:20C::SEME type"
+          }
+        }
+      }
+    ]
+  }
+}

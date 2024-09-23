@@ -1,1 +1,59 @@
-404: Not Found
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "SendOnMQTypeMT_SendGeneral-MethodParameters in Request, version 1.0",
+  "type": "object",
+  "properties": {
+    "TestStepActionMethod": {
+      "type": "string",
+      "enum": [
+        "SendMTGeneral_v1_0"
+      ]
+    },
+    "TestInstructionVersion": {
+      "type": "string",
+      "enum": [
+        "v1.0"
+      ]
+    },
+    "TestCaseExecutionUuid": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "TestInstructionExecutionUuid": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "TestInstructionExecutionVersion": {
+      "type": "string",
+      "pattern": "^[0-9]+$"
+    },
+    "ExpectedToBePassed": {
+      "type": "string",
+      "enum": [
+        "true",
+        "false"
+      ]
+    },
+    "TimeoutTimeInSeconds": {
+      "type": "string",
+      "pattern": "^[0-9]+$"
+    },
+    "Swift MT-message type": {
+      "type": "string"
+    },
+    "TemplateAsString": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "TestInstructionVersion",
+    "TestCaseExecutionUuid",
+    "TestInstructionExecutionUuid",
+    "TestInstructionExecutionVersion",
+    "ExpectedToBePassed",
+    "TimeoutTimeInSeconds",
+    "Swift MT-message type",
+    "TemplateAsString"
+  ],
+  "additionalProperties": false
+}

@@ -17,6 +17,7 @@ fullRemoteFilePathOverAll := $(fullRemotePathOverAll)/$(jsonSchemaFileNameOverAl
 
 # Remote Specific
 repositorySubCustody := FenixSubCustodyTestInstructionAdmin
+repositoryFenixStandard := FenixStandardTestInstructionAdmin
 branchSpecific := master
 
 # General Local path
@@ -41,7 +42,7 @@ fullLocalFilePathTestApiEngineResponse := $(fullLocalPath)/$(localJsonSchemaFile
 
 
 # **** Remote Json-Schemas SendOnMQTypeMT_SendGeneral ****
-jsonSchemaPathSendOnMQTypeMT_SendGeneral_v1_0 := TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_SendOnMQTypeMT_SendOnMQTypeMT_SendGeneral/version_1_0/
+jsonSchemaPathSendOnMQTypeMT_SendGeneral_v1_0 := TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_SendOnMQTypeMT_SendGeneral/version_1_0/
 jsonSchemaFileNameSendOnMQTypeMT_SendGeneralRequest := SendOnMQTypeMT_SendGeneral.json-schema.json
 jsonSchemaFileNameSendOnMQTypeMT_SendGeneralRequestMethodParameters := SendOnMQTypeMT_SendGeneral-MethodParameters.json-schema.json
 jsonSchemaFileNameSendOnMQTypeMT_SendGeneralResponse := SendOnMQTypeMT_SendGeneral_ResponseVariables.json-schema.json

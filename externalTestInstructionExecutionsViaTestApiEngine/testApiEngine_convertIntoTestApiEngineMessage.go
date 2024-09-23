@@ -148,18 +148,21 @@ func ConvertTestInstructionExecutionIntoTestApiEngineRestCallMessage(
 		var tempTestApiEngineAttributes TestApiEngineClassesAndMethodsAndAttributes.TestApiEngineAttributesStruct
 		tempTestApiEngineAttributes = *tempTestApiEngineAttributesPtr
 
-		// Create and add reference between Attribute and TestApiEngineAttribute-name to be used in RestRequest
-		var tempTestApiEngineAttributesToUse *testApiEngineClassesAndMethods.TestApiEngineAttributesStruct
-		tempTestApiEngineAttributesToUse = &testApiEngineClassesAndMethods.TestApiEngineAttributesStruct{
-			TestInstructionAttributeUUID:     tempTestApiEngineAttributes.TestInstructionAttributeUUID,
-			TestInstructionAttributeName:     tempTestApiEngineAttributes.TestInstructionAttributeName,
-			TestInstructionAttributeTypeUUID: tempTestApiEngineAttributes.TestInstructionAttributeTypeUUID,
-			TestApiEngineAttributeNameUUID:   tempTestApiEngineAttributes.TestApiEngineAttributeNameUUID,
-			TestApiEngineAttributeNameName:   tempTestApiEngineAttributes.TestApiEngineAttributeNameName,
-		}
-		// Add Attribute
-		TestApiEngineRestApiMessageValues.TestApiEngineAttributes[TypeAndStructs.TestInstructionAttributeUUIDType(testInstructionAttribute.TestInstructionAttributeUuid)] = tempTestApiEngineAttributesToUse
+		// Check this attribute should be sent to TestApiEngine
+		if tempTestApiEngineAttributes.AttributeShouldBeSentToTestApiEngine == true {
 
+			// Create and add reference between Attribute and TestApiEngineAttribute-name to be used in RestRequest
+			var tempTestApiEngineAttributesToUse *testApiEngineClassesAndMethods.TestApiEngineAttributesStruct
+			tempTestApiEngineAttributesToUse = &testApiEngineClassesAndMethods.TestApiEngineAttributesStruct{
+				TestInstructionAttributeUUID:     tempTestApiEngineAttributes.TestInstructionAttributeUUID,
+				TestInstructionAttributeName:     tempTestApiEngineAttributes.TestInstructionAttributeName,
+				TestInstructionAttributeTypeUUID: tempTestApiEngineAttributes.TestInstructionAttributeTypeUUID,
+				TestApiEngineAttributeNameUUID:   tempTestApiEngineAttributes.TestApiEngineAttributeNameUUID,
+				TestApiEngineAttributeNameName:   tempTestApiEngineAttributes.TestApiEngineAttributeNameName,
+			}
+			// Add Attribute
+			TestApiEngineRestApiMessageValues.TestApiEngineAttributes[TypeAndStructs.TestInstructionAttributeUUIDType(testInstructionAttribute.TestInstructionAttributeUuid)] = tempTestApiEngineAttributesToUse
+		}
 	}
 
 	return TestApiEngineRestApiMessageValues, err
