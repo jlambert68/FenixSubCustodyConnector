@@ -43,6 +43,12 @@
     },
     "TemplateAsString": {
       "type": "string"
+    },
+    "Selected Template to send": {
+      "type": "string"
+    },
+    "Replace Placeholder Values": {
+      "type": "string"
     }
   },
   "required": [
@@ -53,7 +59,9 @@
     "ExpectedToBePassed",
     "TimeoutTimeInSeconds",
     "Swift MT-message type",
-    "TemplateAsString"
+    "TemplateAsString",
+    "Selected Template to send",
+    "Replace Placeholder Values"
   ],
   "additionalProperties": false
 }
