@@ -40,6 +40,26 @@ fullLocalFilePathTestApiEngineResponse := $(fullLocalPath)/$(localJsonSchemaFile
 
 
 
+# **** Remote Json-Schemas SendOnMQTypeMT_SendGeneral ****
+jsonSchemaPathSendOnMQTypeMT_SendGeneral_v1_0 := TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_SendOnMQTypeMT_SendOnMQTypeMT_SendGeneral/version_1_0/
+jsonSchemaFileNameSendOnMQTypeMT_SendGeneralRequest := SendOnMQTypeMT_SendGeneral.json-schema.json
+jsonSchemaFileNameSendOnMQTypeMT_SendGeneralRequestMethodParameters := SendOnMQTypeMT_SendGeneral-MethodParameters.json-schema.json
+jsonSchemaFileNameSendOnMQTypeMT_SendGeneralResponse := SendOnMQTypeMT_SendGeneral_ResponseVariables.json-schema.json
+
+# Full Remote Path and FilePath - SendOnMQTypeMT_SendGeneral
+fullRemotePathSendOnMQTypeMT_SendGeneral_v1_0 := $(remoteUrl)/$(githubUsername)/$(repositorySubCustody)/$(branchSpecific)/$(jsonSchemaPathSendOnMQTypeMT_SendGeneral_v1_0)
+fullRemoteFilePathSendOnMQTypeMT_SendGeneralRequest_v1_0 := $(fullRemotePathSendOnMQTypeMT_SendGeneral_v1_0)/$(jsonSchemaFileNameSendOnMQTypeMT_SendGeneralRequest)
+fullRemoteFilePathSendOnMQTypeMT_SendGeneralRequestMethodParameters_v1_0 := $(fullRemotePathSendOnMQTypeMT_SendGeneral_v1_0)/$(jsonSchemaFileNameSendOnMQTypeMT_SendGeneralRequestMethodParameters)
+fullRemoteFilePathSendOnMQTypeMT_SendGeneralResponse_v1_0 := $(fullRemotePathSendOnMQTypeMT_SendGeneral_v1_0)/$(jsonSchemaFileNameSendOnMQTypeMT_SendGeneralResponse)
+
+# Local - SendOnMQTypeMT_SendGeneral
+localJsonSchemaFileNameSendOnMQTypeMT_SendGeneralRequest_v1_0 := SendOnMQTypeMT_SendGeneral_v1_0_Request.json-schema.json
+localJsonSchemaFileNameSendOnMQTypeMT_SendGeneralRequestMethodParameters_v1_0 := SendOnMQTypeMT_SendGeneral_v1_0_RequestMethodParameters.json-schema.json
+localJsonSchemaFileNameSendOnMQTypeMT_SendGeneral_v1_0 := SendOnMQTypeMT_SendGeneral_v1_0_ResponseVariables.json-schema.json
+fullLocalFilePathSendOnMQTypeMT_SendGeneralRequest_v1_0 := $(fullLocalPath)/$(localJsonSchemaFileNameSendOnMQTypeMT_SendGeneralRequest_v1_0)
+fullLocalFilePathSendOnMQTypeMT_SendGeneralRequestMethodParameters_v1_0 := $(fullLocalPath)/$(localJsonSchemaFileNameSendOnMQTypeMT_SendGeneralRequestMethodParameters_v1_0)
+fullLocalFilePathSendOnMQTypeMT_SendGeneral_v1_0 := $(fullLocalPath)/$(localJsonSchemaFileNameSendOnMQTypeMT_SendGeneral_v1_0)
+
 
 
 # **** Remote Json-Schemas SendMT540 ****

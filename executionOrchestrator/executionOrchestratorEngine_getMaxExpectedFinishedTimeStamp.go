@@ -4,15 +4,29 @@ import (
 	"FenixSubCustodyConnector/sharedCode"
 	"fmt"
 	fenixExecutionWorkerGrpcApi "github.com/jlambert68/FenixGrpcApi/FenixExecutionServer/fenixExecutionWorkerGrpcApi/go_grpc_api"
+	// Fenix 'SendTemplateToThisDomain'
+	TestInstruction_Standard_SendTemplateToThisDomain "github.com/jlambert68/FenixStandardTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_SendTemplateToThisDomain"
+	testInstruction_SendTemplateToThisDomain_version_1_0 "github.com/jlambert68/FenixStandardTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_SendTemplateToThisDomain/version_1_0"
+	// Fenix 'SendTestDataToThisDomain'
+	"github.com/jlambert68/FenixStandardTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_SendTestDataToThisDomain"
 	testInstruction_SendTestDataToThisDomain_version_1_0 "github.com/jlambert68/FenixStandardTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_SendTestDataToThisDomain/version_1_0"
+	// Fenix 'SendOnMQTypeMT_SendGeneral'
+	"github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_SendOnMQTypeMT_SendGeneral"
+	TestInstruction_SendOnMQTypeMT_SendGeneral_version_1_0 "github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_SendOnMQTypeMT_SendGeneral/version_1_0"
+
+	// SubCustody 'SendMT540'
 	"github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_SendOnMQTypeMT_SendMT540"
 	TestInstruction_SendOnMQTypeMT_SendMT540_version1_0 "github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_SendOnMQTypeMT_SendMT540/version_1_0"
+	// SubCustody 'SendMT542'
 	"github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_SendOnMQTypeMT_SendMT542"
 	TestInstruction_SendOnMQTypeMT_SendMT542_version1_0 "github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_SendOnMQTypeMT_SendMT542/version_1_0"
+	// SubCustody 'ValidateMT544'
 	"github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_ValidateMQTypeMT54x_ValidateMT544"
 	TestInstruction_ValidateMQTypeMT54x_ValidateMT544_version1_0 "github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_ValidateMQTypeMT54x_ValidateMT544/version_1_0"
+	// SubCustody 'ValidateMT546'
 	"github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_ValidateMQTypeMT54x_ValidateMT546"
 	TestInstruction_ValidateMQTypeMT54x_ValidateMT546_version1_0 "github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_ValidateMQTypeMT54x_ValidateMT546/version_1_0"
+	// SubCustody 'ValidateMT548'
 	"github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_ValidateMQTypeMT54x_ValidateMT548"
 	TestInstruction_ValidateMQTypeMT54x_ValidateMT548_version1_0 "github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_ValidateMQTypeMT54x_ValidateMT548/version_1_0"
 	"github.com/jlambert68/FenixTestInstructionsAdminShared/TypeAndStructs"
@@ -38,9 +52,34 @@ func getMaxExpectedFinishedTimeStamp(testInstructionExecutionPubSubRequest *feni
 	// Depending on TestInstruction calculate or set 'MaxExpectedFinishedTimeStamp'
 	switch TypeAndStructs.OriginalElementUUIDType(testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionOriginalUuid) {
 
-	// General TestInstruction that can be forced to Connector by user
+	// General TestInstruction, owned by Fenix, that can be forced to Connector by user
 	// TestInstruction holds the TestData that the TestCase is using
-	case testInstruction_SendTestDataToThisDomain_version_1_0.TestInstructionUUID_FenixSentToUsersDomain_SendTestDataToThisDomain:
+	case TestInstruction_Standard_SendTestDataToThisDomain.TestInstructionUUID_FenixSentToUsersDomain_SendTestDataToThisDomain:
+		switch version {
+		case "v1.0":
+
+			// Extract duration
+			expectedExecutionDurationInSeconds = testInstruction_SendTemplateToThisDomain_version_1_0.
+				ExpectedMaxTestInstructionExecutionDurationInSeconds
+
+			// Create Max Finished TimeStamp
+			maxExpectedFinishedTimeStamp = time.Now().Add(time.Duration(expectedExecutionDurationInSeconds) * time.Second)
+
+		default:
+			sharedCode.Logger.WithFields(logrus.Fields{
+				"id": "a37c16ba-09b4-40c7-97a2-fe282a84071c",
+				"TestInstructionOriginalUuid": testInstructionExecutionPubSubRequest.TestInstruction.
+					TestInstructionOriginalUuid,
+				"TestInstructionName": testInstructionExecutionPubSubRequest.TestInstruction.
+					TestInstructionName,
+				"version": version,
+			}).Fatalln("Unhandled version, will exit")
+
+		}
+
+	// General TestInstruction, owned by Fenix, that can be forced to Connector by user
+	// TestInstruction holds a Template that is sent to the Connector
+	case TestInstruction_Standard_SendTemplateToThisDomain.TestInstructionUUID_FenixSentToUsersDomain_SendTemplateToThisDomain:
 		switch version {
 		case "v1.0":
 
@@ -54,6 +93,31 @@ func getMaxExpectedFinishedTimeStamp(testInstructionExecutionPubSubRequest *feni
 		default:
 			sharedCode.Logger.WithFields(logrus.Fields{
 				"id": "a37c16ba-09b4-40c7-97a2-fe282a84071c",
+				"TestInstructionOriginalUuid": testInstructionExecutionPubSubRequest.TestInstruction.
+					TestInstructionOriginalUuid,
+				"TestInstructionName": testInstructionExecutionPubSubRequest.TestInstruction.
+					TestInstructionName,
+				"version": version,
+			}).Fatalln("Unhandled version, will exit")
+
+		}
+
+	// General TestInstruction that can be forced to Connector by user
+	// TestInstruction holds a Template that the user picked
+	case TestInstruction_SendOnMQTypeMT_SendGeneral.TestInstructionUUID_SendOnMQTypeMT_SendGeneral:
+		switch version {
+		case "v1.0":
+
+			// Extract duration
+			expectedExecutionDurationInSeconds = TestInstruction_SendOnMQTypeMT_SendGeneral_version_1_0.
+				ExpectedMaxTestInstructionExecutionDurationInSeconds
+
+			// Create Max Finished TimeStamp
+			maxExpectedFinishedTimeStamp = time.Now().Add(time.Duration(expectedExecutionDurationInSeconds) * time.Second)
+
+		default:
+			sharedCode.Logger.WithFields(logrus.Fields{
+				"id": "52f699bb-5876-40bc-9a32-03dbfa8be55b",
 				"TestInstructionOriginalUuid": testInstructionExecutionPubSubRequest.TestInstruction.
 					TestInstructionOriginalUuid,
 				"TestInstructionName": testInstructionExecutionPubSubRequest.TestInstruction.

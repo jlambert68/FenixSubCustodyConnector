@@ -6,7 +6,10 @@ import (
 	"fmt"
 	"github.com/google/uuid"
 	fenixExecutionWorkerGrpcApi "github.com/jlambert68/FenixGrpcApi/FenixExecutionServer/fenixExecutionWorkerGrpcApi/go_grpc_api"
-	testInstruction_SendTestDataToThisDomain_version_1_0 "github.com/jlambert68/FenixStandardTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_SendTestDataToThisDomain/version_1_0"
+	TestInstruction_Standard_SendTemplateToThisDomain "github.com/jlambert68/FenixStandardTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_SendTemplateToThisDomain"
+	testInstruction_SendTemplateToThisDomain_version_1_0 "github.com/jlambert68/FenixStandardTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_SendTemplateToThisDomain/version_1_0"
+	TestInstruction_Standard_SendTestDataToThisDomain "github.com/jlambert68/FenixStandardTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_SendTestDataToThisDomain"
+	"github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_SendOnMQTypeMT_SendGeneral"
 	"github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_SendOnMQTypeMT_SendMT540"
 	TestInstruction_SendOnMQTypeMT_SendMT540_version1_0 "github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_SendOnMQTypeMT_SendMT540/version_1_0"
 	"github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_SendOnMQTypeMT_SendMT542"
@@ -37,18 +40,29 @@ func processTestInstructionExecutionRequest(
 	// Depending on TestInstruction then choose how to execution the TestInstruction
 	switch TypeAndStructs.OriginalElementUUIDType(testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionOriginalUuid) {
 
-	// General TestInstruction that can be forced to Connector by user
+	// General TestInstruction, owned by Fenix, that can be forced to Connector by user
 	// TestInstruction holds the TestData that the TestCase is using
-	case testInstruction_SendTestDataToThisDomain_version_1_0.TestInstructionUUID_FenixSentToUsersDomain_SendTestDataToThisDomain:
+	case TestInstruction_Standard_SendTestDataToThisDomain.TestInstructionUUID_FenixSentToUsersDomain_SendTestDataToThisDomain:
 
 		// Just log out the Data
 		sharedCode.Logger.WithFields(logrus.Fields{
 			"id":                                    "865f4047-b11d-4a04-886c-5ee9a2cd800a",
 			"testInstructionExecutionPubSubRequest": testInstructionExecutionPubSubRequest,
-		}).Info("The TestInstruction for TestData was sent to Connector")
+		}).Info("The general, Fenix owned, TestInstruction for TestData was sent to Connector")
+
+		// General TestInstruction, owned by Fenix, that can be forced to Connector by user
+	// TestInstruction holds a Template that is sent to the Connector
+	case TestInstruction_Standard_SendTemplateToThisDomain.TestInstructionUUID_FenixSentToUsersDomain_SendTemplateToThisDomain:
+
+		// Just log out the Data
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id":                                    "865f4047-b11d-4a04-886c-5ee9a2cd800a",
+			"testInstructionExecutionPubSubRequest": testInstructionExecutionPubSubRequest,
+		}).Info("The general, Fenix owned, TestInstruction for sending a TemplateTest to Connector")
 
 	// Send a MT54x on MQ or Validate MT54x
-	case TestInstruction_SendOnMQTypeMT_SendMT540.TestInstructionUUID_SubCustody_SendMT540,
+	case TestInstruction_SendOnMQTypeMT_SendGeneral.TestInstructionUUID_SendOnMQTypeMT_SendGeneral,
+		TestInstruction_SendOnMQTypeMT_SendMT540.TestInstructionUUID_SubCustody_SendMT540,
 		TestInstruction_SendOnMQTypeMT_SendMT542.TestInstructionUUID_SubCustody_SendMT542,
 		TestInstruction_ValidateMQTypeMT54x_ValidateMT544.TestInstructionUUID_SubCustody_ValidateMT544,
 		TestInstruction_ValidateMQTypeMT54x_ValidateMT546.TestInstructionUUID_SubCustody_ValidateMT546,
@@ -57,20 +71,30 @@ func processTestInstructionExecutionRequest(
 		// Extract the maximum allowed time before timeout occurs
 		var maximumExecutionDurationInSeconds int64
 		switch TypeAndStructs.OriginalElementUUIDType(testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionOriginalUuid) {
+
+		case TestInstruction_SendOnMQTypeMT_SendGeneral.TestInstructionUUID_SendOnMQTypeMT_SendGeneral:
+			maximumExecutionDurationInSeconds = testInstruction_SendTemplateToThisDomain_version_1_0.
+				ExpectedMaxTestInstructionExecutionDurationInSeconds
+
 		case TestInstruction_SendOnMQTypeMT_SendMT540.TestInstructionUUID_SubCustody_SendMT540:
-			maximumExecutionDurationInSeconds = TestInstruction_SendOnMQTypeMT_SendMT540_version1_0.ExpectedMaxTestInstructionExecutionDurationInSeconds
+			maximumExecutionDurationInSeconds = TestInstruction_SendOnMQTypeMT_SendMT540_version1_0.
+				ExpectedMaxTestInstructionExecutionDurationInSeconds
 
 		case TestInstruction_SendOnMQTypeMT_SendMT542.TestInstructionUUID_SubCustody_SendMT542:
-			maximumExecutionDurationInSeconds = TestInstruction_SendOnMQTypeMT_SendMT542_version1_0.ExpectedMaxTestInstructionExecutionDurationInSeconds
+			maximumExecutionDurationInSeconds = TestInstruction_SendOnMQTypeMT_SendMT542_version1_0.
+				ExpectedMaxTestInstructionExecutionDurationInSeconds
 
 		case TestInstruction_ValidateMQTypeMT54x_ValidateMT544.TestInstructionUUID_SubCustody_ValidateMT544:
-			maximumExecutionDurationInSeconds = TestInstruction_ValidateMQTypeMT54x_ValidateMT544_version1_0.ExpectedMaxTestInstructionExecutionDurationInSeconds
+			maximumExecutionDurationInSeconds = TestInstruction_ValidateMQTypeMT54x_ValidateMT544_version1_0.
+				ExpectedMaxTestInstructionExecutionDurationInSeconds
 
 		case TestInstruction_ValidateMQTypeMT54x_ValidateMT546.TestInstructionUUID_SubCustody_ValidateMT546:
-			maximumExecutionDurationInSeconds = TestInstruction_ValidateMQTypeMT54x_ValidateMT546_version1_0.ExpectedMaxTestInstructionExecutionDurationInSeconds
+			maximumExecutionDurationInSeconds = TestInstruction_ValidateMQTypeMT54x_ValidateMT546_version1_0.
+				ExpectedMaxTestInstructionExecutionDurationInSeconds
 
 		case TestInstruction_ValidateMQTypeMT54x_ValidateMT548.TestInstructionUUID_SubCustody_ValidateMT548:
-			maximumExecutionDurationInSeconds = TestInstruction_ValidateMQTypeMT54x_ValidateMT548_version1_0.ExpectedMaxTestInstructionExecutionDurationInSeconds
+			maximumExecutionDurationInSeconds = TestInstruction_ValidateMQTypeMT54x_ValidateMT548_version1_0.
+				ExpectedMaxTestInstructionExecutionDurationInSeconds
 
 		default:
 			sharedCode.Logger.WithFields(logrus.Fields{
@@ -160,6 +184,17 @@ func processTestInstructionExecutionRequest(
 
 		// Get correct Response Schema depending on message type
 		switch TypeAndStructs.OriginalElementUUIDType(testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionOriginalUuid) {
+
+		// Send used TestData for TestCase
+
+		// Send general MT-message on MQ
+		case TestInstruction_SendOnMQTypeMT_SendGeneral.TestInstructionUUID_SendOnMQTypeMT_SendGeneral:
+			requestMessageToTestApiEngineJsonSchema, requestMethodParametersMessageToTestApiEngineJsonSchema,
+				testApiEngineResponseMessageJsonSchema, finalTestInstructionExecutionResultJsonSchema,
+				responseVariablesJsonSchema =
+				executeTestInstructionUsingTestApiEngine.GetResponseSchemasToUse(
+					TestInstruction_SendOnMQTypeMT_SendGeneral.TestInstructionUUID_SendOnMQTypeMT_SendGeneral,
+					testInstructionVersion)
 
 		// Send a MT540 on MQ
 		case TestInstruction_SendOnMQTypeMT_SendMT540.TestInstructionUUID_SubCustody_SendMT540:

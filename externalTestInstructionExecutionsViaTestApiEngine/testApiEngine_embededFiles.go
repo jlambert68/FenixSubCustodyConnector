@@ -14,6 +14,17 @@ var testApiEngineResponseMessageJsonSchemaAsByteArray []byte
 //go:embed json-schemas/FinalTestInstructionExecutionResultMessage.json-schema.json
 var finalTestInstructionExecutionResultMessageJsonSchemaAsByteArray []byte
 
+// SendOnMQTypeMT_SendGeneral
+//
+//go:embed json-schemas/SendOnMQTypeMT_SendGeneral_v1_0_Request.json-schema.json
+var sendOnMQTypeMT_SendGeneral_v1_0_RequestMessageJsonSchemaAsByteArray []byte
+
+//go:embed json-schemas/SendOnMQTypeMT_SendGeneral_v1_0_RequestMethodParameters.json-schema.json
+var sendOnMQTypeMT_SendGeneral_v1_0_RequestMethodParametersMessageJsonSchemaAsByteArray []byte
+
+//go:embed json-schemas/SendOnMQTypeMT_SendGeneral_v1_0_ResponseVariables.json-schema.json
+var sendOnMQTypeMT_SendGeneral_v1_0_ResponseVariablesMessageJsonSchemaAsByteArray []byte
+
 // SendMT540
 //
 //go:embed json-schemas/SendMT540_v1_0_Request.json-schema.json

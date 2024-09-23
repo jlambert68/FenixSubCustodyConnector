@@ -42,6 +42,10 @@ Download-json-schemas:
 	@curl -L -o $(fullLocalFilePathOverAll) "$(fullRemoteFilePathOverAll)"
 	@curl -L -o $(fullLocalFilePathTestApiEngineResponse) "$(fullRemoteFilePathTestApiEngineResponse)"
 
+	@curl -L -o $(fullLocalFilePathSendOnMQTypeMT_SendGeneralRequest_v1_0) "$(fullRemoteFilePathSendOnMQTypeMT_SendGeneralRequest_v1_0)"
+	@curl -L -o $(fullLocalFilePathSendOnMQTypeMT_SendGeneralRequestMethodParameters_v1_0) "$(fullRemoteFilePathSendOnMQTypeMT_SendGeneralRequestMethodParameters_v1_0)"
+	@curl -L -o $(fullLocalFilePathSendOnMQTypeMT_SendGeneral_v1_0) "$(fullRemoteFilePathSendOnMQTypeMT_SendGeneralResponse_v1_0)"
+
 	@curl -L -o $(fullLocalFilePathSendMT540Request_v1_0) "$(fullRemoteFilePathSendMT540Request_v1_0)"
 	@curl -L -o $(fullLocalFilePathSendMT540RequestMethodParameters_v1_0) "$(fullRemoteFilePathSendMT540RequestMethodParameters_v1_0)"
 	@curl -L -o $(fullLocalFilePathSendMT540_v1_0) "$(fullRemoteFilePathSendMT540Response_v1_0)"

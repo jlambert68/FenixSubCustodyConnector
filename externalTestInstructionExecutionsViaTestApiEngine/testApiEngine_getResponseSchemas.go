@@ -2,6 +2,7 @@ package executeTestInstructionUsingTestApiEngine
 
 import (
 	"FenixSubCustodyConnector/sharedCode"
+	"github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_SendOnMQTypeMT_SendGeneral"
 	"github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_SendOnMQTypeMT_SendMT540"
 	TestInstruction_SendOnMQTypeMT_SendMT542 "github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_SendOnMQTypeMT_SendMT542/version_1_0"
 	TestInstruction_ValidateMQTypeMT54x_ValidateMT544 "github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_ValidateMQTypeMT54x_ValidateMT544/version_1_0"
@@ -33,6 +34,38 @@ func GetResponseSchemasToUse(
 
 	// Chose Response Schema depending on TestInstruction to be executed
 	switch testInstructionUUID {
+
+	// Send used TestData for TestCase
+
+	// Send general MT-message on MQ
+	case TestInstruction_SendOnMQTypeMT_SendGeneral.TestInstructionUUID_SendOnMQTypeMT_SendGeneral:
+		// Extract json-schema depending on version
+		switch testInstructionVersion {
+		case "v1.0":
+
+			// Outgoing Request
+			var tempRequestMessageToTestApiEngineJsonSchema string
+			tempRequestMessageToTestApiEngineJsonSchema = string(sendOnMQTypeMT_SendGeneral_v1_0_RequestMessageJsonSchemaAsByteArray)
+			requestMessageToTestApiEngineJsonSchema = &tempRequestMessageToTestApiEngineJsonSchema
+
+			// Outgoing Request MethodParameters
+			var tempRequestMethodParametersMessageToTestApiEngineJsonSchema string
+			tempRequestMethodParametersMessageToTestApiEngineJsonSchema = string(sendOnMQTypeMT_SendGeneral_v1_0_RequestMethodParametersMessageJsonSchemaAsByteArray)
+			requestMethodParametersMessageToTestApiEngineJsonSchema = &tempRequestMethodParametersMessageToTestApiEngineJsonSchema
+
+			// Incoming Response
+			var tempResponseVariablesJsonSchema string
+			tempResponseVariablesJsonSchema = string(sendOnMQTypeMT_SendGeneral_v1_0_ResponseVariablesMessageJsonSchemaAsByteArray)
+			responseVariablesJsonSchema = &tempResponseVariablesJsonSchema
+
+		default:
+			sharedCode.Logger.WithFields(logrus.Fields{
+				"id":                     "49a4ce39-6f0c-4877-811e-b236bd2c4919",
+				"testInstructionUUID":    testInstructionUUID,
+				"testInstructionVersion": testInstructionVersion,
+			}).Fatal("Unhandled version")
+
+		}
 
 	// Send a MT540 on MQ
 	case TestInstruction_SendOnMQTypeMT_SendMT540.TestInstructionUUID_SubCustody_SendMT540:
