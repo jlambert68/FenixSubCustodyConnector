@@ -12,3 +12,6 @@ var embeddedFile_SubCustody_ExtraTestDataArea []byte
 
 //go:embed simpleTestData/FenixRawTestdata_10rows_240705.csv
 var embeddedFile_CustodyCash_MainTestDataArea []byte
+
+//go:embed simpleTestData/TestData.csv
+var embeddedFile_TestData []byte

@@ -27,7 +27,8 @@ func main() {
 		templateUrlParameters,
 		[][]byte{embeddedFile_SubCustody_MainTestDataArea,
 			embeddedFile_SubCustody_ExtraTestDataArea,
-			embeddedFile_CustodyCash_MainTestDataArea})
+			embeddedFile_CustodyCash_MainTestDataArea,
+			embeddedFile_TestData})
 
 	// Keep program running
 	var waitChannel chan bool
