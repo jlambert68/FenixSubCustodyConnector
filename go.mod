@@ -11,7 +11,7 @@ require (
 	github.com/gorilla/sessions v1.2.2 // indirect; v1.3.0 gives session error when trying to get token from GCP
 	github.com/jlambert68/FenixConnectorAdminShared v0.0.0-20241001110636-ccbb2e2afad1
 	github.com/jlambert68/FenixGrpcApi v0.0.0-20240902161440-74b93725d1bc
-	github.com/jlambert68/FenixScriptEngine v0.0.0-20240918095429-fa7acea1d0a4
+	github.com/jlambert68/FenixScriptEngine v0.0.0-20240926173607-33468503e5cd
 	github.com/jlambert68/FenixStandardTestInstructionAdmin v0.0.0-20240919130102-9cebd6af2e83
 	github.com/jlambert68/FenixSubCustodyTestInstructionAdmin v0.0.0-20240923172941-31edc25c6578
 	github.com/jlambert68/FenixSyncShared v0.0.0-20240911064419-da3d922610cb

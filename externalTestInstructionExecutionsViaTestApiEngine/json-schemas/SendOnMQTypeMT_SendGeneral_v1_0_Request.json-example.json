@@ -1,0 +1,9 @@
+{
+  "testStepClassName": "SendOnMQTypeMT",
+  "testStepActionMethod": "SendMTGeneral_v1_0",
+  "testDataParameterType": "FixedValue",
+  "expectedToBePassed": true,
+  "methodParameters": {
+    "MethodParametersJsonAsString": "{\"ExpectedToBePassed\":\"true\",\"Replace Placeholder Values\":\"true\",\"Selected Template to send\":\"SSC001-01-MT540.iso15022 [720adb07]\",\"Swift MT-message type\":\"MT540\",\"TemplateAsString\":\"{1:F01ESSESES0XFNX6831954657}{2:I540ESSESES0XXXX}{3:{108:GBRMARXHKIJBPTAP}}{4:\n:16R:GENL\n:20C::SEME//20241008083120-6831\n:23G:NEWM\n:16S:GENL\n:16R:TRADDET\n:98A::SETT// attempt to call a non-function object\nstack traceback:\n\\\\t[G]: ?\n:98A::TRAD// attempt to call a non-function object\nstack traceback:\n\\\\t[G]: ?\n:35B:ISIN SE0010987654\nACRI A\n:16S:TRADDET\n:16R:FIAC\n:36B::SETT//UNIT/99,\n:97A::SAFE//01000518027\n:16S:FIAC\n:16R:SETDET\n:22F::SETR//TRAD\n:22F::STCO/NCSD/ENCH\n:16R:SETPRTY\n:95P::DEAG//ESSESES0XXX\n:16S:SETPRTY\n:16R:SETPRTY\n:95P::SELL//ESSESES0FNX\n:16S:SETPRTY\n:16R:SETPRTY\n:95P::PSET//VPCSSESSXXX\n:16S:SETPRTY\n:16S:SETDET\n-}\n\n\",\"TestCaseExecutionUuid\":\"cc447737-9c64-48f0-bdb2-1f66eae8ba71\",\"TestInstructionExecutionUuid\":\"d0a991dd-142b-433d-bce3-0a408c989cbe\",\"TestInstructionExecutionVersion\":\"1\",\"TestInstructionVersion\":\"v1.0\",\"TestStepActionMethod\":\"SendMTGeneral_v1_0\",\"TimeoutTimeInSeconds\":\"30\"}"
+  }
+}
