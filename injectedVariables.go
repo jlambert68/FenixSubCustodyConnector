@@ -40,6 +40,7 @@ var (
 	injectedShouldSpireServerBeUsedForGettingGcpToken                                             string
 	injectedOpenShiftsGcpTokenSourceUrl                                                           string
 	injected_GitHubApiKeys                                                                        string
+	Injected_PrivateKey                                                                           string
 )
 
 // Used for hard coding if Injected or real Environment Variables are expected
@@ -84,4 +85,5 @@ var injectedVariablesMap = map[string]*string{
 	"Injected_ShouldSpireServerBeUsedForGettingGcpToken":                &injectedShouldSpireServerBeUsedForGettingGcpToken,
 	"Injected_OpenShiftsGcpTokenSourceUrl":                              &injectedOpenShiftsGcpTokenSourceUrl,
 	"Injected_GitHubApiKeys":                                            &injected_GitHubApiKeys,
+	"Injected_PrivateKey":                                               &Injected_PrivateKey,
 }

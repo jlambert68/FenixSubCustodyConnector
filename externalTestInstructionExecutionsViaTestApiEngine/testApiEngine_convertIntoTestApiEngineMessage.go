@@ -105,6 +105,8 @@ func ConvertTestInstructionExecutionIntoTestApiEngineRestCallMessage(
 	// Loop all Attributes and populate message to be used for RestCall to TestApiEngine
 	for _, testInstructionAttribute := range testInstructionAttributes {
 
+		fmt.Println("Jobbar på: ", testInstructionAttribute.TestInstructionAttributeName, testInstructionAttribute.GetTestInstructionAttributeUuid())
+
 		// Separate Attribute 'ExpectedToBePassed', which is used in url instead as a parameter in the body of the rest call
 		// But also as an attribute in json-request-body
 		if testInstructionAttribute.TestInstructionAttributeName == string(TestInstructions.TestInstructionAttributeName_SubCustody_ExpectedToBePassed) {
@@ -119,9 +121,6 @@ func ConvertTestInstructionExecutionIntoTestApiEngineRestCallMessage(
 			TestInstructionAttributeName:          TypeAndStructs.TestInstructionAttributeNameType(testInstructionAttribute.TestInstructionAttributeName),
 			TestInstructionAttributeValueAsString: TypeAndStructs.AttributeValueAsStringType(testInstructionAttribute.AttributeValueAsString),
 		}
-		TestApiEngineRestApiMessageValues.TestInstructionAttribute = append(
-			TestApiEngineRestApiMessageValues.TestInstructionAttribute,
-			tempTestInstructionAttributesUuidAndValue)
 
 		// Get TestApiEngine-attribute conversion-map from pointer
 		var attributesMap map[TypeAndStructs.TestInstructionAttributeUUIDType]*TestApiEngineClassesAndMethodsAndAttributes.TestApiEngineAttributesStruct
@@ -154,14 +153,24 @@ func ConvertTestInstructionExecutionIntoTestApiEngineRestCallMessage(
 			// Create and add reference between Attribute and TestApiEngineAttribute-name to be used in RestRequest
 			var tempTestApiEngineAttributesToUse *testApiEngineClassesAndMethods.TestApiEngineAttributesStruct
 			tempTestApiEngineAttributesToUse = &testApiEngineClassesAndMethods.TestApiEngineAttributesStruct{
-				TestInstructionAttributeUUID:     tempTestApiEngineAttributes.TestInstructionAttributeUUID,
-				TestInstructionAttributeName:     tempTestApiEngineAttributes.TestInstructionAttributeName,
-				TestInstructionAttributeTypeUUID: tempTestApiEngineAttributes.TestInstructionAttributeTypeUUID,
-				TestApiEngineAttributeNameUUID:   tempTestApiEngineAttributes.TestApiEngineAttributeNameUUID,
-				TestApiEngineAttributeNameName:   tempTestApiEngineAttributes.TestApiEngineAttributeNameName,
+				TestInstructionAttributeUUID:         tempTestApiEngineAttributes.TestInstructionAttributeUUID,
+				TestInstructionAttributeName:         tempTestApiEngineAttributes.TestInstructionAttributeName,
+				TestInstructionAttributeTypeUUID:     tempTestApiEngineAttributes.TestInstructionAttributeTypeUUID,
+				TestApiEngineAttributeNameUUID:       tempTestApiEngineAttributes.TestApiEngineAttributeNameUUID,
+				TestApiEngineAttributeNameName:       tempTestApiEngineAttributes.TestApiEngineAttributeNameName,
+				AttributeShouldBeSentToTestApiEngine: tempTestApiEngineAttributes.AttributeShouldBeSentToTestApiEngine,
 			}
 			// Add Attribute
 			TestApiEngineRestApiMessageValues.TestApiEngineAttributes[TypeAndStructs.TestInstructionAttributeUUIDType(testInstructionAttribute.TestInstructionAttributeUuid)] = tempTestApiEngineAttributesToUse
+
+			TestApiEngineRestApiMessageValues.TestInstructionAttribute = append(
+				TestApiEngineRestApiMessageValues.TestInstructionAttribute,
+				tempTestInstructionAttributesUuidAndValue)
+
+			fmt.Println("From Attribute:", tempTestApiEngineAttributes)
+			fmt.Println("To Attribute to use:", tempTestApiEngineAttributesToUse)
+		} else {
+			fmt.Println("tempTestApiEngineAttributes", tempTestApiEngineAttributes)
 		}
 	}
 

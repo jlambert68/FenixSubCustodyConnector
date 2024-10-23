@@ -10,9 +10,6 @@ import (
 	// Fenix 'SendTestDataToThisDomain'
 	"github.com/jlambert68/FenixStandardTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_SendTestDataToThisDomain"
 	testInstruction_SendTestDataToThisDomain_version_1_0 "github.com/jlambert68/FenixStandardTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_SendTestDataToThisDomain/version_1_0"
-	// Fenix 'SendOnMQTypeMT_SendGeneral'
-	"github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_SendOnMQTypeMT_SendGeneral"
-	TestInstruction_SendOnMQTypeMT_SendGeneral_version_1_0 "github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_SendOnMQTypeMT_SendGeneral/version_1_0"
 
 	// SubCustody 'SendMT540'
 	"github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_SendOnMQTypeMT_SendMT540"
@@ -104,28 +101,31 @@ func getMaxExpectedFinishedTimeStamp(testInstructionExecutionPubSubRequest *feni
 
 	// General TestInstruction that can be forced to Connector by user
 	// TestInstruction holds a Template that the user picked
-	case TestInstruction_SendOnMQTypeMT_SendGeneral.TestInstructionUUID_SendOnMQTypeMT_SendGeneral:
-		switch version {
-		case "v1.0":
+	/*
+		case TestInstruction_SendOnMQTypeMT_SendGeneral.TestInstructionUUID_SendOnMQTypeMT_SendGeneral:
+			switch version {
+			case "v1.0":
 
-			// Extract duration
-			expectedExecutionDurationInSeconds = TestInstruction_SendOnMQTypeMT_SendGeneral_version_1_0.
-				ExpectedMaxTestInstructionExecutionDurationInSeconds
+				// Extract duration
+				expectedExecutionDurationInSeconds = TestInstruction_SendOnMQTypeMT_SendGeneral_version_1_0.
+					ExpectedMaxTestInstructionExecutionDurationInSeconds
 
-			// Create Max Finished TimeStamp
-			maxExpectedFinishedTimeStamp = time.Now().Add(time.Duration(expectedExecutionDurationInSeconds) * time.Second)
+				// Create Max Finished TimeStamp
+				maxExpectedFinishedTimeStamp = time.Now().Add(time.Duration(expectedExecutionDurationInSeconds) * time.Second)
 
-		default:
-			sharedCode.Logger.WithFields(logrus.Fields{
-				"id": "52f699bb-5876-40bc-9a32-03dbfa8be55b",
-				"TestInstructionOriginalUuid": testInstructionExecutionPubSubRequest.TestInstruction.
-					TestInstructionOriginalUuid,
-				"TestInstructionName": testInstructionExecutionPubSubRequest.TestInstruction.
-					TestInstructionName,
-				"version": version,
-			}).Fatalln("Unhandled version, will exit")
+			default:
+				sharedCode.Logger.WithFields(logrus.Fields{
+					"id": "52f699bb-5876-40bc-9a32-03dbfa8be55b",
+					"TestInstructionOriginalUuid": testInstructionExecutionPubSubRequest.TestInstruction.
+						TestInstructionOriginalUuid,
+					"TestInstructionName": testInstructionExecutionPubSubRequest.TestInstruction.
+						TestInstructionName,
+					"version": version,
+				}).Fatalln("Unhandled version, will exit")
 
-		}
+			}
+
+	*/
 
 	case TestInstruction_SendOnMQTypeMT_SendMT540.TestInstructionUUID_SubCustody_SendMT540:
 

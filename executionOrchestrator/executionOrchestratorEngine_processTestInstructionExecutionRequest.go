@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"github.com/google/uuid"
 	fenixExecutionWorkerGrpcApi "github.com/jlambert68/FenixGrpcApi/FenixExecutionServer/fenixExecutionWorkerGrpcApi/go_grpc_api"
-	TestInstruction_Standard_SendTemplateToThisDomain "github.com/jlambert68/FenixStandardTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_SendTemplateToThisDomain"
 	testInstruction_SendTemplateToThisDomain_version_1_0 "github.com/jlambert68/FenixStandardTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_SendTemplateToThisDomain/version_1_0"
 	TestInstruction_Standard_SendTestDataToThisDomain "github.com/jlambert68/FenixStandardTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_SendTestDataToThisDomain"
 	"github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_SendOnMQTypeMT_SendGeneral"
@@ -50,18 +49,23 @@ func processTestInstructionExecutionRequest(
 			"testInstructionExecutionPubSubRequest": testInstructionExecutionPubSubRequest,
 		}).Info("The general, Fenix owned, TestInstruction for TestData was sent to Connector")
 
-		// General TestInstruction, owned by Fenix, that can be forced to Connector by user
-	// TestInstruction holds a Template that is sent to the Connector
-	case TestInstruction_Standard_SendTemplateToThisDomain.TestInstructionUUID_FenixSentToUsersDomain_SendTemplateToThisDomain:
+		/*
+				// General TestInstruction, owned by Fenix, that can be forced to Connector by user
+			// TestInstruction holds a Template that is sent to the Connector
+			case TestInstruction_Standard_SendTemplateToThisDomain.TestInstructionUUID_FenixSentToUsersDomain_SendTemplateToThisDomain:
 
-		// Just log out the Data
-		sharedCode.Logger.WithFields(logrus.Fields{
-			"id":                                    "865f4047-b11d-4a04-886c-5ee9a2cd800a",
-			"testInstructionExecutionPubSubRequest": testInstructionExecutionPubSubRequest,
-		}).Info("The general, Fenix owned, TestInstruction for sending a TemplateTest to Connector")
+				// Just log out the Data
+				sharedCode.Logger.WithFields(logrus.Fields{
+					"id":                                    "865f4047-b11d-4a04-886c-5ee9a2cd800a",
+					"testInstructionExecutionPubSubRequest": testInstructionExecutionPubSubRequest,
+				}).Info("The general, Fenix owned, TestInstruction for sending a TemplateTest to Connector")
+
+
+		*/
 
 	// Send a MT54x on MQ or Validate MT54x
-	case TestInstruction_SendOnMQTypeMT_SendGeneral.TestInstructionUUID_SendOnMQTypeMT_SendGeneral,
+	case //TestInstruction_Standard_SendTemplateToThisDomain.TestInstructionUUID_FenixSentToUsersDomain_SendTemplateToThisDomain,
+		TestInstruction_SendOnMQTypeMT_SendGeneral.TestInstructionUUID_SendOnMQTypeMT_SendGeneral,
 		TestInstruction_SendOnMQTypeMT_SendMT540.TestInstructionUUID_SubCustody_SendMT540,
 		TestInstruction_SendOnMQTypeMT_SendMT542.TestInstructionUUID_SubCustody_SendMT542,
 		TestInstruction_ValidateMQTypeMT54x_ValidateMT544.TestInstructionUUID_SubCustody_ValidateMT544,
@@ -71,6 +75,10 @@ func processTestInstructionExecutionRequest(
 		// Extract the maximum allowed time before timeout occurs
 		var maximumExecutionDurationInSeconds int64
 		switch TypeAndStructs.OriginalElementUUIDType(testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionOriginalUuid) {
+
+		//case TestInstruction_Standard_SendTemplateToThisDomain.TestInstructionUUID_FenixSentToUsersDomain_SendTemplateToThisDomain:
+		//	maximumExecutionDurationInSeconds = TestInstruction_Standard_SendTemplateToThisDomain_version_1_0.
+		//		ExpectedMaxTestInstructionExecutionDurationInSeconds
 
 		case TestInstruction_SendOnMQTypeMT_SendGeneral.TestInstructionUUID_SendOnMQTypeMT_SendGeneral:
 			maximumExecutionDurationInSeconds = testInstruction_SendTemplateToThisDomain_version_1_0.

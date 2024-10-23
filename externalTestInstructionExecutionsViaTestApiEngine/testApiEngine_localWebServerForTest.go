@@ -803,12 +803,56 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 		}).Info(fmt.Sprintf("Got 'RelatedReference_54x_20CRELA' = '%s' as input",
 			relatedReference_54x_20CRELA))
 
+	case "SendMTGeneral_v1_0":
+
+		// *** Extract 'Selected Template to send' ****
+		variableName = "Selected Template to send"
+		variableType = "String"
+
+		// Verify that Variable exist in json-map and extract variable
+		tempMapVariable, existInMap = cleanedMethodParameters[variableName]
+		if existInMap == false {
+
+			sharedCode.Logger.WithFields(logrus.Fields{
+				"id": "4e813263-2b35-4dd8-b7dc-126dbcec2539",
+			}).Fatalln(fmt.Sprintf("Missing parameter '%s'", variableName))
+
+		}
+
+		// *** Extract 'Swift MT-message type' ****
+		variableName = "Swift MT-message type"
+		variableType = "String"
+
+		// Verify that Variable exist in json-map and extract variable
+		tempMapVariable, existInMap = cleanedMethodParameters[variableName]
+		if existInMap == false {
+
+			sharedCode.Logger.WithFields(logrus.Fields{
+				"id": "186ed252-ba6e-42db-8777-0772e12019e1",
+			}).Fatalln(fmt.Sprintf("Missing parameter '%s'", variableName))
+
+		}
+
+		// *** Extract 'TemplateAsString\' ****
+		variableName = "TemplateAsString"
+		variableType = "String"
+
+		// Verify that Variable exist in json-map and extract variable
+		tempMapVariable, existInMap = cleanedMethodParameters[variableName]
+		if existInMap == false {
+
+			sharedCode.Logger.WithFields(logrus.Fields{
+				"id": "759d7c51-1619-4ace-80b1-26cc600f9022",
+			}).Fatalln(fmt.Sprintf("Missing parameter '%s'", variableName))
+
+		}
+
 	default:
 		// Unhandled Extra parameters
 		sharedCode.Logger.WithFields(logrus.Fields{
 			"id":                   "6b85e2f1-3faa-4880-b89f-b50741ccca72",
 			"testStepActionMethod": testStepActionMethod,
-		}).Fatalln(fmt.Sprintf("Couldn't find 'relatedReference_54x_20CRELA' as input. Exiting..."))
+		}).Fatalln(fmt.Sprintf("Unknown testStepActionMethod. Exiting..."))
 	}
 
 	// Got this as input
@@ -1052,7 +1096,7 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 	// Depending on 'testStepActionMethod', create correct response extra incoming parameters
 	switch testStepActionMethod {
 
-	case "SendMT540_v1_0", "SendMT542_v1_0", "ValidateMT544_v1_0", "ValidateMT546_v1_0", "ValidateMT548_v1_0":
+	case "SendMT540_v1_0", "SendMT542_v1_0", "ValidateMT544_v1_0", "ValidateMT546_v1_0", "ValidateMT548_v1_0", "SendMTGeneral_v1_0":
 
 		// Create correct Response Variable
 		var resoponseVariables ResponseVariableStruct
@@ -1113,9 +1157,20 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 				ResponseVariableValueAsString: "MT548_" + uuid.NewString()[:8],
 			}
 
+		case "SendMTGeneral_v1_0":
+			resoponseVariables = ResponseVariableStruct{
+				TestApiEngineMethodName:       "SendMTGeneral_v1_0",
+				TestInstructionVersion:        "v1.0",
+				ResponseVariableUUID:          "c002af12-114c-4e55-9574-05fae7cf674c",
+				ResponseVariableName:          ":20C::SEME//",
+				ResponseVariableTypeUuid:      "0f6e945e-1556-4cb0-80e5-e021ebc5d8c1",
+				ResponseVariableTypeName:      "54x_:20C::SEME type",
+				ResponseVariableValueAsString: "SendMTGeneral_" + uuid.NewString()[:8],
+			}
+
 		default:
 			sharedCode.Logger.WithFields(logrus.Fields{
-				"id": "0ade709b-4b34-408c-a2e3-4eb653efbf39",
+				"id": "21360a9a-04b8-42bf-95d4-d600c6e5e657",
 			}).Fatalln(fmt.Sprintf("Unhandeled 'testStepActionMethod'='%s'. Exiting...", testStepActionMethod))
 		}
 
