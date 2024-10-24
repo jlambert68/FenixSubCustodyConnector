@@ -9,13 +9,13 @@ require (
 	github.com/gorilla/mux v1.8.1
 	github.com/gorilla/pat v1.0.2 // indirect
 	github.com/gorilla/sessions v1.2.2 // indirect; v1.3.0 gives session error when trying to get token from GCP
-	github.com/jlambert68/FenixConnectorAdminShared v0.0.0-20241023142244-0506143cf869
+	github.com/jlambert68/FenixConnectorAdminShared v0.0.0-20241024081833-7477b42a3107
 	github.com/jlambert68/FenixGrpcApi v0.0.0-20241022175244-86f2f20991d4
 	github.com/jlambert68/FenixScriptEngine v0.0.0-20240926173607-33468503e5cd
-	github.com/jlambert68/FenixStandardTestInstructionAdmin v0.0.0-20241023170411-06dd0550cf32
-	github.com/jlambert68/FenixSubCustodyTestInstructionAdmin v0.0.0-20241023170536-527512a5f97a
+	github.com/jlambert68/FenixStandardTestInstructionAdmin v0.0.0-20241024080408-a282b5752b98
+	github.com/jlambert68/FenixSubCustodyTestInstructionAdmin v0.0.0-20241024081312-a712aa20405e
 	github.com/jlambert68/FenixSyncShared v0.0.0-20240911064419-da3d922610cb
-	github.com/jlambert68/FenixTestInstructionsAdminShared v0.0.0-20241023153649-95c48f5cead9
+	github.com/jlambert68/FenixTestInstructionsAdminShared v0.0.0-20241024080234-e3febbebe27a
 	github.com/markbates/goth v1.80.0 // indirect
 	github.com/santhosh-tekuri/jsonschema/v5 v5.3.1
 	github.com/sirupsen/logrus v1.9.3
@@ -65,7 +65,7 @@ require (
 	golang.org/x/text v0.19.0 // indirect
 	golang.org/x/time v0.7.0 // indirect
 	gonum.org/v1/gonum v0.15.1 // indirect
-	google.golang.org/api v0.202.0 // indirect
+	google.golang.org/api v0.203.0 // indirect
 	google.golang.org/genproto v0.0.0-20241021214115-324edc3d5d38 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20241021214115-324edc3d5d38 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20241021214115-324edc3d5d38 // indirect
