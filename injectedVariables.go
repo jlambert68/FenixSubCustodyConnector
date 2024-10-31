@@ -39,8 +39,12 @@ var (
 	injectedProxyServerURL                                                                        string
 	injectedShouldSpireServerBeUsedForGettingGcpToken                                             string
 	injectedOpenShiftsGcpTokenSourceUrl                                                           string
-	injected_GitHubApiKeys                                                                        string
-	Injected_PrivateKey                                                                           string
+	injectedGithubApiKeys                                                                         string
+	injectedPrivateKey                                                                            string
+	injectedGenerateNewPrivateKeyForDev                                                           string
+	injectedGenerateNewPrivateKeyForAcc                                                           string
+	injectedENVIRONMENT                                                                           string
+	injectedExecutionEnvironmentPlatform                                                          string
 )
 
 // Used for hard coding if Injected or real Environment Variables are expected
@@ -84,6 +88,10 @@ var injectedVariablesMap = map[string]*string{
 	"Injected_ProxyServerURL":                                           &injectedProxyServerURL,
 	"Injected_ShouldSpireServerBeUsedForGettingGcpToken":                &injectedShouldSpireServerBeUsedForGettingGcpToken,
 	"Injected_OpenShiftsGcpTokenSourceUrl":                              &injectedOpenShiftsGcpTokenSourceUrl,
-	"Injected_GitHubApiKeys":                                            &injected_GitHubApiKeys,
-	"Injected_PrivateKey":                                               &Injected_PrivateKey,
+	"Injected_GitHubApiKeys":                                            &injectedGithubApiKeys,
+	"Injected_PrivateKey":                                               &injectedPrivateKey,
+	"Injected_GenerateNewPrivateKeyForDev":                              &injectedGenerateNewPrivateKeyForDev,
+	"Injected_GenerateNewPrivateKeyForAcc":                              &injectedGenerateNewPrivateKeyForAcc,
+	"Injected_ENVIRONMENT":                                              &injectedENVIRONMENT,
+	"Injected_ExecutionEnvironmentPlatform":                             &injectedExecutionEnvironmentPlatform,
 }
