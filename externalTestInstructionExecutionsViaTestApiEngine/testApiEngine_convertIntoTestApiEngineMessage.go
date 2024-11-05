@@ -11,6 +11,7 @@ import (
 	"github.com/jlambert68/FenixTestInstructionsAdminShared/TypeAndStructs"
 	"github.com/sirupsen/logrus"
 	"strconv"
+	"strings"
 )
 
 // ConvertTestInstructionExecutionIntoTestApiEngineRestCallMessage
@@ -114,12 +115,25 @@ func ConvertTestInstructionExecutionIntoTestApiEngineRestCallMessage(
 			TestApiEngineRestApiMessageValues.TestApiEngineExpectedToBePassedValue = TypeAndStructs.AttributeValueAsStringType(testInstructionAttribute.AttributeValueAsString)
 		}
 
+		// If this the Temple then replace '\n' with '\r\n' due that it is how Swift needs line breaks should look like
+		// TODO This should instead be set at TestInstruction-definition level
+		var attributeValueAsString string
+		attributeValueAsString = testInstructionAttribute.AttributeValueAsString
+		if testInstructionAttribute.TestInstructionAttributeName == "TemplateAsString" {
+
+			// First replace all '\r\n' into '\n'. This to secure if there is a mix of line breaks
+			attributeValueAsString = strings.ReplaceAll(attributeValueAsString, "\\r\\n", "\\n")
+
+			// Second replace all '\n' into '\r\n'. Due to Swift standard for line breaks
+			attributeValueAsString = strings.ReplaceAll(attributeValueAsString, "\\n", "\\r\\n")
+		}
+
 		// Create and add Attribute with value
 		var tempTestInstructionAttributesUuidAndValue TestInstructionAttributesUuidAndValueStruct
 		tempTestInstructionAttributesUuidAndValue = TestInstructionAttributesUuidAndValueStruct{
 			TestInstructionAttributeUUID:          TypeAndStructs.TestInstructionAttributeUUIDType(testInstructionAttribute.TestInstructionAttributeUuid),
 			TestInstructionAttributeName:          TypeAndStructs.TestInstructionAttributeNameType(testInstructionAttribute.TestInstructionAttributeName),
-			TestInstructionAttributeValueAsString: TypeAndStructs.AttributeValueAsStringType(testInstructionAttribute.AttributeValueAsString),
+			TestInstructionAttributeValueAsString: TypeAndStructs.AttributeValueAsStringType(attributeValueAsString),
 		}
 
 		// Get TestApiEngine-attribute conversion-map from pointer
