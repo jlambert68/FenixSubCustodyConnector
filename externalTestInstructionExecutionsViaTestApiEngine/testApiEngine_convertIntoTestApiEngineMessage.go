@@ -119,14 +119,14 @@ func ConvertTestInstructionExecutionIntoTestApiEngineRestCallMessage(
 		// TODO This should instead be set at TestInstruction-definition level
 		var attributeValueAsString string
 		attributeValueAsString = testInstructionAttribute.AttributeValueAsString
-		//if testInstructionAttribute.TestInstructionAttributeName == "TemplateAsString" {
+		if testInstructionAttribute.TestInstructionAttributeName == "TemplateAsString" {
 
-		// First replace all '\r\n' into '\n'. This to secure if there is a mix of line breaks
-		attributeValueAsString = strings.ReplaceAll(attributeValueAsString, "\\r\\n", "\\n")
+			// First replace all '\r\n' into '\n'. This to secure if there is a mix of line breaks
+			attributeValueAsString = strings.ReplaceAll(attributeValueAsString, "\r\n", "\n")
 
-		// Second replace all '\n' into '\r\n'. Due to Swift standard for line breaks
-		attributeValueAsString = strings.ReplaceAll(attributeValueAsString, "\\n", "\\r\\n")
-		//}
+			// Second replace all '\n' into '\r\n'. Due to Swift standard for line breaks
+			attributeValueAsString = strings.ReplaceAll(attributeValueAsString, "\n", "\r\n")
+		}
 
 		// Create and add Attribute with value
 		var tempTestInstructionAttributesUuidAndValue TestInstructionAttributesUuidAndValueStruct
