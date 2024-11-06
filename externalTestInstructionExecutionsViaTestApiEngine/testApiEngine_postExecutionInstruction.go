@@ -133,7 +133,7 @@ func PostTestInstructionUsingRestCall(
 
 	} else {
 		// Use TestApiEngine address and port
-		testApiEngineUrl = "https://" + LocalExecutionMethods.TestApiEngineAddress + ":" + LocalExecutionMethods.TestApiEnginePort + testApiEngineUrl
+		testApiEngineUrl = LocalExecutionMethods.TestApiEngineAddress + ":" + LocalExecutionMethods.TestApiEnginePort + testApiEngineUrl
 
 		sharedCode.Logger.WithFields(logrus.Fields{
 			"id":               "fa461ab4-789f-4b2a-a215-2653567fe319",
@@ -397,6 +397,7 @@ func validateAndTransformRestResponse(
 	// Create a proper json for the string of "responseValue"
 	cleanedFenixMessageInTestApiEngineResponseValueAsJsonString = strings.ReplaceAll(cleanedFenixMessageInTestApiEngineResponseValueAsJsonString, `responseValue":"{`, `responseValue":{`)
 	cleanedFenixMessageInTestApiEngineResponseValueAsJsonString = strings.ReplaceAll(cleanedFenixMessageInTestApiEngineResponseValueAsJsonString, `}","executionTimeStamp`, `},"executionTimeStamp`)
+	cleanedFenixMessageInTestApiEngineResponseValueAsJsonString = strings.ReplaceAll(cleanedFenixMessageInTestApiEngineResponseValueAsJsonString, `\\r\\n`, "")
 
 	// *** Second Step ***
 
