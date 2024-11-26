@@ -17,7 +17,7 @@ A External Connector is the component that has two main purpose. First of all do
 
 ![Fenix Inception - Standard External Connector](./Documentation/FenixInception-Overview-NonDetailed-ExternalConnector.png "Fenix Inception - External Connector")
 
-The following environment variable is needed for the Connector to be able to run. The setup is done to be able to run this and other Fenix Inception locally using certain GCP service, i.e. database, pub/sub...
+The following environment variables are needed for the Connector to be able to run. The setup is done to be able to run this and other Fenix Inception component locally but using certain GCP service, i.e. database, pub/sub...
 
 | Environment variable                                                                  | Example value                                                   | comment |
 |---------------------------------------------------------------------------------------|-----------------------------------------------------------------|---------|
