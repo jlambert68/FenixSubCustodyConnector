@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Response Variables Schema for SendTestDataToThisDomain_v1_0",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "TestStepActionMethod": {
+        "type": "string",
+        "enum": [
+          "SendTestDataToThisDomain_v1_0"
+        ]
+      },
+      "TestInstructionVersion": {
+        "type": "string",
+        "enum": [
+          "v1.0"
+        ]
+      }
+    },
+    "required": [
+      "TestStepActionMethod",
+      "TestInstructionVersion"
+    ],
+    "additionalProperties": false
+  }
+}

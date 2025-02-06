@@ -2,6 +2,7 @@ package executeTestInstructionUsingTestApiEngine
 
 import (
 	"FenixSubCustodyConnector/sharedCode"
+	"github.com/jlambert68/FenixStandardTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_SendTestDataToThisDomain"
 	"github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_SendOnMQTypeMT_SendGeneral"
 	"github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_SendOnMQTypeMT_SendMT540"
 	TestInstruction_SendOnMQTypeMT_SendMT542 "github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_SendOnMQTypeMT_SendMT542/version_1_0"
@@ -36,6 +37,34 @@ func GetResponseSchemasToUse(
 	switch testInstructionUUID {
 
 	// Send used TestData for TestCase
+	case TestInstruction_Standard_SendTestDataToThisDomain.TestInstructionUUID_FenixSentToUsersDomain_SendTestDataToThisDomain:
+		// Extract json-schema depending on version
+		switch testInstructionVersion {
+		case "v1.0":
+
+			// Outgoing Request
+			var tempRequestMessageToTestApiEngineJsonSchema string
+			tempRequestMessageToTestApiEngineJsonSchema = string(fenixGeneral_SendTestDataToThisDomain_v1_0_RequestMessageJsonSchemaAsByteArray)
+			requestMessageToTestApiEngineJsonSchema = &tempRequestMessageToTestApiEngineJsonSchema
+
+			// Outgoing Request MethodParameters
+			var tempRequestMethodParametersMessageToTestApiEngineJsonSchema string
+			tempRequestMethodParametersMessageToTestApiEngineJsonSchema = string(fenixGeneral_SendTestDataToThisDomainl_v1_0_RequestMethodParametersMessageJsonSchemaAsByteArray)
+			requestMethodParametersMessageToTestApiEngineJsonSchema = &tempRequestMethodParametersMessageToTestApiEngineJsonSchema
+
+			// Incoming Response
+			var tempResponseVariablesJsonSchema string
+			tempResponseVariablesJsonSchema = string(fenixGeneral_SendTestDataToThisDomain_v1_0_ResponseVariablesMessageJsonSchemaAsByteArray)
+			responseVariablesJsonSchema = &tempResponseVariablesJsonSchema
+
+		default:
+			sharedCode.Logger.WithFields(logrus.Fields{
+				"id":                     "6d88c30d-6a94-4dd8-b96e-5f3803441103",
+				"testInstructionUUID":    testInstructionUUID,
+				"testInstructionVersion": testInstructionVersion,
+			}).Fatal("Unhandled version")
+
+		}
 
 	// Send general MT-message on MQ
 	case TestInstruction_SendOnMQTypeMT_SendGeneral.TestInstructionUUID_SendOnMQTypeMT_SendGeneral:

@@ -8,6 +8,7 @@ import (
 	fenixExecutionWorkerGrpcApi "github.com/jlambert68/FenixGrpcApi/FenixExecutionServer/fenixExecutionWorkerGrpcApi/go_grpc_api"
 	testInstruction_SendTemplateToThisDomain_version_1_0 "github.com/jlambert68/FenixStandardTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_SendTemplateToThisDomain/version_1_0"
 	TestInstruction_Standard_SendTestDataToThisDomain "github.com/jlambert68/FenixStandardTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_SendTestDataToThisDomain"
+	TestInstruction_Standard_SendTestDataToThisDomain_version_1_0 "github.com/jlambert68/FenixStandardTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_SendTestDataToThisDomain/version_1_0"
 	"github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_SendOnMQTypeMT_SendGeneral"
 	"github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_SendOnMQTypeMT_SendMT540"
 	TestInstruction_SendOnMQTypeMT_SendMT540_version1_0 "github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_SendOnMQTypeMT_SendMT540/version_1_0"
@@ -39,32 +40,9 @@ func processTestInstructionExecutionRequest(
 	// Depending on TestInstruction then choose how to execution the TestInstruction
 	switch TypeAndStructs.OriginalElementUUIDType(testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionOriginalUuid) {
 
-	// General TestInstruction, owned by Fenix, that can be forced to Connector by user
-	// TestInstruction holds the TestData that the TestCase is using
-	case TestInstruction_Standard_SendTestDataToThisDomain.TestInstructionUUID_FenixSentToUsersDomain_SendTestDataToThisDomain:
-
-		// Just log out the Data
-		sharedCode.Logger.WithFields(logrus.Fields{
-			"id":                                    "865f4047-b11d-4a04-886c-5ee9a2cd800a",
-			"testInstructionExecutionPubSubRequest": testInstructionExecutionPubSubRequest,
-		}).Info("The general, Fenix owned, TestInstruction for TestData was sent to Connector")
-
-		/*
-				// General TestInstruction, owned by Fenix, that can be forced to Connector by user
-			// TestInstruction holds a Template that is sent to the Connector
-			case TestInstruction_Standard_SendTemplateToThisDomain.TestInstructionUUID_FenixSentToUsersDomain_SendTemplateToThisDomain:
-
-				// Just log out the Data
-				sharedCode.Logger.WithFields(logrus.Fields{
-					"id":                                    "865f4047-b11d-4a04-886c-5ee9a2cd800a",
-					"testInstructionExecutionPubSubRequest": testInstructionExecutionPubSubRequest,
-				}).Info("The general, Fenix owned, TestInstruction for sending a TemplateTest to Connector")
-
-
-		*/
-
 	// Send a MT54x on MQ or Validate MT54x
 	case //TestInstruction_Standard_SendTemplateToThisDomain.TestInstructionUUID_FenixSentToUsersDomain_SendTemplateToThisDomain,
+		TestInstruction_Standard_SendTestDataToThisDomain.TestInstructionUUID_FenixSentToUsersDomain_SendTestDataToThisDomain,
 		TestInstruction_SendOnMQTypeMT_SendGeneral.TestInstructionUUID_SendOnMQTypeMT_SendGeneral,
 		TestInstruction_SendOnMQTypeMT_SendMT540.TestInstructionUUID_SubCustody_SendMT540,
 		TestInstruction_SendOnMQTypeMT_SendMT542.TestInstructionUUID_SubCustody_SendMT542,
@@ -79,6 +57,10 @@ func processTestInstructionExecutionRequest(
 		//case TestInstruction_Standard_SendTemplateToThisDomain.TestInstructionUUID_FenixSentToUsersDomain_SendTemplateToThisDomain:
 		//	maximumExecutionDurationInSeconds = TestInstruction_Standard_SendTemplateToThisDomain_version_1_0.
 		//		ExpectedMaxTestInstructionExecutionDurationInSeconds
+
+		case TestInstruction_Standard_SendTestDataToThisDomain.TestInstructionUUID_FenixSentToUsersDomain_SendTestDataToThisDomain:
+			maximumExecutionDurationInSeconds = TestInstruction_Standard_SendTestDataToThisDomain_version_1_0.
+				ExpectedMaxTestInstructionExecutionDurationInSeconds
 
 		case TestInstruction_SendOnMQTypeMT_SendGeneral.TestInstructionUUID_SendOnMQTypeMT_SendGeneral:
 			maximumExecutionDurationInSeconds = testInstruction_SendTemplateToThisDomain_version_1_0.

@@ -1,3 +1,5 @@
+
+
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
     "title": "Validates the main 'Fenix-data' within the TestApiEngine's 'responseVariables'-field",
@@ -6,7 +8,7 @@
         "TestApiEngineResponseJsonSchemaVersion": {
             "type": "string",
             "enum": [
-                "v1.0"
+                "v1.1"
             ]
         },
         "TestInstructionExecutionUuid": {
@@ -29,12 +31,15 @@
         "ResponseVariables": {
             "oneOf": [
                 {
-                    "type": "null"
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ResponseVariableMessage_NoResponseVariable"
+                    }
                 },
                 {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/ResponseVariableMessage"
+                        "$ref": "#/definitions/ResponseVariableMessage_ResponsvariableType1"
                     }
                 }
             ]
@@ -137,7 +142,23 @@
             ],
             "additionalProperties": false
         },
-        "ResponseVariableMessage": {
+        "ResponseVariableMessage_NoResponseVariable": {
+            "type": "object",
+            "properties": {
+                "TestStepActionMethod": {
+                    "type": "string"
+                },
+                "TestInstructionVersion": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "TestStepActionMethod",
+                "TestInstructionVersion",
+            ],
+            "additionalProperties": false
+        },
+        "ResponseVariableMessage_ResponsvariableType1": {
             "type": "object",
             "properties": {
                 "TestStepActionMethod": {
@@ -177,3 +198,5 @@
         }
     }
 }
+
+

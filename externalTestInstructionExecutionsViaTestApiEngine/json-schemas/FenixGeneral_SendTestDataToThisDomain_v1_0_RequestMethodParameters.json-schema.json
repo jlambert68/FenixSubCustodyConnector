@@ -1,0 +1,56 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "FenixGeneral_SendTestDataToThisDomain-MethodParameters in Request, version 1.0",
+  "type": "object",
+  "properties": {
+    "TestStepActionMethod": {
+      "type": "string",
+      "enum": [
+        "SendTestDataToThisDomain_v1_0"
+      ]
+    },
+    "TestInstructionVersion": {
+      "type": "string",
+      "enum": [
+        "v1.0"
+      ]
+    },
+    "TestCaseExecutionUuid": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "TestInstructionExecutionUuid": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "TestInstructionExecutionVersion": {
+      "type": "string",
+      "pattern": "^[0-9]+$"
+    },
+    "ExpectedToBePassed": {
+      "type": "string",
+      "enum": [
+        "true",
+        "false"
+      ]
+    },
+    "TimeoutTimeInSeconds": {
+      "type": "string",
+      "pattern": "^[0-9]+$"
+    },
+    "ChosenTestDataAsJsonString": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "TestInstructionVersion",
+    "TestCaseExecutionUuid",
+    "TestInstructionExecutionUuid",
+    "TestInstructionExecutionVersion",
+    "ExpectedToBePassed",
+    "TimeoutTimeInSeconds",
+    "ChosenTestDataAsJsonString"
+
+  ],
+  "additionalProperties": false
+}

@@ -14,6 +14,17 @@ var testApiEngineResponseMessageJsonSchemaAsByteArray []byte
 //go:embed json-schemas/FinalTestInstructionExecutionResultMessage.json-schema.json
 var finalTestInstructionExecutionResultMessageJsonSchemaAsByteArray []byte
 
+// FenixGeneral_SendTestDataToThisDomain
+//
+//go:embed json-schemas/FenixGeneral_SendTestDataToThisDomain_v1_0_Request.json-schema.json
+var fenixGeneral_SendTestDataToThisDomain_v1_0_RequestMessageJsonSchemaAsByteArray []byte
+
+//go:embed json-schemas/FenixGeneral_SendTestDataToThisDomain_v1_0_RequestMethodParameters.json-schema.json
+var fenixGeneral_SendTestDataToThisDomainl_v1_0_RequestMethodParametersMessageJsonSchemaAsByteArray []byte
+
+//go:embed json-schemas/FenixGeneral_SendTestDataToThisDomain_v1_0_ResponseVariables.json-schema.json
+var fenixGeneral_SendTestDataToThisDomain_v1_0_ResponseVariablesMessageJsonSchemaAsByteArray []byte
+
 // SendOnMQTypeMT_SendGeneral
 //
 //go:embed json-schemas/SendOnMQTypeMT_SendGeneral_v1_0_Request.json-schema.json

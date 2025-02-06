@@ -1,0 +1,58 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "FenixGeneral_SendTestDataToThisDomain Request, version 1.0",
+  "type": "object",
+  "properties": {
+    "testStepClassName": {
+      "type": "string",
+      "enum": [
+        "FenixGeneral"
+      ]
+    },
+    "testStepActionMethod": {
+      "type": "string",
+      "enum": [
+        "SendTestDataToThisDomain_v1_0"
+      ]
+    },
+    "testDataParameterType": {
+      "type": "string",
+      "enum": [
+        "FixedValue"
+      ]
+    },
+    "expectedToBePassed": {
+      "type": "boolean",
+      "enum": [
+        true,
+        false
+      ]
+    },
+    "methodParameters": {
+      "type": "object",
+      "$ref": "#/definitions/MethodParameters"
+    }
+  },
+  "required": [
+    "testStepClassName",
+    "testStepActionMethod",
+    "testDataParameterType",
+    "expectedToBePassed",
+    "methodParameters"
+  ],
+  "additionalProperties": false,
+  "definitions": {
+    "MethodParameters": {
+      "type": "object",
+      "properties": {
+        "MethodParametersJsonAsString": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "MethodParametersJsonAsString"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

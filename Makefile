@@ -36,8 +36,12 @@ Download-json-schemas:
 	echo "$(fullLocalFilePathOverAll)"
 	echo "$(fullRemoteFilePathOverAll)"
 	echo "......."
-	echo "$(fullLocalFilePathValidateMT544RequestMethodParameters_v1_0)"
-	echo "$(fullRemoteFilePathValidateMT544RequestMethodParameters_v1_0)"
+	echo "$(fullLocalFilePathFenixGeneral_SendTestDataToThisDomainRequest_v1_0)"
+	echo "$(fullRemoteFilePathFenixGeneral_SendTestDataToThisDomain_v1_0)"
+	echo "$(fullLocalFilePathFenixGeneral_SendTestDataToThisDomainMethodParameters_v1_0)"
+	echo "$(fullRemoteFilePathFenixGeneral_SendTestDataToThisDomainMethodParameters_v1_0)"
+	echo "$(fullLocalFilePathFenixGeneral_SendTestDataToThisDomain_v1_0)"
+	echo "$(fullRemoteFilePathFenixGeneral_SendGeneralResponse_v1_0)"
 
 	@curl -L -o $(fullLocalFilePathOverAll) "$(fullRemoteFilePathOverAll)"
 	@curl -L -o $(fullLocalFilePathTestApiEngineResponse) "$(fullRemoteFilePathTestApiEngineResponse)"
@@ -45,6 +49,10 @@ Download-json-schemas:
 	@curl -L -o $(fullLocalFilePathSendOnMQTypeMT_SendGeneralRequest_v1_0) "$(fullRemoteFilePathSendOnMQTypeMT_SendGeneralRequest_v1_0)"
 	@curl -L -o $(fullLocalFilePathSendOnMQTypeMT_SendGeneralRequestMethodParameters_v1_0) "$(fullRemoteFilePathSendOnMQTypeMT_SendGeneralRequestMethodParameters_v1_0)"
 	@curl -L -o $(fullLocalFilePathSendOnMQTypeMT_SendGeneral_v1_0) "$(fullRemoteFilePathSendOnMQTypeMT_SendGeneralResponse_v1_0)"
+
+	@curl -L -o $(fullLocalFilePathFenixGeneral_SendTestDataToThisDomainRequest_v1_0) "$(fullRemoteFilePathFenixGeneral_SendTestDataToThisDomain_v1_0)"
+	@curl -L -o $(fullLocalFilePathFenixGeneral_SendTestDataToThisDomainMethodParameters_v1_0) "$(fullRemoteFilePathFenixGeneral_SendTestDataToThisDomainMethodParameters_v1_0)"
+	@curl -L -o $(fullLocalFilePathFenixGeneral_SendTestDataToThisDomain_v1_0) "$(fullRemoteFilePathFenixGeneral_SendGeneralResponse_v1_0)"
 
 	@curl -L -o $(fullLocalFilePathSendMT540Request_v1_0) "$(fullRemoteFilePathSendMT540Request_v1_0)"
 	@curl -L -o $(fullLocalFilePathSendMT540RequestMethodParameters_v1_0) "$(fullRemoteFilePathSendMT540RequestMethodParameters_v1_0)"
