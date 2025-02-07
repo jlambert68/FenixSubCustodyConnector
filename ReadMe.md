@@ -19,44 +19,44 @@ A External Connector is the component that has two main purpose. First of all do
 
 The following environment variables are needed for the Connector to be able to run. The setup is done to be able to run this and other Fenix Inception component locally but using certain GCP service, i.e. database, pub/sub...
 
-| Environment variable                                                                  | Example value                                                            | comment |
-|---------------------------------------------------------------------------------------|--------------------------------------------------------------------------|---------|
-| AuthClientId                                                                          | 944682210385-jokmr7b6fdllr6k76kfo2hagic7kfvnt.apps.googleusercontent.com |         |
-| AuthClientSecret                                                                      | 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                                      |         |
-| ENVIRONMENT                                                                           | dev                                                                      |         |
-| ExecutionConnectorPort                                                                | 6673                                                                     |         |
-| ExecutionLocationForConnector                                                         | LOCALHOST_NODOCKER                                                       |         |
-| ExecutionLocationForWorker                                                            | LOCALHOST_NODOCKER                                                       |         |
-| ExecutionWorkerAddress                                                                | 127.0.0.1                                                                |         |
-| ExecutionWorkerPort                                                                   | 6671                                                                     |         |
-| ForceNewBaseLineForTestInstructionsAndTestInstructionContainers                       | true                                                                     |         |
-| GCPAuthentication                                                                     | true                                                                     |         |
-| GcpProject                                                                            | mycloud-run-project                                                      |         |
-| GenerateNewPrivateKeyForAcc                                                           | false                                                                    |         |
-| GenerateNewPrivateKeyForDev                                                           | false                                                                    |         |
-| GitHubApiKeys                                                                         | lsk_66asdasKJHGSDksa89asdaKJ800u5a                                       |         |
-| LocalServiceAccountPath                                                               | #                                                                        |         |
-| LocalWebServerAddress                                                                 | 127.0.0.1                                                                |         |
-| LocalWebServerPort                                                                    | 8080                                                                     |         |
-| LoggingLevel                                                                          | DebugLevel                                                               |         |
-| PrivateKey                                                                            | 0q9werq0w9nOIOISODisd09ASd8kLUOSIDU                                      |         |                                               |
-| ProxyServerURL                                                                        | #                                                                        |         |
-| RelativePathToAllowedUsersList                                                        | allowedUsers/allowedUsers.json                                           |         |
-| ShouldProxyServerBeUsed                                                               | false                                                                    |         |
-| ShouldPubSubReceiverBeStarted                                                         | true                                                                     |         |
-| TestApiEngineAddress                                                                  | 127.0.0.1                                                                |         |
-| TestApiEnginePort                                                                     | 5000                                                                     |         |
-| TestApiEngineUrlPath                                                                  | /TestCaseExecution/ExecuteTestActionMethod                               |         |
-| TestInstructionExecutionPubSubTopicBase                                               | ProcessTestInstructionExecutionRequest                                   |         |
-| ThisConnectorIsTheOneThatPublishSupportedTestInstructionsAndTestInstructionContainers | true                                                                     |         |
-| ThisDomainsUuid                                                                       | 7edf2269-a8d3-472c-aed6-8cdcc4a8b6ae                                     |         |
-| ThisExecutionDomainUuid                                                               | 7edf2269-a8d3-472c-aed6-8cdcc4a8b6ae                                     |         |
-| TurnOffAllCommunicationWithWorker                                                     | false                                                                    |         |
-| UseInternalWebServerForTestInsteadOfCallingTestApiEngine                              | true                                                                     |         |
-| UseNativeGcpPubSubClientLibrary                                                       | true                                                                     |         |
-| UsePubSubToReceiveMessagesFromWorker                                                  | true                                                                     |         |
-| UseServiceAccount                                                                     | true                                                                     |         |
-| ExecutionEnvironmentPlatform                                                          | Other                                                                    |         |
+| Environment variable                                                                  | Example value                                                             | comment |
+|---------------------------------------------------------------------------------------|---------------------------------------------------------------------------|---------|
+| AuthClientId                                                                          | 032942210385-jokm098fsd0llr6k76kfo2hagic7kfvnt.apps.googleusercontent.com |         |
+| AuthClientSecret                                                                      | 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                                       |         |
+| ENVIRONMENT                                                                           | dev                                                                       |         |
+| ExecutionConnectorPort                                                                | 6673                                                                      |         |
+| ExecutionLocationForConnector                                                         | LOCALHOST_NODOCKER                                                        |         |
+| ExecutionLocationForWorker                                                            | LOCALHOST_NODOCKER                                                        |         |
+| ExecutionWorkerAddress                                                                | 127.0.0.1                                                                 |         |
+| ExecutionWorkerPort                                                                   | 6671                                                                      |         |
+| ForceNewBaseLineForTestInstructionsAndTestInstructionContainers                       | true                                                                      |         |
+| GCPAuthentication                                                                     | true                                                                      |         |
+| GcpProject                                                                            | mycloud-run-project                                                       |         |
+| GenerateNewPrivateKeyForAcc                                                           | false                                                                     |         |
+| GenerateNewPrivateKeyForDev                                                           | false                                                                     |         |
+| GitHubApiKeys                                                                         | lsk_66asdasKJHGSDksa89asdaKJ800u5a                                        |         |
+| LocalServiceAccountPath                                                               | #                                                                         |         |
+| LocalWebServerAddress                                                                 | 127.0.0.1                                                                 |         |
+| LocalWebServerPort                                                                    | 8080                                                                      |         |
+| LoggingLevel                                                                          | DebugLevel                                                                |         |
+| PrivateKey                                                                            | 0q9werq0w9nOIOISODisd09ASd8kLUOSIDU                                       |         |                                               |
+| ProxyServerURL                                                                        | #                                                                         |         |
+| RelativePathToAllowedUsersList                                                        | allowedUsers/allowedUsers.json                                            |         |
+| ShouldProxyServerBeUsed                                                               | false                                                                     |         |
+| ShouldPubSubReceiverBeStarted                                                         | true                                                                      |         |
+| TestApiEngineAddress                                                                  | 127.0.0.1                                                                 |         |
+| TestApiEnginePort                                                                     | 5000                                                                      |         |
+| TestApiEngineUrlPath                                                                  | /TestCaseExecution/ExecuteTestActionMethod                                |         |
+| TestInstructionExecutionPubSubTopicBase                                               | ProcessTestInstructionExecutionRequest                                    |         |
+| ThisConnectorIsTheOneThatPublishSupportedTestInstructionsAndTestInstructionContainers | true                                                                      |         |
+| ThisDomainsUuid                                                                       | 7edf2269-a8d3-472c-aed6-8cdcc4a8b6ae                                      |         |
+| ThisExecutionDomainUuid                                                               | 7edf2269-a8d3-472c-aed6-8cdcc4a8b6ae                                      |         |
+| TurnOffAllCommunicationWithWorker                                                     | false                                                                     |         |
+| UseInternalWebServerForTestInsteadOfCallingTestApiEngine                              | true                                                                      |         |
+| UseNativeGcpPubSubClientLibrary                                                       | true                                                                      |         |
+| UsePubSubToReceiveMessagesFromWorker                                                  | true                                                                      |         |
+| UseServiceAccount                                                                     | true                                                                      |         |
+| ExecutionEnvironmentPlatform                                                          | Other                                                                     |         |
 
 ### AuthClientId and AuthClientSecret
 To create the AuthClientId and AuthClientSecret, follow the steps below to produce them in GCP
