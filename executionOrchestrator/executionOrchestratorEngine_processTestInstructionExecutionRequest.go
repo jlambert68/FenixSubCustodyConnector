@@ -176,6 +176,13 @@ func processTestInstructionExecutionRequest(
 		switch TypeAndStructs.OriginalElementUUIDType(testInstructionExecutionPubSubRequest.TestInstruction.TestInstructionOriginalUuid) {
 
 		// Send used TestData for TestCase
+		case TestInstruction_Standard_SendTestDataToThisDomain.TestInstructionUUID_FenixSentToUsersDomain_SendTestDataToThisDomain:
+			requestMessageToTestApiEngineJsonSchema, requestMethodParametersMessageToTestApiEngineJsonSchema,
+				testApiEngineResponseMessageJsonSchema, finalTestInstructionExecutionResultJsonSchema,
+				responseVariablesJsonSchema =
+				executeTestInstructionUsingTestApiEngine.GetResponseSchemasToUse(
+					TestInstruction_Standard_SendTestDataToThisDomain.TestInstructionUUID_FenixSentToUsersDomain_SendTestDataToThisDomain,
+					testInstructionVersion)
 
 		// Send general MT-message on MQ
 		case TestInstruction_SendOnMQTypeMT_SendGeneral.TestInstructionUUID_SendOnMQTypeMT_SendGeneral:
