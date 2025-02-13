@@ -56,7 +56,10 @@ func PostTestInstructionUsingRestCall(
 	attributesMap["TestInstructionExecutionUuid"] = testApiEngineRestApiMessageValues.TestInstructionExecutionUuid
 	attributesMap["TestInstructionExecutionVersion"] = strconv.Itoa(int(testApiEngineRestApiMessageValues.
 		TestInstructionExecutionVersion))
-	attributesMap["ExpectedToBePassed"] = string(testApiEngineRestApiMessageValues.TestApiEngineExpectedToBePassedValue)
+	//Only add 'ExpectedToBePassed' if it is used as an attribute
+	if len(testApiEngineRestApiMessageValues.TestApiEngineExpectedToBePassedValue) > 0 {
+		attributesMap["ExpectedToBePassed"] = string(testApiEngineRestApiMessageValues.TestApiEngineExpectedToBePassedValue)
+	}
 	attributesMap["TimeoutTimeInSeconds"] = strconv.Itoa(int(testApiEngineRestApiMessageValues.MaximumExecutionDurationInSeconds))
 
 	// Generate json from AttributesMap
