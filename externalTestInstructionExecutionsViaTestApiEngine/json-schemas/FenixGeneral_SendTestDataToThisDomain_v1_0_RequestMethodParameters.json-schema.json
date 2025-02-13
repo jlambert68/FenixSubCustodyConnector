@@ -27,13 +27,6 @@
       "type": "string",
       "pattern": "^[0-9]+$"
     },
-    "ExpectedToBePassed": {
-      "type": "string",
-      "enum": [
-        "true",
-        "false"
-      ]
-    },
     "TimeoutTimeInSeconds": {
       "type": "string",
       "pattern": "^[0-9]+$"
@@ -47,7 +40,6 @@
     "TestCaseExecutionUuid",
     "TestInstructionExecutionUuid",
     "TestInstructionExecutionVersion",
-    "ExpectedToBePassed",
     "TimeoutTimeInSeconds",
     "ChosenTestDataAsJsonString"
 

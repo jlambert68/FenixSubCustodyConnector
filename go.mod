@@ -10,16 +10,16 @@ require (
 	github.com/gorilla/pat v1.0.2 // indirect
 	github.com/gorilla/sessions v1.2.2 // indirect; v1.3.0 gives session error when trying to get token from GCP
 	github.com/jlambert68/FenixConnectorAdminShared v0.0.0-20241119090841-fee28aa3a05c
-	github.com/jlambert68/FenixGrpcApi v0.0.0-20250114063146-bad1bcdc4fde
+	github.com/jlambert68/FenixGrpcApi v0.0.0-20250210125238-192f9d8695e5
 	github.com/jlambert68/FenixScriptEngine v0.0.0-20241104143504-8f37e95bc346
 	github.com/jlambert68/FenixStandardTestInstructionAdmin v0.0.0-20241025085754-ced7ee5586a6
-	github.com/jlambert68/FenixSubCustodyTestInstructionAdmin v0.0.0-20250206133414-35b341f5a935
+	github.com/jlambert68/FenixSubCustodyTestInstructionAdmin v0.0.0-20250213153900-fce9e09d84d8
 	github.com/jlambert68/FenixSyncShared v0.0.0-20240911064419-da3d922610cb
 	github.com/jlambert68/FenixTestInstructionsAdminShared v0.0.0-20241024135649-85f0f911fdda
 	github.com/markbates/goth v1.80.0 // indirect
 	github.com/santhosh-tekuri/jsonschema/v5 v5.3.1
 	github.com/sirupsen/logrus v1.9.3
-	google.golang.org/protobuf v1.36.4
+	google.golang.org/protobuf v1.36.5
 )
 
 require (
