@@ -154,7 +154,7 @@
             },
             "required": [
                 "TestStepActionMethod",
-                "TestInstructionVersion",
+                "TestInstructionVersion"
             ],
             "additionalProperties": false
         },
