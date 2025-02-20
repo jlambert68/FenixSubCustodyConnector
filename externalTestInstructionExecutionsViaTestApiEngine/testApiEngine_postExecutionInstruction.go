@@ -488,38 +488,28 @@ func validateAndTransformRestResponse(
 	var responseVariablesAsJsonByteArray []byte
 
 	for _, responseVariable := range testApiEngineFinalTestInstructionExecutionResult.ResponseVariables {
-		switch v := responseVariable.(type) {
-		case ResponseVariableType1Struct:
 
-			// Check if the ResponseVariable can be cast into correct response struct
-			if resVar, ok := responseVariable.(ResponseVariableType1Struct); ok {
-				testAPiEngineResponseVariablesType1 = append(testAPiEngineResponseVariablesType1, resVar)
-			} else {
-				sharedCode.Logger.WithFields(logrus.Fields{
-					"id":               "10c35e90-fd04-47fd-a0da-2188c0bf1f4a",
-					"resVar":           resVar,
-					"responseVariable": responseVariable,
-				}).Fatal("ResponseVariable can't be cast into 'ResponseVariableType1Struct'")
-			}
-
-		case NoResponseVariableStruct:
-			// Check if the ResponseVariable can be cast into correct response struct
-			if resVar, ok := responseVariable.(NoResponseVariableStruct); ok {
-				testAPiEngineNoResponseVariables = append(testAPiEngineNoResponseVariables, resVar)
-			} else {
-				sharedCode.Logger.WithFields(logrus.Fields{
-					"id":               "9650a892-7ec4-4329-a9ea-fc3fd1f8fe94",
-					"resVar":           resVar,
-					"responseVariable": responseVariable,
-				}).Fatal("ResponseVariable can't be cast into 'NoResponseVariableStruct'")
-			}
-
-		default:
-			sharedCode.Logger.WithFields(logrus.Fields{
-				"id":                      "c9356f5b-2568-42ff-b651-032cc59b3aeb",
-				"responseVariable.(type)": v,
-			}).Fatal("Unknown response variable type")
+		// Check if the ResponseVariable can be cast into correct response struct
+		// ResponseVariableType1Struct
+		if resVar, ok := responseVariable.(ResponseVariableType1Struct); ok {
+			testAPiEngineResponseVariablesType1 = append(testAPiEngineResponseVariablesType1, resVar)
+			continue
 		}
+
+		// NoResponseVariableStruct
+		if resVar, ok := responseVariable.(NoResponseVariableStruct); ok {
+			testAPiEngineNoResponseVariables = append(testAPiEngineNoResponseVariables, resVar)
+			continue
+		}
+
+		err = errors.New("unknown type for response variable\"")
+
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id":               "c9356f5b-2568-42ff-b651-032cc59b3aeb",
+			"responseVariable": responseVariable,
+		}).Error("Unknown type for response variable")
+
+		return TestApiEngineFinalTestInstructionExecutionResultStruct{}, err
 	}
 
 	// Validate that there are at least one response variable
@@ -537,20 +527,29 @@ func validateAndTransformRestResponse(
 	}
 
 	// Select ResponseVariable-type
-	switch v := testApiEngineFinalTestInstructionExecutionResult.ResponseVariables[0].(type) {
-	case ResponseVariableType1Struct:
+	if len(testAPiEngineNoResponseVariables) > 0 {
+		// ResponseVariableType1Struct:
+
 		// Convert Response Variables into json-byte-array
 		responseVariablesAsJsonByteArray, err = json.Marshal(testAPiEngineResponseVariablesType1)
+	}
 
-	case NoResponseVariableStruct:
+	if len(testAPiEngineNoResponseVariables) > 0 {
+		// NoResponseVariableStruct:
+
 		// Convert Response Variables into json-byte-array
 		responseVariablesAsJsonByteArray, err = json.Marshal(testAPiEngineNoResponseVariables)
+	}
 
-	default:
+	if len(testAPiEngineNoResponseVariables)+len(testAPiEngineNoResponseVariables) == 0 {
+
+		err = errors.New("no response variables, which is not expected")
+
 		sharedCode.Logger.WithFields(logrus.Fields{
-			"id":                      "d7e11066-c1cb-4663-ad7b-f8357455bf5f",
-			"responseVariable.(type)": v,
-		}).Fatal("Unknown response variable type")
+			"id": "63e34ef6-6e14-4620-ac33-ff45dd71d434",
+		}).Error("No response variables, which is not expected")
+
+		return TestApiEngineFinalTestInstructionExecutionResultStruct{}, err
 	}
 
 	if err != nil {
