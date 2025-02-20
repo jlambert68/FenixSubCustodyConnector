@@ -891,7 +891,7 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 				TestInstructionExecutionStatusEnum_TIE_FINISHED_NOT_OK)],
 			TestInstructionExecutionStartTimeStamp: tempTestInstructionExecutionStartTimeStamp.Format(time.RFC3339),
 			TestInstructionExecutionEndTimeStamp:   time.Now().Format(time.RFC3339),
-			ResponseVariables:                      []ResponseVariableType1Struct{},
+			ResponseVariables:                      make([]interface{}, 0),
 			LogPosts: []LogPostStruct{
 				{
 					LogPostTimeStamp:                     time.Now().Format(time.RFC3339),
@@ -965,7 +965,7 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 				TestInstructionExecutionStatusEnum_TIE_TIMEOUT_INTERRUPTION)],
 			TestInstructionExecutionStartTimeStamp: tempTestInstructionExecutionStartTimeStamp.Format(time.RFC3339),
 			TestInstructionExecutionEndTimeStamp:   time.Now().Format(time.RFC3339),
-			ResponseVariables:                      []ResponseVariableType1Struct{},
+			ResponseVariables:                      make([]interface{}, 0),
 			LogPosts: []LogPostStruct{
 				{
 					LogPostTimeStamp: time.Now().Format(time.RFC3339),
@@ -1041,7 +1041,7 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 				TestInstructionExecutionStatusEnum_TIE_TIMEOUT_INTERRUPTION)],
 			TestInstructionExecutionStartTimeStamp: tempTestInstructionExecutionStartTimeStamp.Format(time.RFC3339),
 			TestInstructionExecutionEndTimeStamp:   time.Now().Format(time.RFC3339),
-			ResponseVariables:                      []ResponseVariableType1Struct{},
+			ResponseVariables:                      make([]interface{}, 0),
 			LogPosts: []LogPostStruct{
 				{
 					LogPostTimeStamp: time.Now().Format(time.RFC3339),
@@ -1185,9 +1185,7 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 				TestInstructionExecutionStatusEnum_TIE_FINISHED_OK)],
 			TestInstructionExecutionStartTimeStamp: tempTestInstructionExecutionStartTimeStamp.Format(time.RFC3339),
 			TestInstructionExecutionEndTimeStamp:   time.Now().Format(time.RFC3339),
-			ResponseVariables: []ResponseVariableType1Struct{
-				resoponseVariables,
-			},
+			ResponseVariables:                      make([]interface{}, 0),
 			LogPosts: []LogPostStruct{
 				{
 					LogPostTimeStamp:                     time.Now().Format(time.RFC3339),
@@ -1197,6 +1195,8 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 				},
 			},
 		}
+		tempTestApiEngineFinalTestInstructionExecutionResult.ResponseVariables = append(
+			tempTestApiEngineFinalTestInstructionExecutionResult.ResponseVariables, resoponseVariables)
 
 		var jsonBytes []byte
 		jsonBytes, err = json.Marshal(tempTestApiEngineFinalTestInstructionExecutionResult)
@@ -1252,7 +1252,7 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 				TestInstructionExecutionStatusEnum_TIE_FINISHED_NOT_OK)],
 			TestInstructionExecutionStartTimeStamp: tempTestInstructionExecutionStartTimeStamp.Format(time.RFC3339),
 			TestInstructionExecutionEndTimeStamp:   time.Now().Format(time.RFC3339),
-			ResponseVariables:                      []ResponseVariableType1Struct{},
+			ResponseVariables:                      make([]interface{}, 0),
 			LogPosts: []LogPostStruct{
 				{
 					LogPostTimeStamp:                     time.Now().Format(time.RFC3339),
