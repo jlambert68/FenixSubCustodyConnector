@@ -58,14 +58,14 @@ type TestStepExecutionStatusStruct struct {
 // Specify the structure that the Json-response, from TestApiEngine, will be 'converted into
 // This is the unique Fenix-parts of the TestApiEngine-response, which exists as an inner json 'ResponseValue'
 type TestApiEngineFinalTestInstructionExecutionResultStruct struct {
-	TestApiEngineResponseJsonSchemaVersion string                   `json:"TestApiEngineResponseJsonSchemaVersion"`
-	TestInstructionExecutionUUID           string                   `json:"TestInstructionExecutionUuid"`
-	TestInstructionExecutionVersion        string                   `json:"TestInstructionExecutionVersion"`
-	TestInstructionExecutionStatus         string                   `json:"TestInstructionExecutionStatus"`
-	TestInstructionExecutionStartTimeStamp string                   `json:"TestInstructionExecutionStartTimeStamp"`
-	TestInstructionExecutionEndTimeStamp   string                   `json:"TestInstructionExecutionEndTimeStamp"`
-	ResponseVariables                      []ResponseVariableStruct `json:"ResponseVariables"`
-	LogPosts                               []LogPostStruct          `json:"LogPosts"`
+	TestApiEngineResponseJsonSchemaVersion string          `json:"TestApiEngineResponseJsonSchemaVersion"`
+	TestInstructionExecutionUUID           string          `json:"TestInstructionExecutionUuid"`
+	TestInstructionExecutionVersion        string          `json:"TestInstructionExecutionVersion"`
+	TestInstructionExecutionStatus         string          `json:"TestInstructionExecutionStatus"`
+	TestInstructionExecutionStartTimeStamp string          `json:"TestInstructionExecutionStartTimeStamp"`
+	TestInstructionExecutionEndTimeStamp   string          `json:"TestInstructionExecutionEndTimeStamp"`
+	ResponseVariables                      []interface{}   `json:"ResponseVariables"`
+	LogPosts                               []LogPostStruct `json:"LogPosts"`
 }
 
 // LogPostStruct
@@ -93,9 +93,16 @@ type FoundVersusExpectedValueStruct struct {
 	ExpectedValue string `json:"ExpectedValue"`
 }
 
-// ResponseVariableStruct within 'TestApiEngineFinalTestInstructionExecutionResultStruct'
+// NoResponseVariableStruct within 'TestApiEngineFinalTestInstructionExecutionResultStruct'
 // Holds one response variable and its value
-type ResponseVariableStruct struct {
+type NoResponseVariableStruct struct {
+	TestApiEngineMethodName string `json:"TestStepActionMethod"`
+	TestInstructionVersion  string `json:"TestInstructionVersion"`
+}
+
+// ResponseVariableType1Struct within 'TestApiEngineFinalTestInstructionExecutionResultStruct'
+// Holds one response variable and its value
+type ResponseVariableType1Struct struct {
 	TestApiEngineMethodName       string `json:"TestStepActionMethod"`
 	TestInstructionVersion        string `json:"TestInstructionVersion"`
 	ResponseVariableUUID          string `json:"ResponseVariableUuid"`

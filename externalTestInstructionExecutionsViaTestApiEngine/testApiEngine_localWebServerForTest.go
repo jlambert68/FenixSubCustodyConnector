@@ -891,7 +891,7 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 				TestInstructionExecutionStatusEnum_TIE_FINISHED_NOT_OK)],
 			TestInstructionExecutionStartTimeStamp: tempTestInstructionExecutionStartTimeStamp.Format(time.RFC3339),
 			TestInstructionExecutionEndTimeStamp:   time.Now().Format(time.RFC3339),
-			ResponseVariables:                      []ResponseVariableStruct{},
+			ResponseVariables:                      []ResponseVariableType1Struct{},
 			LogPosts: []LogPostStruct{
 				{
 					LogPostTimeStamp:                     time.Now().Format(time.RFC3339),
@@ -965,7 +965,7 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 				TestInstructionExecutionStatusEnum_TIE_TIMEOUT_INTERRUPTION)],
 			TestInstructionExecutionStartTimeStamp: tempTestInstructionExecutionStartTimeStamp.Format(time.RFC3339),
 			TestInstructionExecutionEndTimeStamp:   time.Now().Format(time.RFC3339),
-			ResponseVariables:                      []ResponseVariableStruct{},
+			ResponseVariables:                      []ResponseVariableType1Struct{},
 			LogPosts: []LogPostStruct{
 				{
 					LogPostTimeStamp: time.Now().Format(time.RFC3339),
@@ -1041,7 +1041,7 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 				TestInstructionExecutionStatusEnum_TIE_TIMEOUT_INTERRUPTION)],
 			TestInstructionExecutionStartTimeStamp: tempTestInstructionExecutionStartTimeStamp.Format(time.RFC3339),
 			TestInstructionExecutionEndTimeStamp:   time.Now().Format(time.RFC3339),
-			ResponseVariables:                      []ResponseVariableStruct{},
+			ResponseVariables:                      []ResponseVariableType1Struct{},
 			LogPosts: []LogPostStruct{
 				{
 					LogPostTimeStamp: time.Now().Format(time.RFC3339),
@@ -1099,11 +1099,11 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 	case "SendMT540_v1_0", "SendMT542_v1_0", "ValidateMT544_v1_0", "ValidateMT546_v1_0", "ValidateMT548_v1_0", "SendMTGeneral_v1_0":
 
 		// Create correct Response Variable
-		var resoponseVariables ResponseVariableStruct
+		var resoponseVariables ResponseVariableType1Struct
 		switch testStepActionMethod {
 
 		case "SendMT540_v1_0":
-			resoponseVariables = ResponseVariableStruct{
+			resoponseVariables = ResponseVariableType1Struct{
 				TestApiEngineMethodName:       "SendMT540_v1_0",
 				TestInstructionVersion:        "v1.0",
 				ResponseVariableUUID:          "24fa2f84-827a-4c01-a86c-da42d888c295",
@@ -1114,7 +1114,7 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 			}
 
 		case "SendMT542_v1_0":
-			resoponseVariables = ResponseVariableStruct{
+			resoponseVariables = ResponseVariableType1Struct{
 				TestApiEngineMethodName:       "SendMT542_v1_0",
 				TestInstructionVersion:        "v1.0",
 				ResponseVariableUUID:          "9dd57f25-75e0-4024-862b-e0728c066604",
@@ -1125,7 +1125,7 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 			}
 
 		case "ValidateMT544_v1_0":
-			resoponseVariables = ResponseVariableStruct{
+			resoponseVariables = ResponseVariableType1Struct{
 				TestApiEngineMethodName:       "ValidateMT544_v1_0",
 				TestInstructionVersion:        "v1.0",
 				ResponseVariableUUID:          "39818ba1-676d-42d0-87da-e1080e9d5ffd",
@@ -1136,7 +1136,7 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 			}
 
 		case "ValidateMT546_v1_0":
-			resoponseVariables = ResponseVariableStruct{
+			resoponseVariables = ResponseVariableType1Struct{
 				TestApiEngineMethodName:       "ValidateMT546_v1_0",
 				TestInstructionVersion:        "v1.0",
 				ResponseVariableUUID:          "5dfd7890-a0b4-4528-804a-451a77f542ad",
@@ -1147,7 +1147,7 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 			}
 
 		case "ValidateMT548_v1_0":
-			resoponseVariables = ResponseVariableStruct{
+			resoponseVariables = ResponseVariableType1Struct{
 				TestApiEngineMethodName:       "ValidateMT548_v1_0",
 				TestInstructionVersion:        "v1.0",
 				ResponseVariableUUID:          "8ed1ead9-741b-4115-9f78-f8a7db1d6274",
@@ -1158,7 +1158,7 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 			}
 
 		case "SendMTGeneral_v1_0":
-			resoponseVariables = ResponseVariableStruct{
+			resoponseVariables = ResponseVariableType1Struct{
 				TestApiEngineMethodName:       "SendMTGeneral_v1_0",
 				TestInstructionVersion:        "v1.0",
 				ResponseVariableUUID:          "c002af12-114c-4e55-9574-05fae7cf674c",
@@ -1185,7 +1185,7 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 				TestInstructionExecutionStatusEnum_TIE_FINISHED_OK)],
 			TestInstructionExecutionStartTimeStamp: tempTestInstructionExecutionStartTimeStamp.Format(time.RFC3339),
 			TestInstructionExecutionEndTimeStamp:   time.Now().Format(time.RFC3339),
-			ResponseVariables: []ResponseVariableStruct{
+			ResponseVariables: []ResponseVariableType1Struct{
 				resoponseVariables,
 			},
 			LogPosts: []LogPostStruct{
@@ -1252,7 +1252,7 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 				TestInstructionExecutionStatusEnum_TIE_FINISHED_NOT_OK)],
 			TestInstructionExecutionStartTimeStamp: tempTestInstructionExecutionStartTimeStamp.Format(time.RFC3339),
 			TestInstructionExecutionEndTimeStamp:   time.Now().Format(time.RFC3339),
-			ResponseVariables:                      []ResponseVariableStruct{},
+			ResponseVariables:                      []ResponseVariableType1Struct{},
 			LogPosts: []LogPostStruct{
 				{
 					LogPostTimeStamp:                     time.Now().Format(time.RFC3339),

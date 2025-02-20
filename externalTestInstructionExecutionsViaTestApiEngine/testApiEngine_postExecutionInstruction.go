@@ -5,6 +5,7 @@ import (
 	"bytes"
 	"crypto/tls"
 	"encoding/json"
+	"errors"
 	"github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/LocalExecutionMethods"
 	"github.com/santhosh-tekuri/jsonschema/v5"
 	"github.com/sirupsen/logrus"
@@ -482,15 +483,79 @@ func validateAndTransformRestResponse(
 	}
 
 	// Extract Response Variables
-	var testAPiEngineResponseVariables []ResponseVariableStruct
-	testAPiEngineResponseVariables = testApiEngineFinalTestInstructionExecutionResult.ResponseVariables
-
-	// Convert Response Variables into json-byte-array
+	var testAPiEngineResponseVariablesType1 []ResponseVariableType1Struct
+	var testAPiEngineNoResponseVariables []NoResponseVariableStruct
 	var responseVariablesAsJsonByteArray []byte
-	responseVariablesAsJsonByteArray, err = json.Marshal(testAPiEngineResponseVariables)
+
+	for _, responseVariable := range testApiEngineFinalTestInstructionExecutionResult.ResponseVariables {
+		switch v := responseVariable.(type) {
+		case ResponseVariableType1Struct:
+
+			// Check if the ResponseVariable can be cast into correct response struct
+			if resVar, ok := responseVariable.(ResponseVariableType1Struct); ok {
+				testAPiEngineResponseVariablesType1 = append(testAPiEngineResponseVariablesType1, resVar)
+			} else {
+				sharedCode.Logger.WithFields(logrus.Fields{
+					"id":               "10c35e90-fd04-47fd-a0da-2188c0bf1f4a",
+					"resVar":           resVar,
+					"responseVariable": responseVariable,
+				}).Fatal("ResponseVariable can't be cast into 'ResponseVariableType1Struct'")
+			}
+
+		case NoResponseVariableStruct:
+			// Check if the ResponseVariable can be cast into correct response struct
+			if resVar, ok := responseVariable.(NoResponseVariableStruct); ok {
+				testAPiEngineNoResponseVariables = append(testAPiEngineNoResponseVariables, resVar)
+			} else {
+				sharedCode.Logger.WithFields(logrus.Fields{
+					"id":               "9650a892-7ec4-4329-a9ea-fc3fd1f8fe94",
+					"resVar":           resVar,
+					"responseVariable": responseVariable,
+				}).Fatal("ResponseVariable can't be cast into 'NoResponseVariableStruct'")
+			}
+
+		default:
+			sharedCode.Logger.WithFields(logrus.Fields{
+				"id":                      "c9356f5b-2568-42ff-b651-032cc59b3aeb",
+				"responseVariable.(type)": v,
+			}).Fatal("Unknown response variable type")
+		}
+	}
+
+	// Validate that there are at least one response variable
+	if len(testApiEngineFinalTestInstructionExecutionResult.ResponseVariables) == 0 {
+
+		err = errors.New("expected at least one response variable")
+
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id": "6ede6867-29eb-4a9d-ac71-e0823de9aee1",
+			"testApiEngineFinalTestInstructionExecutionResult.ResponseVariables": testApiEngineFinalTestInstructionExecutionResult.ResponseVariables,
+		}).Error("Expected at least one response variable")
+
+		return TestApiEngineFinalTestInstructionExecutionResultStruct{}, err
+
+	}
+
+	// Select ResponseVariable-type
+	switch v := testApiEngineFinalTestInstructionExecutionResult.ResponseVariables[0].(type) {
+	case ResponseVariableType1Struct:
+		// Convert Response Variables into json-byte-array
+		responseVariablesAsJsonByteArray, err = json.Marshal(testAPiEngineResponseVariablesType1)
+
+	case NoResponseVariableStruct:
+		// Convert Response Variables into json-byte-array
+		responseVariablesAsJsonByteArray, err = json.Marshal(testAPiEngineNoResponseVariables)
+
+	default:
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id":                      "d7e11066-c1cb-4663-ad7b-f8357455bf5f",
+			"responseVariable.(type)": v,
+		}).Fatal("Unknown response variable type")
+	}
+
 	if err != nil {
 		sharedCode.Logger.WithFields(logrus.Fields{
-			"id": "27ce4027-f030-469d-9b1c-3afb7d62fc84",
+			"id": "41d96c5a-25f0-451d-a869-b2686a91f442",
 			"string(responseVariablesAsJsonByteArray)": string(responseVariablesAsJsonByteArray),
 		}).Error("Couldn't Marshal testAPiEngineResponseVariables into json")
 
@@ -502,7 +567,7 @@ func validateAndTransformRestResponse(
 
 	if err != nil {
 		sharedCode.Logger.WithFields(logrus.Fields{
-			"id":                               "ae00dc85-24ee-4b8f-b300-ba17d31dba6f",
+			"id":                               "f3604e47-9161-4a38-9fcf-ad078cc22860",
 			"err":                              err,
 			"responseVariablesAsJsonByteArray": string(responseVariablesAsJsonByteArray),
 		}).Error("Couldn't Unmarshal the json, responseVariablesAsJsonByteArray, into object that can be validated")
