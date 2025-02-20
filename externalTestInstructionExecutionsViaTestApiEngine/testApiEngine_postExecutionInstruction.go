@@ -582,6 +582,7 @@ func validateAndTransformRestResponse(
 			"id":                               "74916f92-fb0f-445c-ae0a-6a5bd2bd0fcf",
 			"err":                              err,
 			"responseVariablesAsJsonByteArray": string(responseVariablesAsJsonByteArray),
+			"responseVariablesJsonSchema":      responseVariablesJsonSchema,
 		}).Error("'testAPiEngineResponseVariables' is not valid to json-schema " +
 			"'responseVariablesJsonSchema'")
 
