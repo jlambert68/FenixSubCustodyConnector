@@ -96,8 +96,8 @@ type FoundVersusExpectedValueStruct struct {
 // NoResponseVariableStruct within 'TestApiEngineFinalTestInstructionExecutionResultStruct'
 // Holds one response variable and its value
 type NoResponseVariableStruct struct {
-	TestApiEngineMethodName string `json:"TestStepActionMethod"`
-	TestInstructionVersion  string `json:"TestInstructionVersion"`
+	TestStepActionMethod   string `json:"TestStepActionMethod"`
+	TestInstructionVersion string `json:"TestInstructionVersion"`
 }
 
 // ResponseVariableType1Struct within 'TestApiEngineFinalTestInstructionExecutionResultStruct'

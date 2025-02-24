@@ -3,11 +3,14 @@ package executionOrchestrator
 import (
 	executeTestInstructionUsingTestApiEngine "FenixSubCustodyConnector/externalTestInstructionExecutionsViaTestApiEngine"
 	"FenixSubCustodyConnector/sharedCode"
+	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/google/uuid"
 	fenixExecutionWorkerGrpcApi "github.com/jlambert68/FenixGrpcApi/FenixExecutionServer/fenixExecutionWorkerGrpcApi/go_grpc_api"
 	"github.com/sirupsen/logrus"
 	"google.golang.org/protobuf/types/known/timestamppb"
+	"log"
 	"strconv"
 	"time"
 )
@@ -409,36 +412,18 @@ func validateAndConvertTestApiEngineResponse(
 	// Loop response variables from TestApiEngine
 	for _, tempResponseVariable := range testApiEngineFinalTestInstructionExecutionResult.ResponseVariables {
 
-		switch v := tempResponseVariable.(type) {
-		case executeTestInstructionUsingTestApiEngine.ResponseVariableType1Struct:
-
-			// Check if the ResponseVariable can be cast into correct response struct
-			if resVar, ok := tempResponseVariable.(executeTestInstructionUsingTestApiEngine.ResponseVariableType1Struct); ok {
-
-				// Create gRPC-Response variable
-				var tempResponseVariableGrpc *fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage_ResponseVariableMessage
-				tempResponseVariableGrpc = &fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage_ResponseVariableMessage{
-					ResponseVariableUuid:          resVar.ResponseVariableUUID,
-					ResponseVariableName:          resVar.ResponseVariableName,
-					ResponseVariableTypeUuid:      resVar.ResponseVariableTypeUuid,
-					ResponseVariableTypeName:      resVar.ResponseVariableTypeName,
-					ResponseVariableValueAsString: resVar.ResponseVariableValueAsString,
-				}
-
-				// Append to list of Response variables
-				tempResponseVariablesGrpc = append(tempResponseVariablesGrpc, tempResponseVariableGrpc)
-
-			} else {
-				sharedCode.Logger.WithFields(logrus.Fields{
-					"id":                   "2f91cbfb-9ad8-4481-9fa3-bcb084e13ef0",
-					"resVar":               resVar,
-					"tempResponseVariable": tempResponseVariable,
-				}).Fatal("ResponseVariable can't be cast into 'ResponseVariableType1Struct'")
+		if resMap, ok := tempResponseVariable.(map[string]interface{}); ok {
+			// Try to unmarshal the map into ResponseVariableType1Struct
+			resVarBytes, err := json.Marshal(resMap) // Marshal the map into JSON bytes
+			if err != nil {
+				log.Println("Error marshalling map:", err)
+				continue
 			}
 
-		case executeTestInstructionUsingTestApiEngine.NoResponseVariableStruct:
-			// Check if the ResponseVariable can be cast into correct response struct
-			if resVar, ok := tempResponseVariable.(executeTestInstructionUsingTestApiEngine.NoResponseVariableStruct); ok {
+			// Try to unmarshal the map into NoResponseVariableStruct
+			var resVarNoResponse executeTestInstructionUsingTestApiEngine.NoResponseVariableStruct
+			if err := json.Unmarshal(resVarBytes, &resVarNoResponse); err == nil {
+				// Successfully unmarshalled to NoResponseVariableStruct
 
 				// Create gRPC-Response variable
 				var tempResponseVariableGrpc *fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage_ResponseVariableMessage
@@ -447,21 +432,51 @@ func validateAndConvertTestApiEngineResponse(
 				// Append to list of Response variables
 				tempResponseVariablesGrpc = append(tempResponseVariablesGrpc, tempResponseVariableGrpc)
 
+				continue
+
 			} else {
 				sharedCode.Logger.WithFields(logrus.Fields{
 					"id":                   "3577647c-22c3-48fb-9fbf-340d467585ac",
-					"resVar":               resVar,
+					"resVarBytes":          resVarBytes,
 					"tempResponseVariable": tempResponseVariable,
 				}).Fatal("ResponseVariable can't be cast into 'NoResponseVariableStruct'")
 			}
 
-		default:
-			sharedCode.Logger.WithFields(logrus.Fields{
-				"id":                      "0468a463-d6ca-4812-9472-f0275b4b507c",
-				"responseVariable.(type)": v,
-			}).Fatal("Unknown response variable type")
-		}
+			var resVarType1 executeTestInstructionUsingTestApiEngine.ResponseVariableType1Struct
+			if err := json.Unmarshal(resVarBytes, &resVarType1); err == nil {
+				// Successfully unmarshalled to ResponseVariableType1Struct
 
+				// Create gRPC-Response variable
+				var tempResponseVariableGrpc *fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage_ResponseVariableMessage
+				tempResponseVariableGrpc = &fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage_ResponseVariableMessage{
+					ResponseVariableUuid:          resVarType1.ResponseVariableUUID,
+					ResponseVariableName:          resVarType1.ResponseVariableName,
+					ResponseVariableTypeUuid:      resVarType1.ResponseVariableTypeUuid,
+					ResponseVariableTypeName:      resVarType1.ResponseVariableTypeName,
+					ResponseVariableValueAsString: resVarType1.ResponseVariableValueAsString,
+				}
+
+				// Append to list of Response variables
+				tempResponseVariablesGrpc = append(tempResponseVariablesGrpc, tempResponseVariableGrpc)
+
+				continue
+
+			} else {
+				sharedCode.Logger.WithFields(logrus.Fields{
+					"id":                   "2f91cbfb-9ad8-4481-9fa3-bcb084e13ef0",
+					"resVar":               resVarBytes,
+					"tempResponseVariable": tempResponseVariable,
+				}).Fatal("ResponseVariable can't be cast into 'ResponseVariableType1Struct'")
+			}
+
+			// If both unmarshal attempts fail, log error and return
+			err = errors.New("unknown type for response variable")
+			sharedCode.Logger.WithFields(logrus.Fields{
+				"id":                   "c9356f5b-2568-42ff-b651-032cc59b3aeb",
+				"tempResponseVariable": tempResponseVariable,
+			}).Error("Unknown type for response variable")
+
+		}
 	}
 
 	// Convert LogPosts

@@ -10,6 +10,7 @@ import (
 	"github.com/santhosh-tekuri/jsonschema/v5"
 	"github.com/sirupsen/logrus"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"strconv"
 	"strings"
@@ -489,27 +490,62 @@ func validateAndTransformRestResponse(
 
 	for _, responseVariable := range testApiEngineFinalTestInstructionExecutionResult.ResponseVariables {
 
-		// Check if the ResponseVariable can be cast into correct response struct
-		// ResponseVariableType1Struct
-		if resVar, ok := responseVariable.(ResponseVariableType1Struct); ok {
-			testAPiEngineResponseVariablesType1 = append(testAPiEngineResponseVariablesType1, resVar)
-			continue
+		if resMap, ok := responseVariable.(map[string]interface{}); ok {
+			// Try to unmarshal the map into ResponseVariableType1Struct
+			resVarBytes, err := json.Marshal(resMap) // Marshal the map into JSON bytes
+			if err != nil {
+				log.Println("Error marshalling map:", err)
+				continue
+			}
+
+			// Try to unmarshal the map into NoResponseVariableStruct
+			var resVarNoResponse NoResponseVariableStruct
+			if err := json.Unmarshal(resVarBytes, &resVarNoResponse); err == nil {
+				// Successfully unmarshalled to NoResponseVariableStruct
+				testAPiEngineNoResponseVariables = append(testAPiEngineNoResponseVariables, resVarNoResponse)
+				continue
+			}
+
+			var resVarType1 ResponseVariableType1Struct
+			if err := json.Unmarshal(resVarBytes, &resVarType1); err == nil {
+				// Successfully unmarshalled to ResponseVariableType1Struct
+				testAPiEngineResponseVariablesType1 = append(testAPiEngineResponseVariablesType1, resVarType1)
+				continue
+			}
+
+			// If both unmarshal attempts fail, log error and return
+			err = errors.New("unknown type for response variable")
+			sharedCode.Logger.WithFields(logrus.Fields{
+				"id":               "c9356f5b-2568-42ff-b651-032cc59b3aeb",
+				"responseVariable": responseVariable,
+			}).Error("Unknown type for response variable")
+			return TestApiEngineFinalTestInstructionExecutionResultStruct{}, err
 		}
 
-		// NoResponseVariableStruct
-		if resVar, ok := responseVariable.(NoResponseVariableStruct); ok {
-			testAPiEngineNoResponseVariables = append(testAPiEngineNoResponseVariables, resVar)
-			continue
-		}
+		/*
+			// Check if the ResponseVariable can be cast into correct response struct
+			// ResponseVariableType1Struct
+			if resVar, ok := responseVariable.(*ResponseVariableType1Struct); ok {
+				testAPiEngineResponseVariablesType1 = append(testAPiEngineResponseVariablesType1, *resVar)
+				continue
+			}
 
-		err = errors.New("unknown type for response variable\"")
+			// NoResponseVariableStruct
+			if resVar, ok := responseVariable.(*NoResponseVariableStruct); ok {
+				testAPiEngineNoResponseVariables = append(testAPiEngineNoResponseVariables, *resVar)
+				continue
+			}
 
-		sharedCode.Logger.WithFields(logrus.Fields{
-			"id":               "c9356f5b-2568-42ff-b651-032cc59b3aeb",
-			"responseVariable": responseVariable,
-		}).Error("Unknown type for response variable")
+			err = errors.New("unknown type for response variable")
 
-		return TestApiEngineFinalTestInstructionExecutionResultStruct{}, err
+			sharedCode.Logger.WithFields(logrus.Fields{
+				"id":               "c9356f5b-2568-42ff-b651-032cc59b3aeb",
+				"responseVariable": responseVariable,
+			}).Error("Unknown type for response variable")
+
+			return TestApiEngineFinalTestInstructionExecutionResultStruct{}, err
+
+		*/
 	}
 
 	// Validate that there are at least one response variable
