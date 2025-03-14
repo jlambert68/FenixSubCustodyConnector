@@ -23,6 +23,7 @@ func PostTestInstructionUsingRestCall(
 	testApiEngineResponseMessageJsonSchema *string,
 	finalTestInstructionExecutionResultJsonSchema *string,
 	responseVariablesJsonSchema *string,
+	expectedResponseVariableType ResponseVariableTypeType,
 	testInstructionVersion string) (
 	testApiEngineFinalTestInstructionExecutionResult TestApiEngineFinalTestInstructionExecutionResultStruct,
 	err error) {
@@ -187,7 +188,8 @@ func PostTestInstructionUsingRestCall(
 		&bodyAsString,
 		testApiEngineResponseMessageJsonSchema,
 		finalTestInstructionExecutionResultJsonSchema,
-		responseVariablesJsonSchema)
+		responseVariablesJsonSchema,
+		expectedResponseVariableType)
 
 	if err != nil {
 		return TestApiEngineFinalTestInstructionExecutionResultStruct{}, err
@@ -320,7 +322,8 @@ func validateAndTransformRestResponse(
 	testApiEngineResponseMessageJson *string,
 	testApiEngineResponseMessageJsonSchema *string,
 	finalTestInstructionExecutionResultJsonSchema *string,
-	responseVariablesJsonSchema *string) (
+	responseVariablesJsonSchema *string,
+	expectedResponseVariableType ResponseVariableTypeType) (
 	testApiEngineFinalTestInstructionExecutionResult TestApiEngineFinalTestInstructionExecutionResultStruct,
 	err error) {
 
@@ -498,54 +501,39 @@ func validateAndTransformRestResponse(
 				continue
 			}
 
-			// Try to unmarshal the map into NoResponseVariableStruct
-			var resVarNoResponse NoResponseVariableStruct
-			if err := json.Unmarshal(resVarBytes, &resVarNoResponse); err == nil {
-				// Successfully unmarshalled to NoResponseVariableStruct
-				testAPiEngineNoResponseVariables = append(testAPiEngineNoResponseVariables, resVarNoResponse)
-				continue
+			// Act on Response Variable Type
+			switch expectedResponseVariableType {
+
+			case NoResponseVariableType:
+				// Try to unmarshal the map into NoResponseVariableStruct
+				var resVarNoResponse NoResponseVariableStruct
+				if err := json.Unmarshal(resVarBytes, &resVarNoResponse); err == nil {
+					// Successfully unmarshalled to NoResponseVariableStruct
+					testAPiEngineNoResponseVariables = append(testAPiEngineNoResponseVariables, resVarNoResponse)
+					continue
+				}
+
+			case ResponseVariableType1Type:
+				var resVarType1 ResponseVariableType1Struct
+				if err := json.Unmarshal(resVarBytes, &resVarType1); err == nil {
+					// Successfully unmarshalled to ResponseVariableType1Struct
+					testAPiEngineResponseVariablesType1 = append(testAPiEngineResponseVariablesType1, resVarType1)
+					continue
+				}
+
+			default:
+				sharedCode.Logger.WithFields(logrus.Fields{
+					"id":                           "c3603c54-ec52-4a02-a61e-8b5fa8be025b",
+					"expectedResponseVariableType": expectedResponseVariableType,
+					"testApiEngineFinalTestInstructionExecutionResult": testApiEngineFinalTestInstructionExecutionResult,
+					"responseVariable": responseVariable,
+				}).Error("Unhandled 'ResponseVariableTypeType'")
+
+				return TestApiEngineFinalTestInstructionExecutionResultStruct{}, err
+
 			}
 
-			var resVarType1 ResponseVariableType1Struct
-			if err := json.Unmarshal(resVarBytes, &resVarType1); err == nil {
-				// Successfully unmarshalled to ResponseVariableType1Struct
-				testAPiEngineResponseVariablesType1 = append(testAPiEngineResponseVariablesType1, resVarType1)
-				continue
-			}
-
-			// If both unmarshal attempts fail, log error and return
-			err = errors.New("unknown type for response variable")
-			sharedCode.Logger.WithFields(logrus.Fields{
-				"id":               "c9356f5b-2568-42ff-b651-032cc59b3aeb",
-				"responseVariable": responseVariable,
-			}).Error("Unknown type for response variable")
-			return TestApiEngineFinalTestInstructionExecutionResultStruct{}, err
 		}
-
-		/*
-			// Check if the ResponseVariable can be cast into correct response struct
-			// ResponseVariableType1Struct
-			if resVar, ok := responseVariable.(*ResponseVariableType1Struct); ok {
-				testAPiEngineResponseVariablesType1 = append(testAPiEngineResponseVariablesType1, *resVar)
-				continue
-			}
-
-			// NoResponseVariableStruct
-			if resVar, ok := responseVariable.(*NoResponseVariableStruct); ok {
-				testAPiEngineNoResponseVariables = append(testAPiEngineNoResponseVariables, *resVar)
-				continue
-			}
-
-			err = errors.New("unknown type for response variable")
-
-			sharedCode.Logger.WithFields(logrus.Fields{
-				"id":               "c9356f5b-2568-42ff-b651-032cc59b3aeb",
-				"responseVariable": responseVariable,
-			}).Error("Unknown type for response variable")
-
-			return TestApiEngineFinalTestInstructionExecutionResultStruct{}, err
-
-		*/
 	}
 
 	// Validate that there are at least one response variable
@@ -562,35 +550,32 @@ func validateAndTransformRestResponse(
 
 	}
 
-	// Select ResponseVariable-type
-	if len(testAPiEngineNoResponseVariables) > 0 {
-		// ResponseVariableType1Struct:
+	// Act on Response Variable Type
+	switch expectedResponseVariableType {
 
-		// Convert Response Variables into json-byte-array
-		responseVariablesAsJsonByteArray, err = json.Marshal(testAPiEngineResponseVariablesType1)
-	}
-
-	if len(testAPiEngineNoResponseVariables) > 0 {
-		// NoResponseVariableStruct:
-
+	case NoResponseVariableType:
 		// Convert Response Variables into json-byte-array
 		responseVariablesAsJsonByteArray, err = json.Marshal(testAPiEngineNoResponseVariables)
-	}
 
-	if len(testAPiEngineNoResponseVariables)+len(testAPiEngineNoResponseVariables) == 0 {
+	case ResponseVariableType1Type:
+		// Convert Response Variables into json-byte-array
+		responseVariablesAsJsonByteArray, err = json.Marshal(testAPiEngineResponseVariablesType1)
 
-		err = errors.New("no response variables, which is not expected")
-
+	default:
 		sharedCode.Logger.WithFields(logrus.Fields{
-			"id": "63e34ef6-6e14-4620-ac33-ff45dd71d434",
-		}).Error("No response variables, which is not expected")
+			"id":                           "0951f3cc-d477-465f-907b-fec4b97d05fd",
+			"expectedResponseVariableType": expectedResponseVariableType,
+			"testApiEngineFinalTestInstructionExecutionResult": testApiEngineFinalTestInstructionExecutionResult,
+		}).Error("Unhandled 'ResponseVariableTypeType'")
 
 		return TestApiEngineFinalTestInstructionExecutionResultStruct{}, err
+
 	}
 
+	// Error when converting into json-byte-array
 	if err != nil {
 		sharedCode.Logger.WithFields(logrus.Fields{
-			"id": "41d96c5a-25f0-451d-a869-b2686a91f442",
+			"id": "d2a2bef3-906a-4196-854b-0cc069d8d936",
 			"string(responseVariablesAsJsonByteArray)": string(responseVariablesAsJsonByteArray),
 		}).Error("Couldn't Marshal testAPiEngineResponseVariables into json")
 

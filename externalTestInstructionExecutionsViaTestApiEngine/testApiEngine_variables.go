@@ -93,6 +93,16 @@ type FoundVersusExpectedValueStruct struct {
 	ExpectedValue string `json:"ExpectedValue"`
 }
 
+// ResponseVariableTypeType
+// Type of ResponseVariable
+type ResponseVariableTypeType uint8
+
+const (
+	UndefinedResponseVariableType ResponseVariableTypeType = iota
+	NoResponseVariableType
+	ResponseVariableType1Type
+)
+
 // NoResponseVariableStruct within 'TestApiEngineFinalTestInstructionExecutionResultStruct'
 // Holds one response variable and its value
 type NoResponseVariableStruct struct {
