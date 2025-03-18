@@ -3,14 +3,11 @@ package executionOrchestrator
 import (
 	executeTestInstructionUsingTestApiEngine "FenixSubCustodyConnector/externalTestInstructionExecutionsViaTestApiEngine"
 	"FenixSubCustodyConnector/sharedCode"
-	"encoding/json"
-	"errors"
 	"fmt"
 	"github.com/google/uuid"
 	fenixExecutionWorkerGrpcApi "github.com/jlambert68/FenixGrpcApi/FenixExecutionServer/fenixExecutionWorkerGrpcApi/go_grpc_api"
 	"github.com/sirupsen/logrus"
 	"google.golang.org/protobuf/types/known/timestamppb"
-	"log"
 	"strconv"
 	"time"
 )
@@ -409,74 +406,41 @@ func validateAndConvertTestApiEngineResponse(
 	// Convert ResponseValue
 	var tempResponseVariablesGrpc []*fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage_ResponseVariableMessage
 
-	// Loop response variables from TestApiEngine
-	for _, tempResponseVariable := range testApiEngineFinalTestInstructionExecutionResult.ResponseVariables {
+	// Act on Response Variable Type
+	switch testApiEngineFinalTestInstructionExecutionResult.ResponseVariableType {
 
-		if resMap, ok := tempResponseVariable.(map[string]interface{}); ok {
-			// Try to unmarshal the map into ResponseVariableType1Struct
-			resVarBytes, err := json.Marshal(resMap) // Marshal the map into JSON bytes
-			if err != nil {
-				log.Println("Error marshalling map:", err)
-				continue
+	case executeTestInstructionUsingTestApiEngine.NoResponseVariableType:
+
+		// Do nothing, because don't send back 'NoResponseVariableType'
+
+	case executeTestInstructionUsingTestApiEngine.ResponseVariableType1Type:
+
+		// Loop response variables from TestApiEngine
+		for _, tempResponseVariableType1 := range testApiEngineFinalTestInstructionExecutionResult.ResponseVariablesType1 {
+
+			// Create gRPC-Response variable
+			var tempResponseVariableGrpc *fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage_ResponseVariableMessage
+			tempResponseVariableGrpc = &fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage_ResponseVariableMessage{
+				ResponseVariableUuid:          tempResponseVariableType1.ResponseVariableUUID,
+				ResponseVariableName:          tempResponseVariableType1.ResponseVariableName,
+				ResponseVariableTypeUuid:      tempResponseVariableType1.ResponseVariableTypeUuid,
+				ResponseVariableTypeName:      tempResponseVariableType1.ResponseVariableTypeName,
+				ResponseVariableValueAsString: tempResponseVariableType1.ResponseVariableValueAsString,
 			}
 
-			// Try to unmarshal the map into NoResponseVariableStruct
-			var resVarNoResponse executeTestInstructionUsingTestApiEngine.NoResponseVariableStruct
-			if err := json.Unmarshal(resVarBytes, &resVarNoResponse); err == nil {
-				// Successfully unmarshalled to NoResponseVariableStruct
+			// Append to list of Response variables
+			tempResponseVariablesGrpc = append(tempResponseVariablesGrpc, tempResponseVariableGrpc)
 
-				// Create gRPC-Response variable
-				var tempResponseVariableGrpc *fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage_ResponseVariableMessage
-				tempResponseVariableGrpc = &fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage_ResponseVariableMessage{}
-
-				// Append to list of Response variables
-				tempResponseVariablesGrpc = append(tempResponseVariablesGrpc, tempResponseVariableGrpc)
-
-				continue
-
-			} else {
-				sharedCode.Logger.WithFields(logrus.Fields{
-					"id":                   "3577647c-22c3-48fb-9fbf-340d467585ac",
-					"resVarBytes":          resVarBytes,
-					"tempResponseVariable": tempResponseVariable,
-				}).Fatal("ResponseVariable can't be cast into 'NoResponseVariableStruct'")
-			}
-
-			var resVarType1 executeTestInstructionUsingTestApiEngine.ResponseVariableType1Struct
-			if err := json.Unmarshal(resVarBytes, &resVarType1); err == nil {
-				// Successfully unmarshalled to ResponseVariableType1Struct
-
-				// Create gRPC-Response variable
-				var tempResponseVariableGrpc *fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage_ResponseVariableMessage
-				tempResponseVariableGrpc = &fenixExecutionWorkerGrpcApi.FinalTestInstructionExecutionResultMessage_ResponseVariableMessage{
-					ResponseVariableUuid:          resVarType1.ResponseVariableUUID,
-					ResponseVariableName:          resVarType1.ResponseVariableName,
-					ResponseVariableTypeUuid:      resVarType1.ResponseVariableTypeUuid,
-					ResponseVariableTypeName:      resVarType1.ResponseVariableTypeName,
-					ResponseVariableValueAsString: resVarType1.ResponseVariableValueAsString,
-				}
-
-				// Append to list of Response variables
-				tempResponseVariablesGrpc = append(tempResponseVariablesGrpc, tempResponseVariableGrpc)
-
-				continue
-
-			} else {
-				sharedCode.Logger.WithFields(logrus.Fields{
-					"id":                   "2f91cbfb-9ad8-4481-9fa3-bcb084e13ef0",
-					"resVar":               resVarBytes,
-					"tempResponseVariable": tempResponseVariable,
-				}).Fatal("ResponseVariable can't be cast into 'ResponseVariableType1Struct'")
-			}
-
-			// If both unmarshal attempts fail, log error and return
-			err = errors.New("unknown type for response variable")
-			sharedCode.Logger.WithFields(logrus.Fields{
-				"id":                   "c9356f5b-2568-42ff-b651-032cc59b3aeb",
-				"tempResponseVariable": tempResponseVariable,
-			}).Error("Unknown type for response variable")
-
+			continue
 		}
+
+	default:
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id":                   "c3603c54-ec52-4a02-a61e-8b5fa8be025b",
+			"ResponseVariableType": testApiEngineFinalTestInstructionExecutionResult.ResponseVariableType,
+			"testApiEngineFinalTestInstructionExecutionResult": testApiEngineFinalTestInstructionExecutionResult,
+		}).Error("Unhandled 'ResponseVariableTypeType'")
+
 	}
 
 	// Convert LogPosts

@@ -616,5 +616,30 @@ func validateAndTransformRestResponse(
 			"'responseVariablesJsonSchema'")
 	}
 
+	// Store the Response Parameters into correct structure
+	// Act on Response Variable Type
+	switch expectedResponseVariableType {
+
+	case NoResponseVariableType:
+		// Store as 'NoResponseVariableType'
+		testApiEngineFinalTestInstructionExecutionResult.NoResponseVariables = testAPiEngineNoResponseVariables
+		testApiEngineFinalTestInstructionExecutionResult.ResponseVariableType = expectedResponseVariableType
+
+	case ResponseVariableType1Type:
+		// Store as 'ResponseVariableType1Type'
+		testApiEngineFinalTestInstructionExecutionResult.ResponseVariablesType1 = testAPiEngineResponseVariablesType1
+		testApiEngineFinalTestInstructionExecutionResult.ResponseVariableType = expectedResponseVariableType
+
+	default:
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id":                           "3b2574d2-48bc-4c08-9652-1a342a3eb0d2",
+			"expectedResponseVariableType": expectedResponseVariableType,
+			"testApiEngineFinalTestInstructionExecutionResult": testApiEngineFinalTestInstructionExecutionResult,
+		}).Error("Unhandled 'ResponseVariableTypeType'")
+
+		return TestApiEngineFinalTestInstructionExecutionResultStruct{}, err
+
+	}
+
 	return testApiEngineFinalTestInstructionExecutionResult, err
 }

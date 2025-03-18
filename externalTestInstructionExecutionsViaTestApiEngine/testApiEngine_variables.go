@@ -58,14 +58,17 @@ type TestStepExecutionStatusStruct struct {
 // Specify the structure that the Json-response, from TestApiEngine, will be 'converted into
 // This is the unique Fenix-parts of the TestApiEngine-response, which exists as an inner json 'ResponseValue'
 type TestApiEngineFinalTestInstructionExecutionResultStruct struct {
-	TestApiEngineResponseJsonSchemaVersion string          `json:"TestApiEngineResponseJsonSchemaVersion"`
-	TestInstructionExecutionUUID           string          `json:"TestInstructionExecutionUuid"`
-	TestInstructionExecutionVersion        string          `json:"TestInstructionExecutionVersion"`
-	TestInstructionExecutionStatus         string          `json:"TestInstructionExecutionStatus"`
-	TestInstructionExecutionStartTimeStamp string          `json:"TestInstructionExecutionStartTimeStamp"`
-	TestInstructionExecutionEndTimeStamp   string          `json:"TestInstructionExecutionEndTimeStamp"`
-	ResponseVariables                      []interface{}   `json:"ResponseVariables"`
-	LogPosts                               []LogPostStruct `json:"LogPosts"`
+	TestApiEngineResponseJsonSchemaVersion string                        `json:"TestApiEngineResponseJsonSchemaVersion"`
+	TestInstructionExecutionUUID           string                        `json:"TestInstructionExecutionUuid"`
+	TestInstructionExecutionVersion        string                        `json:"TestInstructionExecutionVersion"`
+	TestInstructionExecutionStatus         string                        `json:"TestInstructionExecutionStatus"`
+	TestInstructionExecutionStartTimeStamp string                        `json:"TestInstructionExecutionStartTimeStamp"`
+	TestInstructionExecutionEndTimeStamp   string                        `json:"TestInstructionExecutionEndTimeStamp"`
+	ResponseVariables                      []interface{}                 `json:"ResponseVariables"`
+	ResponseVariableType                   ResponseVariableTypeType      `json:"ResponseVariableType"`
+	NoResponseVariables                    []NoResponseVariableStruct    `json:"NoResponseVariables"`
+	ResponseVariablesType1                 []ResponseVariableType1Struct `json:"ResponseVariableType"`
+	LogPosts                               []LogPostStruct               `json:"LogPosts"`
 }
 
 // LogPostStruct
