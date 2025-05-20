@@ -1,5 +1,3 @@
-
-
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
     "title": "Validates the main 'Fenix-data' within the TestApiEngine's 'responseVariables'-field",
@@ -129,16 +127,33 @@
         "FoundVersusExpectedValueMessage": {
             "type": "object",
             "properties": {
-                "FoundValue": {
+                "VariableName": {
                     "type": "string"
                 },
-                "ExpectedValue": {
+                "VariableDescription": {
                     "type": "string"
+                },
+                "FoundVersusExpectedValues": {
+                    "type": "object",
+                    "properties": {
+                        "FoundValue": {
+                            "type": "string"
+                        },
+                        "ExpectedValue": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "FoundValue",
+                        "ExpectedValue"
+                    ],
+                    "additionalProperties": false
                 }
             },
             "required": [
-                "FoundValue",
-                "ExpectedValue"
+                "VariableName",
+                "VariableDescription",
+                "FoundVersusExpectedValues"
             ],
             "additionalProperties": false
         },
@@ -198,5 +213,3 @@
         }
     }
 }
-
-

@@ -10,11 +10,13 @@ import (
 func InitiateExecutionOrchestratorEngine(
 	tempAllowedUsers []byte,
 	tempTemplateUrlParameters []byte,
-	tempSimpleTestDataFiles [][]byte) {
+	tempSimpleTestDataFiles [][]byte,
+	tempSupportedMetaData []byte) {
 
 	allowedUsers = tempAllowedUsers
 	templateUrlParameters = tempTemplateUrlParameters
 	simpleTestDataFiles = tempSimpleTestDataFiles
+	supportedMetaData = tempSupportedMetaData
 
 	connectorFunctionsToDoCallBackOn = &fenixConnectorAdminShared_sharedCode.ConnectorCallBackFunctionsStruct{
 		GetMaxExpectedFinishedTimeStamp:        getMaxExpectedFinishedTimeStamp,
@@ -22,7 +24,8 @@ func InitiateExecutionOrchestratorEngine(
 		InitiateLogger:                         initiateLogger,
 		GenerateSupportedTestInstructionsAndTestInstructionContainersAndAllowedUsers: generateSupportedTestInstructionsAndTestInstructionContainersAndAllowedUsers,
 		GenerateTemplateRepositoryConnectionParameters:                               generateTemplateRepositoryConnectionParameters,
-		GenerateSimpleTestData: generateSimpleTestData,
+		GenerateSimpleTestData:    generateSimpleTestData,
+		GenerateSupportedMetaData: generateSupportedMetaData,
 	}
 	fenixConnectorAdminShared.InitiateFenixConnectorAdminShared(connectorFunctionsToDoCallBackOn)
 

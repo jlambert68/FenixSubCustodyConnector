@@ -1,0 +1,147 @@
+{
+  "MetaDataGroups": [
+    {
+      "MetaDataGroupName": "TestCase",
+      "MetaDataInGroup": [
+        {
+          "MetaDataName": "Status",
+          "SelectType": "SingleSelect",
+          "Mandatory": "True",
+          "MetaDataValues": [
+            "Blocked",
+            "Draft",
+            "Ready for Test",
+            "Ready for Test (No Review)"
+          ]
+        },
+        {
+          "MetaDataName": "Finish Time",
+          "SelectType": "SingleSelect",
+          "Mandatory": "True",
+          "MetaDataValues": [
+            "T+0",
+            "T+1",
+            "T>1"
+          ]
+        },
+        {
+          "MetaDataName": "Finish Time",
+          "SelectType": "SingleSelect",
+          "Mandatory": "True",
+          "MetaDataValues": [
+            "SysTest & AccTest - In All Suites",
+            "SysTest & AccTest - Not In All Suites",
+            "Only SysTest - In Suites",
+            "Only SysTest - Not In Suites",
+            "Only AccTest - In Suites",
+            "Only AccTest - Not In Suites"
+          ]
+        },
+        {
+          "MetaDataName": "Semi Manual",
+          "SelectType": "SingleSelect",
+          "Mandatory": "True",
+          "MetaDataValues": [
+            "Yes",
+            "No"
+          ]
+        }
+      ]
+    },
+    {
+      "MetaDataGroupName": "TestCase Type",
+      "MetaDataInGroup": [
+        {
+          "MetaDataName": "Product",
+          "SelectType": "SingleSelect",
+          "Mandatory": "True",
+          "MetaDataValues": [
+            "Clearing & Settlement",
+            "Corporate Action",
+            "Fund Execution",
+            "CSDR Penalty Fee"
+          ]
+        },
+        {
+          "MetaDataName": "MoneyTransfer Reversal Types",
+          "SelectType": "MultiSelect",
+          "Mandatory": "True",
+          "MetaDataValues": [
+            "No Reversals",
+            "Client-Pacs004",
+            "Client-Pacs008",
+            "Nostro-Pacs004",
+            "Nostro-Pacs008"
+          ]
+        },
+        {
+          "MetaDataName": "TestCase structure types",
+          "SelectType": "MultiSelect",
+          "Mandatory": "False",
+          "MetaDataValues": [
+            "Projection",
+            "Cancel",
+            "Reversal",
+            "Settlement",
+            "Partial Settlement"
+          ]
+        },
+        {
+          "MetaDataName": "Semi Manual",
+          "SelectType": "SingleSelect",
+          "Mandatory": "True",
+          "MetaDataValues": [
+            "Yes",
+            "No"
+          ]
+        }
+      ]
+    },
+    {
+      "MetaDataGroupName": "FX",
+      "MetaDataInGroup": [
+        {
+          "MetaDataName": "Has FX",
+          "SelectType": "SingleSelect",
+          "Mandatory": "True",
+          "MetaDataValues": [
+            "Yes",
+            "No"
+          ]
+        },
+        {
+          "MetaDataName": "FX Program",
+          "SelectType": "SingleSelect",
+          "Mandatory": "True",
+          "MetaDataValues": [
+            "SEB (Unrestricted)",
+            "BBH (Restricted)",
+            "Agency"
+          ]
+        },
+        {
+          "MetaDataName": "FX Trigger Event",
+          "SelectType": "SingleSelect",
+          "Mandatory": "True",
+          "MetaDataValues": [
+            "Upon Projection",
+            "Upon Settlement"
+          ]
+        },
+        {
+          "MetaDataName": "FX details",
+          "SelectType": "MultiSelect",
+          "Mandatory": "False",
+          "MetaDataValues": [
+            "2nd FX",
+            "Selective Netting",
+            "FX Cancelled",
+            "FX Contra",
+            "FX Reassign to other",
+            "FX reassign to same"
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -622,8 +622,10 @@ func validateAndTransformRestResponse(
 
 	case NoResponseVariableType:
 		// Store as 'NoResponseVariableType'
-		testApiEngineFinalTestInstructionExecutionResult.NoResponseVariables = testAPiEngineNoResponseVariables
-		testApiEngineFinalTestInstructionExecutionResult.ResponseVariableType = expectedResponseVariableType
+		//testApiEngineFinalTestInstructionExecutionResult.NoResponseVariables = testAPiEngineNoResponseVariables
+		//testApiEngineFinalTestInstructionExecutionResult.ResponseVariableType = expectedResponseVariableType
+
+		log.Fatalln("Should not be here")
 
 	case ResponseVariableType1Type:
 		// Store as 'ResponseVariableType1Type'

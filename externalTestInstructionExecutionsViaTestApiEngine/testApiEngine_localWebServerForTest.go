@@ -883,7 +883,7 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 		// Create the Response from the "Fenix-code"
 		var tempTestApiEngineFinalTestInstructionExecutionResult TestApiEngineFinalTestInstructionExecutionResultStruct
 		tempTestApiEngineFinalTestInstructionExecutionResult = TestApiEngineFinalTestInstructionExecutionResultStruct{
-			TestApiEngineResponseJsonSchemaVersion: "v1.0",
+			TestApiEngineResponseJsonSchemaVersion: "v1.1",
 			TestInstructionExecutionUUID:           testInstructionExecutionUuid,
 			TestInstructionExecutionVersion:        testInstructionExecutionVersionAsString,
 			TestInstructionExecutionStatus: fenixExecutionWorkerGrpcApi.
@@ -957,7 +957,7 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 		// Create the Response from the "Fenix-code"
 		var tempTestApiEngineFinalTestInstructionExecutionResult TestApiEngineFinalTestInstructionExecutionResultStruct
 		tempTestApiEngineFinalTestInstructionExecutionResult = TestApiEngineFinalTestInstructionExecutionResultStruct{
-			TestApiEngineResponseJsonSchemaVersion: "v1.0",
+			TestApiEngineResponseJsonSchemaVersion: "v1.1",
 			TestInstructionExecutionUUID:           testInstructionExecutionUuid,
 			TestInstructionExecutionVersion:        testInstructionExecutionVersionAsString,
 			TestInstructionExecutionStatus: fenixExecutionWorkerGrpcApi.
@@ -1033,7 +1033,7 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 		// Create the Response from the "Fenix-code"
 		var tempTestApiEngineFinalTestInstructionExecutionResult TestApiEngineFinalTestInstructionExecutionResultStruct
 		tempTestApiEngineFinalTestInstructionExecutionResult = TestApiEngineFinalTestInstructionExecutionResultStruct{
-			TestApiEngineResponseJsonSchemaVersion: "v1.0",
+			TestApiEngineResponseJsonSchemaVersion: "v1.1",
 			TestInstructionExecutionUUID:           testInstructionExecutionUuid,
 			TestInstructionExecutionVersion:        testInstructionExecutionVersionAsString,
 			TestInstructionExecutionStatus: fenixExecutionWorkerGrpcApi.
@@ -1100,6 +1100,9 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 
 		// Create correct Response Variable
 		var resoponseVariables ResponseVariableType1Struct
+		var tempFoundVersusExpectedValueForVariables []FoundVersusExpectedValueForVariableStruct
+		var logPostStatus string
+
 		switch testStepActionMethod {
 
 		case "SendMT540_v1_0":
@@ -1113,6 +1116,11 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 				ResponseVariableValueAsString: "MT540_" + uuid.NewString()[:8],
 			}
 
+			logPostStatus = fenixExecutionWorkerGrpcApi.LogPostStatusEnum_name[int32(
+				fenixExecutionWorkerGrpcApi.LogPostStatusEnum_INFO)]
+
+			tempFoundVersusExpectedValueForVariables = nil
+
 		case "SendMT542_v1_0":
 			resoponseVariables = ResponseVariableType1Struct{
 				TestApiEngineMethodName:       "SendMT542_v1_0",
@@ -1122,6 +1130,20 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 				ResponseVariableTypeUuid:      "0f6e945e-1556-4cb0-80e5-e021ebc5d8c1",
 				ResponseVariableTypeName:      "54x_:20C::SEME type",
 				ResponseVariableValueAsString: "MT542_" + uuid.NewString()[:8],
+			}
+
+			logPostStatus = fenixExecutionWorkerGrpcApi.LogPostStatusEnum_name[int32(
+				fenixExecutionWorkerGrpcApi.LogPostStatusEnum_EXECUTION_OK)]
+
+			tempFoundVersusExpectedValueForVariables = []FoundVersusExpectedValueForVariableStruct{
+				{
+					VariableName:        "MyFirstVariable",
+					VariableDescription: "Used to test the SendMT542_v1_0 TestStepActionMethod",
+					FoundVersusExpectedValues: FoundVersusExpectedValueStruct{
+						FoundValue:    "1(1) - Found this value for MyFirstVariable - SendMT542_v1_0",
+						ExpectedValue: "1(1) - Expected this value for MyFirstVariable - SendMT542_v1_0",
+					},
+				},
 			}
 
 		case "ValidateMT544_v1_0":
@@ -1135,6 +1157,28 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 				ResponseVariableValueAsString: "MT544_" + uuid.NewString()[:8],
 			}
 
+			logPostStatus = fenixExecutionWorkerGrpcApi.LogPostStatusEnum_name[int32(
+				fenixExecutionWorkerGrpcApi.LogPostStatusEnum_EXECUTION_ERROR)]
+
+			tempFoundVersusExpectedValueForVariables = []FoundVersusExpectedValueForVariableStruct{
+				{
+					VariableName:        "MyFirstVariable",
+					VariableDescription: "Used to test the SendMT544_v1_0 TestStepActionMethod",
+					FoundVersusExpectedValues: FoundVersusExpectedValueStruct{
+						FoundValue:    "1(2) - Found this value for MyFirstVariable - SendMT544_v1_0",
+						ExpectedValue: "1(2) - Expected this value for MyFirstVariable - SendMT544_v1_0",
+					},
+				},
+				{
+					VariableName:        "MySecondVariable",
+					VariableDescription: "Used to test the SendMT544_v1_0 TestStepActionMethod",
+					FoundVersusExpectedValues: FoundVersusExpectedValueStruct{
+						FoundValue:    "2(2) - Found this value for MySecondVariable - SendMT544_v1_0",
+						ExpectedValue: "2(2) - Expected this value for MySecondVariable - SendMT544_v1_0",
+					},
+				},
+			}
+
 		case "ValidateMT546_v1_0":
 			resoponseVariables = ResponseVariableType1Struct{
 				TestApiEngineMethodName:       "ValidateMT546_v1_0",
@@ -1146,6 +1190,28 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 				ResponseVariableValueAsString: "MT546_" + uuid.NewString()[:8],
 			}
 
+			logPostStatus = fenixExecutionWorkerGrpcApi.LogPostStatusEnum_name[int32(
+				fenixExecutionWorkerGrpcApi.LogPostStatusEnum_VALIDATION_OK)]
+
+			tempFoundVersusExpectedValueForVariables = []FoundVersusExpectedValueForVariableStruct{
+				{
+					VariableName:        "MyFirstVariable",
+					VariableDescription: "Used to test the SendMT546_v1_0 TestStepActionMethod",
+					FoundVersusExpectedValues: FoundVersusExpectedValueStruct{
+						FoundValue:    "1(2) - Found this value for MyFirstVariable - SendMT546_v1_0",
+						ExpectedValue: "1(2) - Expected this value for MyFirstVariable - SendMT546_v1_0",
+					},
+				},
+				{
+					VariableName:        "MySecondVariable",
+					VariableDescription: "Used to test the SendMT546_v1_0 TestStepActionMethod",
+					FoundVersusExpectedValues: FoundVersusExpectedValueStruct{
+						FoundValue:    "2(2) - Found this value for MySecondVariable - SendMT546_v1_0",
+						ExpectedValue: "2(2) - Expected this value for MySecondVariable - SendMT546_v1_0",
+					},
+				},
+			}
+
 		case "ValidateMT548_v1_0":
 			resoponseVariables = ResponseVariableType1Struct{
 				TestApiEngineMethodName:       "ValidateMT548_v1_0",
@@ -1155,6 +1221,28 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 				ResponseVariableTypeUuid:      "0f6e945e-1556-4cb0-80e5-e021ebc5d8c1",
 				ResponseVariableTypeName:      "54x_:20C::SEME type",
 				ResponseVariableValueAsString: "MT548_" + uuid.NewString()[:8],
+			}
+
+			logPostStatus = fenixExecutionWorkerGrpcApi.LogPostStatusEnum_name[int32(
+				fenixExecutionWorkerGrpcApi.LogPostStatusEnum_VALIDATION_ERROR)]
+
+			tempFoundVersusExpectedValueForVariables = []FoundVersusExpectedValueForVariableStruct{
+				{
+					VariableName:        "MyFirstVariable",
+					VariableDescription: "Used to test the SendMT548_v1_0 TestStepActionMethod",
+					FoundVersusExpectedValues: FoundVersusExpectedValueStruct{
+						FoundValue:    "1(2) - Found this value for MyFirstVariable - SendMT548_v1_0",
+						ExpectedValue: "1(2) - Expected this value for MyFirstVariable - SendMT548_v1_0",
+					},
+				},
+				{
+					VariableName:        "MySecondVariable",
+					VariableDescription: "Used to test the SendMT548_v1_0 TestStepActionMethod",
+					FoundVersusExpectedValues: FoundVersusExpectedValueStruct{
+						FoundValue:    "2(2) - Found this value for MySecondVariable - SendMT548_v1_0",
+						ExpectedValue: "2(2) - Expected this value for MySecondVariable - SendMT548_v1_0",
+					},
+				},
 			}
 
 		case "SendMTGeneral_v1_0":
@@ -1177,7 +1265,7 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 		// Create the Response from the "Fenix-code"
 		var tempTestApiEngineFinalTestInstructionExecutionResult TestApiEngineFinalTestInstructionExecutionResultStruct
 		tempTestApiEngineFinalTestInstructionExecutionResult = TestApiEngineFinalTestInstructionExecutionResultStruct{
-			TestApiEngineResponseJsonSchemaVersion: "v1.0",
+			TestApiEngineResponseJsonSchemaVersion: "v1.1",
 			TestInstructionExecutionUUID:           testInstructionExecutionUuid,
 			TestInstructionExecutionVersion:        testInstructionExecutionVersionAsString,
 			TestInstructionExecutionStatus: fenixExecutionWorkerGrpcApi.
@@ -1189,9 +1277,9 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 			LogPosts: []LogPostStruct{
 				{
 					LogPostTimeStamp:                     time.Now().Format(time.RFC3339),
-					LogPostStatus:                        fenixExecutionWorkerGrpcApi.LogPostStatusEnum_name[int32(fenixExecutionWorkerGrpcApi.LogPostStatusEnum_EXECUTION_OK)],
+					LogPostStatus:                        logPostStatus,
 					LogPostText:                          fmt.Sprintf("Execution of '%s' was a success", testStepActionMethod),
-					FoundVersusExpectedValueForVariables: nil,
+					FoundVersusExpectedValueForVariables: tempFoundVersusExpectedValueForVariables,
 				},
 			},
 		}
@@ -1244,7 +1332,7 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 
 		var tempTestApiEngineFinalTestInstructionExecutionResult TestApiEngineFinalTestInstructionExecutionResultStruct
 		tempTestApiEngineFinalTestInstructionExecutionResult = TestApiEngineFinalTestInstructionExecutionResultStruct{
-			TestApiEngineResponseJsonSchemaVersion: "v1.0",
+			TestApiEngineResponseJsonSchemaVersion: "v1.1",
 			TestInstructionExecutionUUID:           testInstructionExecutionUuid,
 			TestInstructionExecutionVersion:        testInstructionExecutionVersionAsString,
 			TestInstructionExecutionStatus: fenixExecutionWorkerGrpcApi.
