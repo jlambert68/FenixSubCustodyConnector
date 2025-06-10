@@ -4,5 +4,8 @@ import (
 	_ "embed"
 )
 
-//go:embed supportedMetaData/supportedMetaData.json
-var embeddedFile_SupportedMetaData []byte
+//go:embed supportedMetaData/supportedTestCaseMetaData.json
+var embeddedFile_SupportedTestCaseMetaData []byte
+
+//go:embed supportedMetaData/supportedTestSuiteMetaData.json
+var embeddedFile_SupportedTestSuiteMetaData []byte

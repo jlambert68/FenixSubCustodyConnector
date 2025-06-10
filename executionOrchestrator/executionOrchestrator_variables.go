@@ -17,4 +17,5 @@ var connectorFunctionsToDoCallBackOn *fenixConnectorAdminShared_sharedCode.Conne
 var allowedUsers []byte
 var templateUrlParameters []byte
 var simpleTestDataFiles [][]byte
-var supportedMetaData []byte
+var supportedTestCaseMetaData []byte
+var supportedTestSuiteMetaData []byte

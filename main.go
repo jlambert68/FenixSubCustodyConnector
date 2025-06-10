@@ -29,7 +29,8 @@ func main() {
 			embeddedFile_SubCustody_ExtraTestDataArea,
 			embeddedFile_CustodyCash_MainTestDataArea,
 			embeddedFile_TestData},
-		embeddedFile_SupportedMetaData)
+		embeddedFile_SupportedTestCaseMetaData,
+		embeddedFile_SupportedTestSuiteMetaData)
 
 	// Keep program running
 	var waitChannel chan bool

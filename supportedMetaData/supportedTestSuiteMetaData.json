@@ -1,0 +1,64 @@
+{
+  "MetaDataGroups": [
+    {
+      "MetaDataGroupName": "TestSuite",
+      "MetaDataInGroup": [
+        {
+          "MetaDataName": "Status",
+          "SelectType": "SingleSelect",
+          "Mandatory": "True",
+          "MetaDataValues": [
+            "Blocked",
+            "Draft",
+            "Ready for Test"
+          ]
+        },
+        {
+          "MetaDataName": "TestEnvironment",
+          "SelectType": "SingleSelect",
+          "Mandatory": "True",
+          "MetaDataValues": [
+            "AccTest",
+            "SysTest"
+          ]
+        },
+        {
+          "MetaDataName": "Finish Time",
+          "SelectType": "SingleSelect",
+          "Mandatory": "True",
+          "MetaDataValues": [
+            "T+0",
+            "T+1",
+            "T>1"
+          ]
+        }
+      ]
+    },
+    {
+      "MetaDataGroupName": "TestSuite Type",
+      "MetaDataInGroup": [
+        {
+          "MetaDataName": "Ledger",
+          "SelectType": "SingleSelect",
+          "Mandatory": "True",
+          "MetaDataValues": [
+            "HUBERT",
+            "ISAT",
+            "SEBIS"
+          ]
+        },
+        {
+          "MetaDataName": "FX",
+          "SelectType": "SingleSelect",
+          "Mandatory": "True",
+          "MetaDataValues": [
+            "NoFX",
+            "SEB",
+            "BBH",
+            "Agency"
+          ]
+        }
+      ]
+    }
+  ]
+}
