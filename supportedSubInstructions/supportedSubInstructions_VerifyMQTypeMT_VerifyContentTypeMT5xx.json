@@ -1,0 +1,36 @@
+{
+  "Class": "VerifyMQTypeMT",
+  "ActionMethod": "VerifyContentTypeMT5xx",
+  "SubInstructions": {
+    "SubInstructionContainer": {
+      "ExecutionType": "Serial",
+      "SubInstructionContainerChildren": [
+        {
+          "SubInstructionContainer": {
+            "ExecutionType": "Parallel",
+            "SubInstructionContainerChildren": [
+              {
+                "SubInstruction": {
+                  "Class": "Class1",
+                  "Method": "ActionMethod_1_1"
+                }
+              },
+              {
+                "SubInstruction": {
+                  "Class": "Class1",
+                  "Method": "ActionMethod_1_2"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "SubInstruction": {
+            "Class": "Class2",
+            "Method": "ActionMethod_2_1"
+          }
+        }
+      ]
+    }
+  }
+}

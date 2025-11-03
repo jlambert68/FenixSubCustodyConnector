@@ -19,3 +19,5 @@ var templateUrlParameters []byte
 var simpleTestDataFiles [][]byte
 var supportedTestCaseMetaData []byte
 var supportedTestSuiteMetaData []byte
+var supportedSubInstructions []byte
+var supportedSubInstructionsPerTestInstructionSlice [][]byte

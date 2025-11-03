@@ -30,7 +30,9 @@ func main() {
 			embeddedFile_CustodyCash_MainTestDataArea,
 			embeddedFile_TestData},
 		embeddedFile_SupportedTestCaseMetaData,
-		embeddedFile_SupportedTestSuiteMetaData)
+		embeddedFile_SupportedTestSuiteMetaData,
+		embeddedFile_SupportedSubInstructions,
+		embeddedFiles_SupportedSubInstructionsPerTestInstructionSlice)
 
 	// Keep program running
 	var waitChannel chan bool
