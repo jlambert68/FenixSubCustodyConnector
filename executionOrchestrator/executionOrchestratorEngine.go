@@ -33,8 +33,8 @@ func InitiateExecutionOrchestratorEngine(
 		GenerateSimpleTestData:                             generateSimpleTestData,
 		GenerateSupportedTestCaseMetaData:                  generateSupportedTestCaseMetaData,
 		GenerateSupportedTestSuiteMetaData:                 generateSupportedTestSuiteMetaData,
-		GenerateSupportedSubInstructions:                   generateSupportedSubInstructions(),
-		GenerateSupportedSubInstructionsPerTestInstruction: generateSupportedSubInstructionsPerTestInstruction(),
+		GenerateSupportedSubInstructions:                   generateSupportedSubInstructions,
+		GenerateSupportedSubInstructionsPerTestInstruction: generateSupportedSubInstructionsPerTestInstruction,
 	}
 	fenixConnectorAdminShared.InitiateFenixConnectorAdminShared(connectorFunctionsToDoCallBackOn)
 
