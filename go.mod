@@ -9,7 +9,7 @@ require (
 	github.com/gorilla/mux v1.8.1
 	github.com/gorilla/pat v1.0.2 // indirect
 	github.com/gorilla/sessions v1.2.2 // indirect; v1.3.0 gives session error when trying to get token from GCP
-	github.com/jlambert68/FenixConnectorAdminShared v0.0.0-20251105141917-2ab3b6273306
+	github.com/jlambert68/FenixConnectorAdminShared v0.0.0-20251107121021-07d91d11f82f
 	github.com/jlambert68/FenixGrpcApi v0.0.0-20251103081159-a0962fe7cfb2
 	github.com/jlambert68/FenixScriptEngine v0.0.0-20241104143504-8f37e95bc346
 	github.com/jlambert68/FenixStandardTestInstructionAdmin v0.0.0-20241025085754-ced7ee5586a6

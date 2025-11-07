@@ -6,6 +6,12 @@
       "ExecutionType": "Serial",
       "SubInstructionContainerChildren": [
         {
+          "SubInstruction": {
+            "Class": "Class1",
+            "Method": "ActionMethod_1_1"
+          }
+        },
+        {
           "SubInstructionContainer": {
             "ExecutionType": "Parallel",
             "SubInstructionContainerChildren": [

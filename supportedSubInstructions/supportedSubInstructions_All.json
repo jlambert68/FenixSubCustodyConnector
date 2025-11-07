@@ -9,22 +9,18 @@
     {
       "Class": "Class1",
       "Method": "ActionMethod_1_2",
-      "Description": "Description_1_1",
+      "Description": "Description_1_2",
       "PreConditions": [
         {
           "Class": "Class1",
           "Method": "ActionMethod_1_1"
-        },
-        {
-          "Class": "Class2",
-          "Method": "ActionMethod_2_1"
         }
       ]
     },
     {
       "Class": "Class2",
       "Method": "ActionMethod_2_1",
-      "Description": "Description_1_1",
+      "Description": "Description_2_1",
       "PreConditions": [
         {
           "Class": "Class1",
