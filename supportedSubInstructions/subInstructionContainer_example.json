@@ -1,0 +1,17 @@
+{
+  "SubInstructionContainer": {
+    "ExecutionType": "Parallel",
+    "SubInstructionContainerChildren": [
+      {
+        "SubInstruction": {
+          "Class": "MTMessageContent",
+          "Method": "ValidateMTTypeTagContent",
+          "Execute": true,
+          "UseFullTimeOutTime": false,
+          "InputStackIndex": 0,
+          "OutputStackIndex": -1
+        }
+      }
+    ]
+  }
+}
