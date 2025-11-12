@@ -23,6 +23,10 @@ import (
 	"github.com/jlambert68/FenixTestInstructionsAdminShared/TypeAndStructs"
 	"github.com/sirupsen/logrus"
 	"google.golang.org/protobuf/types/known/timestamppb"
+	// SubCustody 'VerifyReceivedTypeMT5xx'
+	"github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_VerifyMQTypeMT_VerifyReceivedTypeMT5xx"
+	TestInstruction_VerifyMQTypeMT_VerifyReceivedTypeMT5xx_version1_0 "github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_VerifyMQTypeMT_VerifyReceivedTypeMT5xx/version_1_0"
+
 	"strconv"
 )
 
@@ -48,7 +52,8 @@ func processTestInstructionExecutionRequest(
 		TestInstruction_SendOnMQTypeMT_SendMT542.TestInstructionUUID_SubCustody_SendMT542,
 		TestInstruction_ValidateMQTypeMT54x_ValidateMT544.TestInstructionUUID_SubCustody_ValidateMT544,
 		TestInstruction_ValidateMQTypeMT54x_ValidateMT546.TestInstructionUUID_SubCustody_ValidateMT546,
-		TestInstruction_ValidateMQTypeMT54x_ValidateMT548.TestInstructionUUID_SubCustody_ValidateMT548:
+		TestInstruction_ValidateMQTypeMT54x_ValidateMT548.TestInstructionUUID_SubCustody_ValidateMT548,
+		TestInstruction_VerifyMQTypeMT_VerifyReceivedTypeMT5xx.TestInstructionUUID_SubCustody_VerifyReceivedTypeMT5xx:
 
 		// Extract the maximum allowed time before timeout occurs
 		var maximumExecutionDurationInSeconds int64
@@ -84,6 +89,10 @@ func processTestInstructionExecutionRequest(
 
 		case TestInstruction_ValidateMQTypeMT54x_ValidateMT548.TestInstructionUUID_SubCustody_ValidateMT548:
 			maximumExecutionDurationInSeconds = TestInstruction_ValidateMQTypeMT54x_ValidateMT548_version1_0.
+				ExpectedMaxTestInstructionExecutionDurationInSeconds
+
+		case TestInstruction_VerifyMQTypeMT_VerifyReceivedTypeMT5xx.TestInstructionUUID_SubCustody_VerifyReceivedTypeMT5xx:
+			maximumExecutionDurationInSeconds = TestInstruction_VerifyMQTypeMT_VerifyReceivedTypeMT5xx_version1_0.
 				ExpectedMaxTestInstructionExecutionDurationInSeconds
 
 		default:
@@ -239,6 +248,15 @@ func processTestInstructionExecutionRequest(
 				responseVariablesJsonSchema =
 				executeTestInstructionUsingTestApiEngine.GetResponseSchemasToUse(
 					TestInstruction_ValidateMQTypeMT54x_ValidateMT548.TestInstructionUUID_SubCustody_ValidateMT548,
+					testInstructionVersion)
+			expectedResponseVariableType = executeTestInstructionUsingTestApiEngine.ResponseVariableType1Type
+
+		case TestInstruction_VerifyMQTypeMT_VerifyReceivedTypeMT5xx.TestInstructionUUID_SubCustody_VerifyReceivedTypeMT5xx:
+			requestMessageToTestApiEngineJsonSchema, requestMethodParametersMessageToTestApiEngineJsonSchema,
+				testApiEngineResponseMessageJsonSchema, finalTestInstructionExecutionResultJsonSchema,
+				responseVariablesJsonSchema =
+				executeTestInstructionUsingTestApiEngine.GetResponseSchemasToUse(
+					TestInstruction_VerifyMQTypeMT_VerifyReceivedTypeMT5xx.TestInstructionUUID_SubCustody_VerifyReceivedTypeMT5xx,
 					testInstructionVersion)
 			expectedResponseVariableType = executeTestInstructionUsingTestApiEngine.ResponseVariableType1Type
 

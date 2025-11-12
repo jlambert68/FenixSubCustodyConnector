@@ -19,7 +19,6 @@
             "UseFullTimeOutTime": false,
             "InputStackIndex": 0,
             "OutputStackIndex": 1,
-            "PreSetMemoryStack" : [],
             "StackCommands": [
               {
                 "StackCommand": "PEEKN",
@@ -50,8 +49,8 @@
             "Execute": true,
             "UseFullTimeOutTime": true,
             "InputStackIndex": 0,
-            "OutputStackIndex": 0,
-            "PreSetMemoryStack": []
+            "OutputStackIndex": 0
+
           }
         },
         {
@@ -62,8 +61,8 @@
             "Execute": true,
             "UseFullTimeOutTime": false,
             "InputStackIndex": 1,
-            "OutputStackIndex": 1,
-            "PreSetMemoryStack": []
+            "OutputStackIndex": 1
+
           }
         },
         {
@@ -74,8 +73,8 @@
             "Execute": true,
             "UseFullTimeOutTime": false,
             "InputStackIndex": 1,
-            "OutputStackIndex": 1,
-            "PreSetMemoryStack": []
+            "OutputStackIndex": 1
+
           }
         },
         {
@@ -85,8 +84,6 @@
             "Method": "CompareMT540AndMT544TagContentIsEqual",
             "Execute": true,
             "UseFullTimeOutTime": false,
-            "InputStackIndex": -1,
-            "OutputStackIndex": -1,
             "PreSetMemoryStack": [
               0,
               1

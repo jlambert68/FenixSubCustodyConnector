@@ -1,0 +1,5 @@
+"Class": "StackSubInstructions",
+"Method": "ExecuteStackCommands",
+PEEKN
+PUSHN
+DROPMEMEMORYALL

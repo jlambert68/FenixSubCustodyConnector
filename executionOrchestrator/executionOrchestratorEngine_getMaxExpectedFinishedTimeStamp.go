@@ -30,6 +30,9 @@ import (
 	"github.com/sirupsen/logrus"
 	"strconv"
 	"time"
+	// SubCustody 'VerifyReceivedTypeMT5xx'
+	"github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_VerifyMQTypeMT_VerifyReceivedTypeMT5xx"
+	TestInstruction_VerifyMQTypeMT_VerifyReceivedTypeMT5xx_version1_0 "github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_VerifyMQTypeMT_VerifyReceivedTypeMT5xx/version_1_0"
 )
 
 func getMaxExpectedFinishedTimeStamp(testInstructionExecutionPubSubRequest *fenixExecutionWorkerGrpcApi.
@@ -246,6 +249,32 @@ func getMaxExpectedFinishedTimeStamp(testInstructionExecutionPubSubRequest *feni
 		default:
 			sharedCode.Logger.WithFields(logrus.Fields{
 				"id": "e01ce31f-f2f9-494d-9824-a66032210c5a",
+				"TestInstructionOriginalUuid": testInstructionExecutionPubSubRequest.TestInstruction.
+					TestInstructionOriginalUuid,
+				"TestInstructionName": testInstructionExecutionPubSubRequest.TestInstruction.
+					TestInstructionName,
+				"version": version,
+			}).Fatalln("Unhandled version, will exit")
+
+		}
+
+	case TestInstruction_VerifyMQTypeMT_VerifyReceivedTypeMT5xx.TestInstructionUUID_SubCustody_VerifyReceivedTypeMT5xx:
+
+		// Extract execution duration based on TestInstruction version
+		switch version {
+
+		case "v1.0":
+
+			// Extract duration
+			expectedExecutionDurationInSeconds = TestInstruction_VerifyMQTypeMT_VerifyReceivedTypeMT5xx_version1_0.
+				ExpectedMaxTestInstructionExecutionDurationInSeconds
+
+			// Create Max Finished TimeStamp
+			maxExpectedFinishedTimeStamp = time.Now().Add(time.Duration(expectedExecutionDurationInSeconds) * time.Second)
+
+		default:
+			sharedCode.Logger.WithFields(logrus.Fields{
+				"id": "323947d7-a8a6-4b38-a3bb-9b6edc20362a",
 				"TestInstructionOriginalUuid": testInstructionExecutionPubSubRequest.TestInstruction.
 					TestInstructionOriginalUuid,
 				"TestInstructionName": testInstructionExecutionPubSubRequest.TestInstruction.
