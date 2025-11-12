@@ -769,7 +769,7 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 	case "SendMT540_v1_0", "SendMT542_v1_0":
 		// No extra parameters
 
-	case "ValidateMT544_v1_0", "ValidateMT546_v1_0", "ValidateMT548_v1_0":
+	case "ValidateMT544_v1_0", "ValidateMT546_v1_0", "ValidateMT548_v1_0", "VerifyReceivedTypeMT5xx":
 		// Extract 'RelatedReference_54x_20CRELA'
 
 		// *** Extract RelatedReference_54x_20CRELA ****
@@ -1096,7 +1096,7 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 	// Depending on 'testStepActionMethod', create correct response extra incoming parameters
 	switch testStepActionMethod {
 
-	case "SendMT540_v1_0", "SendMT542_v1_0", "ValidateMT544_v1_0", "ValidateMT546_v1_0", "ValidateMT548_v1_0", "SendMTGeneral_v1_0":
+	case "SendMT540_v1_0", "SendMT542_v1_0", "ValidateMT544_v1_0", "ValidateMT546_v1_0", "ValidateMT548_v1_0", "SendMTGeneral_v1_0", "VerifyReceivedTypeMT5xx":
 
 		// Create correct Response Variable
 		var resoponseVariables ResponseVariableType1Struct
@@ -1254,6 +1254,39 @@ func testApiEngineClassTestApiEngineMethod(w http.ResponseWriter, r *http.Reques
 				ResponseVariableTypeUuid:      "0f6e945e-1556-4cb0-80e5-e021ebc5d8c1",
 				ResponseVariableTypeName:      "54x_:20C::SEME type",
 				ResponseVariableValueAsString: "SendMTGeneral_" + uuid.NewString()[:8],
+			}
+
+		case "VerifyReceivedTypeMT5xx":
+			resoponseVariables = ResponseVariableType1Struct{
+				TestApiEngineMethodName:       "VerifyReceivedTypeMT5xx",
+				TestInstructionVersion:        "v1.0",
+				ResponseVariableUUID:          "17bdce39-6c5a-4d1b-b0c0-fc2c4800deb3",
+				ResponseVariableName:          ":20C::SEME//",
+				ResponseVariableTypeUuid:      "a327ccc8-6d5d-44d5-8d2c-f4900db68429",
+				ResponseVariableTypeName:      "5xx_:20C::SEME type",
+				ResponseVariableValueAsString: "MT5xx_" + uuid.NewString()[:8],
+			}
+
+			logPostStatus = fenixExecutionWorkerGrpcApi.LogPostStatusEnum_name[int32(
+				fenixExecutionWorkerGrpcApi.LogPostStatusEnum_EXECUTION_ERROR)]
+
+			tempFoundVersusExpectedValueForVariables = []FoundVersusExpectedValueForVariableStruct{
+				{
+					VariableName:        "MyFirstVariable",
+					VariableDescription: "Used to test the VerifyReceivedTypeMT5xx_v1_0 TestStepActionMethod",
+					FoundVersusExpectedValues: FoundVersusExpectedValueStruct{
+						FoundValue:    "1(2) - Found this value for MyFirstVariable - VerifyReceivedTypeMT5xx_v1_0",
+						ExpectedValue: "1(2) - Expected this value for MyFirstVariable - VerifyReceivedTypeMT5xx_v1_0",
+					},
+				},
+				{
+					VariableName:        "MySecondVariable",
+					VariableDescription: "Used to test the VerifyReceivedTypeMT5xx_v1_0 TestStepActionMethod",
+					FoundVersusExpectedValues: FoundVersusExpectedValueStruct{
+						FoundValue:    "2(2) - Found this value for MySecondVariable - VerifyReceivedTypeMT5xx_v1_0",
+						ExpectedValue: "2(2) - Expected this value for MySecondVariable - VerifyReceivedTypeMT5xx_v1_0",
+					},
+				},
 			}
 
 		default:
