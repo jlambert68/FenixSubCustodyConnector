@@ -1,93 +1,47 @@
 {
-  "Class": "VerifyMQResponseTypeMT",
-  "ActionMethod": "VerifyContentTypeMT544",
-  "StackIndex": 0,
-  "TestInstructionParametersStackPushOrder": [
-    "RelatedReference_5xx_20CRELA",
-    "MessageType_5xx_FromTestInstruction"
-  ],
+  "Class": "VerifyMQTypeMT",
+  "ActionMethod": "VerifyContentTypeMT5xx",
   "SubInstructions": {
     "SubInstructionContainer": {
       "ExecutionType": "Serial",
       "SubInstructionContainerChildren": [
         {
           "SubInstruction": {
-            "_comment": "Prepare other Stack for original message",
-            "Class": "StackSubInstructions",
-            "Method": "ExecuteStackCommands",
+            "Class": "Class1",
+            "Method": "ActionMethod_1_1",
             "Execute": true,
-            "UseFullTimeOutTime": false,
-            "InputStackIndex": 0,
-            "OutputStackIndex": 1,
-            "StackCommands": [
+            "UseFullTimeOutTime": true
+          }
+        },
+        {
+          "SubInstructionContainer": {
+            "ExecutionType": "Parallel",
+            "SubInstructionContainerChildren": [
               {
-                "StackCommand": "PEEKN",
-                "StackIndex": 0,
-                "StackVariables": [
-                  2
-                ]
+                "SubInstruction": {
+                  "Class": "Class1",
+                  "Method": "ActionMethod_1_1",
+                  "Execute": true,
+                  "UseFullTimeOutTime": true
+                }
               },
               {
-                "StackCommand": "PUSHN",
-                "StackIndex": 1,
-                "StackVariables": [
-                  1
-                ]
-              },
-              {
-                "StackCommand": "DROPMEMEMORYALL",
-                "StackIndex": 1
+                "SubInstruction": {
+                  "Class": "Class1",
+                  "Method": "ActionMethod_1_2",
+                  "Execute": true,
+                  "UseFullTimeOutTime": true
+                }
               }
             ]
           }
         },
         {
           "SubInstruction": {
-            "_comment": "Get the MQ-response message, and MQ-Type from Message, to validate",
-            "Class": "MQArchiverForSubInstructions",
-            "Method": "GetMTMessageBasedOnRELAReferenceAndMTType",
+            "Class": "Class2",
+            "Method": "ActionMethod_2_1",
             "Execute": true,
-            "UseFullTimeOutTime": true,
-            "InputStackIndex": 0,
-            "OutputStackIndex": 0
-
-          }
-        },
-        {
-          "SubInstruction": {
-            "_comment": "Get the Original MQ-message",
-            "Class": "MQArchiverForSubInstructions",
-            "Method": "GetMTMessageBasedOnSEMEReference",
-            "Execute": true,
-            "UseFullTimeOutTime": false,
-            "InputStackIndex": 1,
-            "OutputStackIndex": 1
-
-          }
-        },
-        {
-          "SubInstruction": {
-            "_comment": "Validate that response message has correct MT-type, i.e. 'MT544'",
-            "Class": "MTMessageContent",
-            "Method": "ValidateMTTypeFromTestInstructionVsMQMessage",
-            "Execute": true,
-            "UseFullTimeOutTime": false,
-            "InputStackIndex": 1,
-            "OutputStackIndex": 1
-
-          }
-        },
-        {
-          "SubInstruction": {
-            "_comment": "Validate that MT544 message has same tag-values as the original MT540",
-            "Class": "MTMessageContent",
-            "Method": "CompareMT540AndMT544TagContentIsEqual",
-            "Execute": true,
-            "UseFullTimeOutTime": false,
-            "PreSetMemoryStack": [
-              0,
-              1
-            ]
+            "UseFullTimeOutTime": true
           }
         }
       ]

@@ -1,0 +1,75 @@
+{
+  "SupportedSubInstructions": [
+    {
+      "Class": "MQArchiverSubInstructions",
+      "Method": "GetMTMessageBasedOnSEMEReference",
+      "Execute": true,
+      "UseFullTimeOutTime": true,
+      "Description": "Retrieve MT-message and MT-message-type from MQ-Archiver based on :20C::SEME-reference. MQ-message-type (i.e. MT540) is extracted from Header tag 2, i.e. '{2:I540{{....'",
+      "ExpectedInputMessageStackStackPushOrderInfo": [
+        "20C::SEME"
+      ],
+      "ExpectedOutputMessageStackStackPushOrderInfo": [
+        "20C::SEME",
+        "MT-Message",
+        "MTType_FromMessage"
+      ],
+      "PreConditions": []
+    },
+    {
+      "Class": "MQArchiverSubInstructions",
+      "Method": "GetMTMessageBasedOnRELAReferenceAndMTType",
+      "Execute": true,
+      "UseFullTimeOutTime": true,
+      "Description": "Retrieve MT-message from MQ-Archiver based on :20C::RELA-reference and MT-message-type",
+      "ExpectedInputMessageStackStackPushOrderInfo": [
+        "20C::RELA",
+        "MTType_FromTestInstruction"
+      ],
+      "ExpectedOutputMessageStackStackPushOrderInfo": [
+        "20C::RELA",
+        "MTType_FromTestInstruction",
+        "MT-Message",
+        "MTType_FromMessage"
+      ],
+      "PreConditions": []
+    },
+    {
+      "Class": "MTMessageContent",
+      "Method": "ValidateMT544MessageTagContent",
+      "Execute": true,
+      "UseFullTimeOutTime": false,
+      "Description": "Validates that the contents of the Tags for SEME-message and RELA-message match",
+      "PreConditions": [
+        {
+          "Class": "MQArchiverSubInstructions",
+          "Method": "GetMTMessageBasedOnSEMEReference",
+          "Execute": true
+        },
+        {
+          "Class": "MQArchiverSubInstructions",
+          "Method": "GetMTMessageBasedOnRELAReference",
+          "Execute": true
+        }
+      ]
+    },
+    {
+      "Class": "MTMessageContent",
+      "Method": "ValidateMTTypeFromTestInstructionToMQMessage",
+      "Execute": true,
+      "UseFullTimeOutTime": false,
+      "Description": "Validates the Message type (i.e. 540) in Header tag 2, i.e. '{2:I540{{....' is the same as the MT-type from the TestInstruction",
+      "ExpectedInputMessageStackStackPushOrderInfo": [
+        "MTType_FromTestInstruction",
+        "n/a",
+        "MTType_FromMessage"
+      ],
+      "ExpectedOutputMessageStackStackPushOrderInfo": [
+        "MTType_FromTestInstruction",
+        "n/a",
+        "MTType_FromMessage"
+      ],
+      "PreConditions": []
+    }
+  ]
+}
