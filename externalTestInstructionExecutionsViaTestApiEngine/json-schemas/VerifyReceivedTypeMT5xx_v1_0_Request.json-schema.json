@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "SendMT542 Request, version 1.0",
+  "title": "Verify that a message of type MT5xx was received, version 1.0",
   "type": "object",
   "properties": {
     "testcase_execution_id": {
@@ -9,13 +9,13 @@
     "testStepClassName": {
       "type": "string",
       "enum": [
-        "SendOnMQTypeMT"
+        "VerifyMQTypeMT"
       ]
     },
     "testStepActionMethod": {
       "type": "string",
       "enum": [
-        "SendMT542_v1_0"
+        "VerifyReceivedTypeMT5xx_v1_0"
       ]
     },
     "testDataParameterType": {
@@ -37,6 +37,7 @@
     }
   },
   "required": [
+    "testcase_execution_id",
     "testStepClassName",
     "testStepActionMethod",
     "testDataParameterType",

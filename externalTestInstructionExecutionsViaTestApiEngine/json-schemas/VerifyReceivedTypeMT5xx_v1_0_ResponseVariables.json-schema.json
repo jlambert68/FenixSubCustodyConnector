@@ -1,0 +1,70 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Response Variables Schema for VerifyReceivedTypeMT5xx",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "TestStepActionMethod": {
+        "type": "string",
+        "enum": [
+          "VerifyReceivedTypeMT5xx_v1_0"
+        ]
+      },
+      "TestInstructionVersion": {
+        "type": "string",
+        "enum": [
+          "v1.0"
+        ]
+      },
+      "ResponseVariableUuid": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "ResponseVariableName": {
+        "type": "string"
+      },
+      "ResponseVariableTypeUuid": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "ResponseVariableTypeName": {
+        "type": "string"
+      },
+      "ResponseVariableValueAsString": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "TestStepActionMethod",
+      "TestInstructionVersion",
+      "ResponseVariableUuid",
+      "ResponseVariableName",
+      "ResponseVariableTypeUuid",
+      "ResponseVariableTypeName",
+      "ResponseVariableValueAsString"
+    ],
+    "additionalProperties": false,
+    "oneOf": [
+      {
+        "type": "null"
+      },
+      {
+        "properties": {
+          "ResponseVariableUuid": {
+            "const": "17bdce39-6c5a-4d1b-b0c0-fc2c4800deb3"
+          },
+          "ResponseVariableName": {
+            "const": ":20C::SEME//"
+          },
+          "ResponseVariableTypeUuid": {
+            "const": "a327ccc8-6d5d-44d5-8d2c-f4900db68429"
+          },
+          "ResponseVariableTypeName": {
+            "const": "5xx_:20C::SEME type"
+          }
+        }
+      }
+    ]
+  }
+}

@@ -91,3 +91,14 @@ var validateMT548_v1_0_RequestMethodParametersMessageJsonSchemaAsByteArray []byt
 
 //go:embed json-schemas/ValidateMT548_v1_0_ResponseVariables.json-schema.json
 var validateMT548_v1_0_ResponseVariablesMessageJsonSchemaAsByteArray []byte
+
+// SendVerifyReceivedTypeMT5xx
+//
+//go:embed json-schemas/VerifyReceivedTypeMT5xx_v1_0_Request.json-schema.json
+var verifyReceivedTypeMT5xx_v1_0_RequestMessageJsonSchemaAsByteArray []byte
+
+//go:embed json-schemas/VerifyReceivedTypeMT5xx_v1_0_RequestMethodParameters.json-schema.json
+var verifyReceivedTypeMT5xx_v1_0_RequestMethodParametersMessageJsonSchemaAsByteArray []byte
+
+//go:embed json-schemas/VerifyReceivedTypeMT5xx_v1_0_ResponseVariables.json-schema.json
+var verifyReceivedTypeMT5xx_v1_0_ResponseVariablesMessageJsonSchemaAsByteArray []byte

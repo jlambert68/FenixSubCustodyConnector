@@ -193,3 +193,25 @@ localJsonSchemaFileNameValidateMT548_v1_0 := ValidateMT548_v1_0_ResponseVariable
 fullLocalFilePathValidateMT548Request_v1_0 := $(fullLocalPath)/$(localJsonSchemaFileNameValidateMT548Request_v1_0)
 fullLocalFilePathValidateMT548RequestMethodParameters_v1_0 := $(fullLocalPath)/$(localJsonSchemaFileNameValidateMT548RequestMethodParameters_v1_0)
 fullLocalFilePathValidateMT548_v1_0 := $(fullLocalPath)/$(localJsonSchemaFileNameValidateMT548_v1_0)
+
+
+
+# **** Remote Json-Schemas VerifyReceivedTypeMT5xx ****
+jsonSchemaPathVerifyReceivedTypeMT5xx_v1_0 := TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_VerifyMQTypeMT_VerifyReceivedTypeMT5xx/version_1_0/
+jsonSchemaFileNameVerifyReceivedTypeMT5xxRequest := VerifyMQTypeMT_VerifyReceivedTypeMT5xx.json-schema.json
+jsonSchemaFileNameVerifyReceivedTypeMT5xxRequestMethodParameters := VerifyMQTypeMT_VerifyReceivedTypeMT5xx-MethodParameters.json-schema.json
+jsonSchemaFileNameVerifyReceivedTypeMT5xxResponse := VerifyMQTypeMT_VerifyReceivedTypeMT5xx_ResponseVariables.json-schema.json
+
+# Full Remote Path and FilePath - VerifyReceivedTypeMT5xx
+fullRemotePathVerifyReceivedTypeMT5xx_v1_0 := $(remoteUrl)/$(githubUsername)/$(repositorySubCustody)/$(branchSpecific)/$(jsonSchemaPathVerifyReceivedTypeMT5xx_v1_0)
+fullRemoteFilePathVerifyReceivedTypeMT5xxRequest_v1_0 := $(fullRemotePathVerifyReceivedTypeMT5xx_v1_0)/$(jsonSchemaFileNameVerifyReceivedTypeMT5xxRequest)
+fullRemoteFilePathVerifyReceivedTypeMT5xxRequestMethodParameters_v1_0 := $(fullRemotePathVerifyReceivedTypeMT5xx_v1_0)/$(jsonSchemaFileNameVerifyReceivedTypeMT5xxRequestMethodParameters)
+fullRemoteFilePathVerifyReceivedTypeMT5xx_v1_0 := $(fullRemotePathVerifyReceivedTypeMT5xx_v1_0)/$(jsonSchemaFileNameVerifyReceivedTypeMT5xxResponse)
+
+# Local - VerifyReceivedTypeMT5xx
+localJsonSchemaFileNameVerifyReceivedTypeMT5xxRequest_v1_0 := VerifyReceivedTypeMT5xx_v1_0_Request.json-schema.json
+localJsonSchemaFileNameVerifyReceivedTypeMT5xxRequestMethodParameters_v1_0 := VerifyReceivedTypeMT5xx_v1_0_RequestMethodParameters.json-schema.json
+localJsonSchemaFileNameVerifyReceivedTypeMT5xx_v1_0 := VerifyReceivedTypeMT5xx_v1_0_ResponseVariables.json-schema.json
+fullLocalFilePathVerifyReceivedTypeMT5xxRequest_v1_0 := $(fullLocalPath)/$(localJsonSchemaFileNameVerifyReceivedTypeMT5xxRequest_v1_0)
+fullLocalFilePathVerifyReceivedTypeMT5xxRequestMethodParameters_v1_0 := $(fullLocalPath)/$(localJsonSchemaFileNameVerifyReceivedTypeMT5xxRequestMethodParameters_v1_0)
+fullLocalFilePathVerifyReceivedTypeMT5xx_v1_0 := $(fullLocalPath)/$(localJsonSchemaFileNameVerifyReceivedTypeMT5xx_v1_0)

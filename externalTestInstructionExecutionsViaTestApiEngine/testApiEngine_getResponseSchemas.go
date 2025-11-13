@@ -9,6 +9,7 @@ import (
 	TestInstruction_ValidateMQTypeMT54x_ValidateMT544 "github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_ValidateMQTypeMT54x_ValidateMT544/version_1_0"
 	"github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_ValidateMQTypeMT54x_ValidateMT546"
 	"github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_ValidateMQTypeMT54x_ValidateMT548"
+	"github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/TestInstructionsAndTesInstructionContainersAndAllowedUsers/TestInstructions/TestInstruction_VerifyMQTypeMT_VerifyReceivedTypeMT5xx"
 	"github.com/jlambert68/FenixTestInstructionsAdminShared/TypeAndStructs"
 	"github.com/sirupsen/logrus"
 )
@@ -248,6 +249,37 @@ func GetResponseSchemasToUse(
 				"testInstructionUUID":    testInstructionUUID,
 				"testInstructionVersion": testInstructionVersion,
 			}).Fatal("Unhandled version for 'TestInstructionUUID_SubCustody_ValidateMT548'")
+
+		}
+
+		// Verify Received a MT5xx
+	case TestInstruction_VerifyMQTypeMT_VerifyReceivedTypeMT5xx.TestInstructionUUID_SubCustody_VerifyReceivedTypeMT5xx:
+
+		// Extract json-schema depending on version
+		switch testInstructionVersion {
+		case "v1.0":
+
+			// Outgoing Request
+			var tempRequestMessageToTestApiEngineJsonSchema string
+			tempRequestMessageToTestApiEngineJsonSchema = string(verifyReceivedTypeMT5xx_v1_0_RequestMessageJsonSchemaAsByteArray)
+			requestMessageToTestApiEngineJsonSchema = &tempRequestMessageToTestApiEngineJsonSchema
+
+			// Outgoing Request MethodParameters
+			var tempRequestMethodParametersMessageToTestApiEngineJsonSchema string
+			tempRequestMethodParametersMessageToTestApiEngineJsonSchema = string(verifyReceivedTypeMT5xx_v1_0_RequestMethodParametersMessageJsonSchemaAsByteArray)
+			requestMethodParametersMessageToTestApiEngineJsonSchema = &tempRequestMethodParametersMessageToTestApiEngineJsonSchema
+
+			// Incoming Response
+			var tempResponseVariablesJsonSchema string
+			tempResponseVariablesJsonSchema = string(verifyReceivedTypeMT5xx_v1_0_ResponseVariablesMessageJsonSchemaAsByteArray)
+			responseVariablesJsonSchema = &tempResponseVariablesJsonSchema
+
+		default:
+			sharedCode.Logger.WithFields(logrus.Fields{
+				"id":                     "a4fe7edc-29f1-458e-abb2-56acab7cb744",
+				"testInstructionUUID":    testInstructionUUID,
+				"testInstructionVersion": testInstructionVersion,
+			}).Fatal("Unhandled version for 'TestInstructionUUID_SubCustody_VerifyReceivedTypeMT5xx'")
 
 		}
 

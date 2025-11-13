@@ -44,6 +44,7 @@ func PostTestInstructionUsingRestCall(
 
 	// Create the struct holding full Rest-request to TestApiEngine
 	type testApiEngineRequestStruct struct {
+		TestCaseExecutionUuid string            `json:"testcase_execution_id"`
 		TestStepClassName     string            `json:"testStepClassName"`
 		TestStepActionMethod  string            `json:"testStepActionMethod"`
 		TestDataParameterType string            `json:"testDataParameterType"`
@@ -81,6 +82,7 @@ func PostTestInstructionUsingRestCall(
 	// Request to be sent to TestApiEngine
 	var tempTestApiEngineRequest testApiEngineRequestStruct
 	tempTestApiEngineRequest = testApiEngineRequestStruct{
+		TestCaseExecutionUuid: testApiEngineRestApiMessageValues.TestCaseExecutionUuid,
 		TestStepClassName:     string(testApiEngineRestApiMessageValues.TestApiEngineClassName),
 		TestStepActionMethod:  string(testApiEngineRestApiMessageValues.TestApiEngineMethodName),
 		TestDataParameterType: "FixedValue",

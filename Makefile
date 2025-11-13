@@ -73,4 +73,8 @@ Download-json-schemas:
 	@curl -L -o $(fullLocalFilePathValidateMT548Request_v1_0) "$(fullRemoteFilePathValidateMT548Request_v1_0)"
 	@curl -L -o $(fullLocalFilePathValidateMT548RequestMethodParameters_v1_0) "$(fullRemoteFilePathValidateMT548RequestMethodParameters_v1_0)"
 	@curl -L -o $(fullLocalFilePathValidateMT548_v1_0) "$(fullRemoteFilePathValidateMT548_v1_0)"
+
+	@curl -L -o $(fullLocalFilePathVerifyReceivedTypeMT5xxRequest_v1_0) "$(fullRemoteFilePathVerifyReceivedTypeMT5xxRequest_v1_0)"
+	@curl -L -o $(fullLocalFilePathVerifyReceivedTypeMT5xxRequestMethodParameters_v1_0) "$(fullRemoteFilePathVerifyReceivedTypeMT5xxRequestMethodParameters_v1_0)"
+	@curl -L -o $(fullLocalFilePathVerifyReceivedTypeMT5xx_v1_0) "$(fullRemoteFilePathVerifyReceivedTypeMT5xx_v1_0)"
 #$(localJsonSchemaPath)/$(localJsonSchemaOverAllLName)

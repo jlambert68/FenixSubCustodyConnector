@@ -3,6 +3,9 @@
   "title": "ValidateMT546 Request, version 1.0",
   "type": "object",
   "properties": {
+    "testcase_execution_id": {
+      "type": "string"
+    },
     "testStepClassName": {
       "type": "string",
       "enum": [
