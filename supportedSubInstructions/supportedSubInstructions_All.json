@@ -4,7 +4,6 @@
       "Class": "Class1",
       "Method": "ActionMethod_1_1",
       "Execute": true,
-      "UseFullTimeOutTime": true,
       "Description": "Description_1_1",
       "PreConditions": []
     },
@@ -12,7 +11,6 @@
       "Class": "Class1",
       "Method": "ActionMethod_1_2",
       "Execute": true,
-      "UseFullTimeOutTime": true,
       "Description": "Description_1_2",
       "PreConditions": [
         {
@@ -31,7 +29,6 @@
       "Class": "Class2",
       "Method": "ActionMethod_2_1",
       "Execute": true,
-      "UseFullTimeOutTime": true,
       "Description": "Description_2_1",
       "PreConditions": [
         {

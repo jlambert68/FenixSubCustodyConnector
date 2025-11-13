@@ -9,8 +9,14 @@
           "SubInstruction": {
             "Class": "Class1",
             "Method": "ActionMethod_1_1",
-            "Execute": true,
-            "UseFullTimeOutTime": true
+            "Execute": true
+          }
+        },
+        {
+          "SubInstruction": {
+            "Class": "Class2",
+            "Method": "ActionMethod_2_1",
+            "Execute": true
           }
         },
         {
@@ -21,16 +27,14 @@
                 "SubInstruction": {
                   "Class": "Class1",
                   "Method": "ActionMethod_1_1",
-                  "Execute": true,
-                  "UseFullTimeOutTime": true
+                  "Execute": true
                 }
               },
               {
                 "SubInstruction": {
                   "Class": "Class1",
                   "Method": "ActionMethod_1_2",
-                  "Execute": true,
-                  "UseFullTimeOutTime": true
+                  "Execute": true
                 }
               }
             ]
@@ -40,8 +44,7 @@
           "SubInstruction": {
             "Class": "Class2",
             "Method": "ActionMethod_2_1",
-            "Execute": true,
-            "UseFullTimeOutTime": true
+            "Execute": true
           }
         }
       ]
