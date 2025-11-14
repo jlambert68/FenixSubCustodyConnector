@@ -3,7 +3,7 @@
   "title": "Verify that a message of type MT5xx was received, version 1.0",
   "type": "object",
   "properties": {
-    "testcase_execution_id": {
+    "testCaseExecutionId": {
       "type": "string"
     },
     "testStepClassName": {
@@ -37,7 +37,7 @@
     }
   },
   "required": [
-    "testcase_execution_id",
+    "testCaseExecutionId",
     "testStepClassName",
     "testStepActionMethod",
     "testDataParameterType",
