@@ -54,7 +54,7 @@
     "TestInstructionExecutionVersion",
     "ExpectedToBePassed",
     "TimeoutTimeInSeconds",
-    "RelatedReference_5xx_20CRELA",
+    "RelatedReference_54x_20CRELA",
     "MessageType_5xx"
   ],
   "additionalProperties": false

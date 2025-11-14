@@ -13,7 +13,7 @@ require (
 	github.com/jlambert68/FenixGrpcApi v0.0.0-20251103081159-a0962fe7cfb2
 	github.com/jlambert68/FenixScriptEngine v0.0.0-20241104143504-8f37e95bc346
 	github.com/jlambert68/FenixStandardTestInstructionAdmin v0.0.0-20241025085754-ced7ee5586a6
-	github.com/jlambert68/FenixSubCustodyTestInstructionAdmin v0.0.0-20251114141132-2330d9f75a13
+	github.com/jlambert68/FenixSubCustodyTestInstructionAdmin v0.0.0-20251114142616-b8db021e428e
 	github.com/jlambert68/FenixSyncShared v0.0.0-20240911064419-da3d922610cb
 	github.com/jlambert68/FenixTestInstructionsAdminShared v0.0.0-20241024135649-85f0f911fdda
 	github.com/markbates/goth v1.82.0 // indirect
