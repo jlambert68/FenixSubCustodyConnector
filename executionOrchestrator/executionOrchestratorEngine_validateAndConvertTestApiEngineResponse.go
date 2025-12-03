@@ -436,7 +436,7 @@ func validateAndConvertTestApiEngineResponse(
 
 	default:
 		sharedCode.Logger.WithFields(logrus.Fields{
-			"id":                   "c3603c54-ec52-4a02-a61e-8b5fa8be025b",
+			"id":                   "2cfcbeaf-69f0-480e-adf2-d0bbefec42e6",
 			"ResponseVariableType": testApiEngineFinalTestInstructionExecutionResult.ResponseVariableType,
 			"testApiEngineFinalTestInstructionExecutionResult": testApiEngineFinalTestInstructionExecutionResult,
 		}).Error("Unhandled 'ResponseVariableTypeType'")
