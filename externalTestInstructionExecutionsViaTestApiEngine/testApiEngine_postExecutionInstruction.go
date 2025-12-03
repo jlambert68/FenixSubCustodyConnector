@@ -678,6 +678,11 @@ func validateAndTransformRestResponse(
 
 		log.Fatalln("Should not be here")
 
+	case ResponseVariableType0Type:
+		// Store as 'ResponseVariableType1Type'
+		testApiEngineFinalTestInstructionExecutionResult.ResponseVariablesType0 = testAPiEngineResponseVariablesType0
+		testApiEngineFinalTestInstructionExecutionResult.ResponseVariableType = expectedResponseVariableType
+
 	case ResponseVariableType1Type:
 		// Store as 'ResponseVariableType1Type'
 		testApiEngineFinalTestInstructionExecutionResult.ResponseVariablesType1 = testAPiEngineResponseVariablesType1

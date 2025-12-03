@@ -69,6 +69,7 @@ type TestApiEngineFinalTestInstructionExecutionResultStruct struct {
 	ResponseVariables                      []interface{}            `json:"ResponseVariables"`
 	ResponseVariableType                   ResponseVariableTypeType `json:"ResponseVariableType"`
 	//NoResponseVariables                    []NoResponseVariableStruct    `json:"NoResponseVariables"`
+	ResponseVariablesType0 []ResponseVariableType0Struct `json:"ResponseVariableType"`
 	ResponseVariablesType1 []ResponseVariableType1Struct `json:"ResponseVariableType"`
 	LogPosts               []LogPostStruct               `json:"LogPosts"`
 }
