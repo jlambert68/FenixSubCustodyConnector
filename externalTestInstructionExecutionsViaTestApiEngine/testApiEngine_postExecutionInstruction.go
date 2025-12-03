@@ -370,6 +370,7 @@ func validateAndTransformRestResponse(
 			"id":                                     "771b579b-3191-4877-b126-64affafe7fc0",
 			"err":                                    err,
 			"testApiEngineResponseMessageJsonSchema": *testApiEngineResponseMessageJsonSchema,
+			"jsonObjectedToBeValidated":              jsonObjectedToBeValidated,
 		}).Error("'testApiEngineResponseMessageJson' is not valid to json-schema " +
 			"'testApiEngineResponseMessageJsonSchema'")
 

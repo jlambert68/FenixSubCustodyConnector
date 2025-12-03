@@ -15,7 +15,8 @@
       },
       "required": [
         "statusCode",
-        "statusText"],
+        "statusText"
+      ],
       "additionalProperties": false
     },
     "details": {
@@ -27,12 +28,25 @@
     "executionTimeStamp": {
       "type": "string",
       "format": "date-time"
+    },
+    "executionId": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "verdict": {
+      "type": "string",
+      "enum": [
+        "Pass"
+      ]
     }
   },
   "required": [
     "testStepExecutionStatus",
     "details",
     "responseValue",
-    "executionTimeStamp"],
+    "executionTimeStamp",
+    "executionId",
+    "verdict"
+  ],
   "additionalProperties": false
 }
