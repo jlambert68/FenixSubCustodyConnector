@@ -36,7 +36,8 @@
     "verdict": {
       "type": "string",
       "enum": [
-        "Pass"
+        "Pass",
+        "Fail"
       ]
     }
   },

@@ -38,6 +38,7 @@ type TestApiEngineResponseWithResponseValueAsStringStruct struct {
 	Details                 string                        `json:"details"`
 	ResponseValue           string                        `json:"responseValue"`
 	ExecutionTimeStamp      string                        `json:"executionTimeStamp"`
+	Verdict                 string                        `json:"verdict"`
 }
 
 type TestApiEngineResponseWithResponseValueAsTestApiEngineFinalTestInstructionExecutionResultStruct struct {
@@ -45,6 +46,7 @@ type TestApiEngineResponseWithResponseValueAsTestApiEngineFinalTestInstructionEx
 	Details                 string                                                 `json:"details"`
 	ResponseValue           TestApiEngineFinalTestInstructionExecutionResultStruct `json:"responseValue"`
 	ExecutionTimeStamp      string                                                 `json:"executionTimeStamp"`
+	Verdict                 string                                                 `json:"verdict"`
 }
 
 // TestStepExecutionStatusStruct

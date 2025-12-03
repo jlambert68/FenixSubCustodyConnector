@@ -6,6 +6,7 @@ import (
 	"crypto/tls"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"github.com/jlambert68/FenixSubCustodyTestInstructionAdmin/LocalExecutionMethods"
 	"github.com/santhosh-tekuri/jsonschema/v5"
 	"github.com/sirupsen/logrus"
@@ -393,6 +394,40 @@ func validateAndTransformRestResponse(
 			"id": "c91706b3-d462-4943-929e-d424a11a7258",
 			"cleanedTestApiEngineResponseMessageJson": cleanedTestApiEngineResponseMessageJson,
 		}).Error("Couldn't Unmarshal 'cleanedTestApiEngineResponseMessageJson' into Go-struct of type 'TestApiEngineResponseWithResponseValueAsStringStruct'")
+
+		return TestApiEngineFinalTestInstructionExecutionResultStruct{}, err
+	}
+
+	// Check the overall TestApiEngine result from "Verdict" (Pass or Fail)
+	if tempTestApiEngineResponseWithResponseValueAsString.Verdict == "Fail" {
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id": "4e6470dc-d32f-4b97-abc8-ee3e02e144aa",
+			"cleanedTestApiEngineResponseMessageJson": cleanedTestApiEngineResponseMessageJson,
+			"ResponseValue": tempTestApiEngineResponseWithResponseValueAsString.ResponseValue,
+		}).Error("")
+
+		var errId = "1c7ea2cc-1249-4ad9-a0ac-dc6b6611fdb9"
+		err = errors.New(fmt.Sprintf("TestApiEngine failed with response: %s [ErrorId='%s']",
+			tempTestApiEngineResponseWithResponseValueAsString.ResponseValue,
+			errId))
+
+		return TestApiEngineFinalTestInstructionExecutionResultStruct{}, err
+	}
+
+	// Check the overall TestApiEngine result from "Verdict" (Not any of Pass or Fail)
+	if tempTestApiEngineResponseWithResponseValueAsString.Verdict == "Fail" {
+		sharedCode.Logger.WithFields(logrus.Fields{
+			"id": "82b72ca0-ed43-4069-8903-c7508ec0a1ee",
+			"cleanedTestApiEngineResponseMessageJson": cleanedTestApiEngineResponseMessageJson,
+			"ResponseValue": tempTestApiEngineResponseWithResponseValueAsString.ResponseValue,
+			"Verdict":       tempTestApiEngineResponseWithResponseValueAsString.Verdict,
+		}).Error("")
+
+		var errId = "99de3d1e-61fa-4f5c-9791-4a1d9698f8e7"
+		err = errors.New(fmt.Sprintf("TestApiEngine failed with response: %s  and having Verdict= '%s' [ErrorId='%s']",
+			tempTestApiEngineResponseWithResponseValueAsString.ResponseValue,
+			tempTestApiEngineResponseWithResponseValueAsString.Verdict,
+			errId))
 
 		return TestApiEngineFinalTestInstructionExecutionResultStruct{}, err
 	}
