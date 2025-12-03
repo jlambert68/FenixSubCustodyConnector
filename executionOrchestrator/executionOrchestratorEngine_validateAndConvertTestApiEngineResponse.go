@@ -413,6 +413,10 @@ func validateAndConvertTestApiEngineResponse(
 
 		// Do nothing, because don't send back 'NoResponseVariableType'
 
+	case executeTestInstructionUsingTestApiEngine.ResponseVariableType0Type:
+
+		// Do nothing, because don't send back 'NoResponseVariableType'
+
 	case executeTestInstructionUsingTestApiEngine.ResponseVariableType1Type:
 
 		// Loop response variables from TestApiEngine
