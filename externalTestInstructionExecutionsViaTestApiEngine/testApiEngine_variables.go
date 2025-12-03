@@ -103,6 +103,7 @@ type ResponseVariableTypeType uint8
 const (
 	UndefinedResponseVariableType ResponseVariableTypeType = iota
 	NoResponseVariableType
+	ResponseVariableType0Type
 	ResponseVariableType1Type
 )
 
@@ -111,6 +112,13 @@ const (
 type NoResponseVariableStruct struct {
 	TestStepActionMethod   string `json:"TestStepActionMethod"`
 	TestInstructionVersion string `json:"TestInstructionVersion"`
+}
+
+// ResponseVariableType0Struct within 'TestApiEngineFinalTestInstructionExecutionResultStruct'
+// Holds one response variable with no value
+type ResponseVariableType0Struct struct {
+	TestApiEngineMethodName string `json:"TestStepActionMethod"`
+	TestInstructionVersion  string `json:"TestInstructionVersion"`
 }
 
 // ResponseVariableType1Struct within 'TestApiEngineFinalTestInstructionExecutionResultStruct'

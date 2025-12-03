@@ -490,6 +490,7 @@ func validateAndTransformRestResponse(
 	}
 
 	// Extract Response Variables
+	var testAPiEngineResponseVariablesType0 []ResponseVariableType0Struct
 	var testAPiEngineResponseVariablesType1 []ResponseVariableType1Struct
 	var testAPiEngineNoResponseVariables []NoResponseVariableStruct
 	var responseVariablesAsJsonByteArray []byte
@@ -513,6 +514,14 @@ func validateAndTransformRestResponse(
 				if err := json.Unmarshal(resVarBytes, &resVarNoResponse); err == nil {
 					// Successfully unmarshalled to NoResponseVariableStruct
 					testAPiEngineNoResponseVariables = append(testAPiEngineNoResponseVariables, resVarNoResponse)
+					continue
+				}
+
+			case ResponseVariableType0Type:
+				var resVarType0 ResponseVariableType0Struct
+				if err := json.Unmarshal(resVarBytes, &resVarType0); err == nil {
+					// Successfully unmarshalled to ResponseVariableType1Struct
+					testAPiEngineResponseVariablesType0 = append(testAPiEngineResponseVariablesType0, resVarType0)
 					continue
 				}
 
@@ -559,6 +568,10 @@ func validateAndTransformRestResponse(
 	case NoResponseVariableType:
 		// Convert Response Variables into json-byte-array
 		responseVariablesAsJsonByteArray, err = json.Marshal(testAPiEngineNoResponseVariables)
+
+	case ResponseVariableType0Type:
+		// Convert Response Variables into json-byte-array
+		responseVariablesAsJsonByteArray, err = json.Marshal(testAPiEngineResponseVariablesType0)
 
 	case ResponseVariableType1Type:
 		// Convert Response Variables into json-byte-array

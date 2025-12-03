@@ -193,7 +193,7 @@ func processTestInstructionExecutionRequest(
 				executeTestInstructionUsingTestApiEngine.GetResponseSchemasToUse(
 					TestInstruction_Standard_SendTestDataToThisDomain.TestInstructionUUID_FenixSentToUsersDomain_SendTestDataToThisDomain,
 					testInstructionVersion)
-			expectedResponseVariableType = executeTestInstructionUsingTestApiEngine.NoResponseVariableType
+			expectedResponseVariableType = executeTestInstructionUsingTestApiEngine.ResponseVariableType0Type
 
 		// Send general MT-message on MQ
 		case TestInstruction_SendOnMQTypeMT_SendGeneral.TestInstructionUUID_SendOnMQTypeMT_SendGeneral:
